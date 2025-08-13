@@ -26,5 +26,5 @@ public abstract class BoardFileIO {
         return board.getSize();
     }
     
-    public abstract void process(Board board) throws IOException;
+    public abstract void process(Board board, char[][] grid) throws IOException;
 }

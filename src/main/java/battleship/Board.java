@@ -21,26 +21,35 @@ public class Board {
         }
     }
 
-    private final char[][] grid;
+    private final char[][] shipGrid;
+    private final char[][] hitMissGrid;
     private final int size;
 
     public Board(int size) {
         if (size <= 0 && size < 20) throw new IllegalArgumentException("size must be between 0 and 20");
         this.size = size;
-        this.grid = new char[size][size];
-        clear();
+        this.shipGrid = new char[size][size];
+        this.hitMissGrid = new char[size][size];
     }
 
     public int getSize() { return size; }
+    
+    public char[][] getShipGrid() {
+        return shipGrid;
+    }
 
-    public char getCell(int row, int col) { // Dont use
+    public char[][] getHitMissGrid() {
+        return hitMissGrid;
+    }
+
+    public char getCell(int row, int col, char[][] grid) { // Dont use
         if (!inBounds(row, col)) {
             throw new IndexOutOfBoundsException("row=" + row + ", col=" + col + " out of bounds for size " + size);
         }
         return grid[row][col];
     }
 
-    public Result setCell(int row, int col, char state) {
+    public Result setCell(int row, int col, char state, char[][] grid) {
         if (!inBounds(row, col)) return Result.OUT_OF_BOUNDS;
         if (!isAllowed(state))   return Result.INVALID_STATE;
         grid[row][col] = state;
@@ -51,7 +60,8 @@ public class Board {
     public void clear() {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                grid[r][c] = WATER;
+                shipGrid[r][c] = WATER;
+                hitMissGrid[r][c] = WATER;
             }
         }
     }
@@ -70,14 +80,14 @@ public class Board {
         for (int i = 0; i < length; i++) {
             int rr = r0 + dir.deltar * i;
             int cc = c0 + dir.deltac * i;
-            if (grid[rr][cc] != WATER) return Result.OCCUPIED;
+            if (shipGrid[rr][cc] != WATER) return Result.OCCUPIED;
         }
 
         // Change state of ship cells
         for (int i = 0; i < length; i++) {
             int rr = r0 + dir.deltar * i;
             int cc = c0 + dir.deltac * i;
-            grid[rr][cc] = state;
+            shipGrid[rr][cc] = state;
         }
         return Result.OK;
     }
@@ -91,30 +101,19 @@ public class Board {
     }
     
     public Result markHit(int row, int col) { 
-        return setCell(row, col, HIT); 
+        return setCell(row, col, HIT, hitMissGrid); 
     }
     
     public Result markMiss(int row, int col) { 
-        return setCell(row, col, MISS); 
+        return setCell(row, col, MISS, hitMissGrid); 
     }
     
     public Result placeShip(int r0, int c0, int length, Direction dir) {
         return fillLine(r0, c0, length, dir, SHIP);
     }
     
-    public char cellState(int row, int col){
+    public char cellState(int row, int col, char[][] grid){
         if (!inBounds(row, col)) return 'L';
         return grid[row][col];
-    }
-
-    @Override public String toString() {
-        StringBuilder sb = new StringBuilder(size * (2 * size + 1));
-        for (int r = 0; r < size; r++) {
-            for (int c = 0; c < size; c++) {
-                sb.append(grid[r][c]).append(' ');
-            }
-            sb.append(System.lineSeparator());
-        }
-        return sb.toString();
     }
 }

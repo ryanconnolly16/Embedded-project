@@ -8,16 +8,16 @@ import java.io.IOException;
 public class FileInput extends BoardFileIO {
 
     @Override
-    public void process(Board board) {
+    public void process(Board board, char[][] grid) {
         try {
-            loadFromFile(board, defaultFile);
+            loadFromFile(board, defaultFile, grid);
             System.out.println("Board loaded from: " + defaultFile.getAbsolutePath());
         } catch (IOException e) {
             System.err.println("Error loading board: " + e.getMessage());
         }
     }
 
-    public void loadFromFile(Board board, File file) throws IOException {
+    public void loadFromFile(Board board, File file, char[][] grid) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             int size = Integer.parseInt(reader.readLine().trim());
             if (size != board.getSize()) {
@@ -28,7 +28,7 @@ public class FileInput extends BoardFileIO {
                 String line = reader.readLine();
                 for (int c = 0; c < size; c++) {
                     char state = decode(line.charAt(c));
-                    board.setCell(r, c, state);
+                    board.setCell(r, c, state, grid);
                 }
             }
         }

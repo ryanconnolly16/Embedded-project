@@ -5,21 +5,11 @@ public final class BoardRenderer {
 
     // Default
     public static String render(Board board) {
-        return renderAsciiGrid(board);
-    }
-
-    // For hiding ships
-    public static String render(Board board, boolean hideShips) {
-        return renderAsciiGrid(board, 3, 1, true, true, hideShips);
+        return renderAsciiGrid(board, 3, 1, true, true, false, grid);
     }
 
     // Don't use
-    public static String renderAsciiGrid(Board board) {
-        return renderAsciiGrid(board, 3, 1, true, true, false);
-    }
-
-    // Don't use
-    public static String renderAsciiGrid(Board b, int cellW, int cellH, boolean showTopLetters, boolean showBottomLetters, boolean hideShips) {
+    public static String renderAsciiGrid(Board b, int cellW, int cellH, boolean showTopLetters, boolean showBottomLetters, boolean hideShips, char[][] grid) {
         int n = b.getSize();
         int rowW = Integer.toString(n).length();
         if (cellW < 1) cellW = 1;
@@ -63,7 +53,7 @@ public final class BoardRenderer {
 
                 // Cells
                 for (int c = 0; c < n; c++) {
-                    char raw = b.getCell(r, c);
+                    char raw = b.getCell(r, c, grid);
                     if (hideShips && raw == 'S') raw = ' '; // fog of war (change to whatever we want)
                     char glyph = (inner == cellH / 2) ? mapAsciiGlyph(raw) : ' ';
                     String content = (inner == cellH / 2) ? centerStr(String.valueOf(glyph), cellW) : spaces(cellW);
