@@ -117,7 +117,6 @@ public class BattleshipGame {
             String usershot = input.nextLine();
             
             if(usershot.equals("x")){
-            
                 break;
             }
             
