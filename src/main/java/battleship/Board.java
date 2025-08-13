@@ -107,7 +107,7 @@ public class Board {
     
     public Result placeShip(int r0, int c0, int length, Direction dir) {
         return fillLine(r0, c0, length, dir, SHIP);
-}
+    }
 
     @Override public String toString() {
         StringBuilder sb = new StringBuilder(size * (2 * size + 1));
@@ -118,5 +118,9 @@ public class Board {
             sb.append(System.lineSeparator());
         }
         return sb.toString();
+    }
+    public char cellState(int row, int col){
+        if (!inBounds(row, col)) return 'L';
+        return grid[row][col];
     }
 }
