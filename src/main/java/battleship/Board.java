@@ -1,5 +1,5 @@
 package battleship;
-//testing
+//whore
 public class Board {
     // Cell symbols (stick with chars for now)
     public static final char WATER = ' ';
