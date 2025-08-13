@@ -1,5 +1,5 @@
 package battleship;
-//whore not ok
+
 public class Board {
     // Cell symbols (stick with chars for now)
     public static final char WATER = ' ';
@@ -33,7 +33,7 @@ public class Board {
 
     public int getSize() { return size; }
 
-    public char getCell(int row, int col) {
+    public char getCell(int row, int col) { // Dont use
         if (!inBounds(row, col)) {
             throw new IndexOutOfBoundsException("row=" + row + ", col=" + col + " out of bounds for size " + size);
         }
@@ -82,13 +82,6 @@ public class Board {
         return Result.OK;
     }
 
-    
-    
-    
-    
-    
-    
-    
     private boolean inBounds(int row, int col) {
         return row >= 0 && row < size && col >= 0 && col < size;
     }
@@ -108,6 +101,11 @@ public class Board {
     public Result placeShip(int r0, int c0, int length, Direction dir) {
         return fillLine(r0, c0, length, dir, SHIP);
     }
+    
+    public char cellState(int row, int col){
+        if (!inBounds(row, col)) return 'L';
+        return grid[row][col];
+    }
 
     @Override public String toString() {
         StringBuilder sb = new StringBuilder(size * (2 * size + 1));
@@ -118,9 +116,5 @@ public class Board {
             sb.append(System.lineSeparator());
         }
         return sb.toString();
-    }
-    public char cellState(int row, int col){
-        if (!inBounds(row, col)) return 'L';
-        return grid[row][col];
     }
 }
