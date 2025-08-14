@@ -1,12 +1,13 @@
 battleship\BoardRenderer.class
-battleship\Board$GridType.class
 battleship\Fleet$Ship.class
-battleship\BattleshipGame.class
-battleship\Board$Direction.class
 battleship\Board.class
 battleship\FileInput.class
 battleship\Test.class
 battleship\Board$Result.class
-battleship\FileOutput.class
+battleship\SaveManager.class
 battleship\BoardFileIO.class
 battleship\Fleet.class
+battleship\Board$GridType.class
+battleship\BattleshipGame.class
+battleship\Board$Direction.class
+battleship\FileOutput.class

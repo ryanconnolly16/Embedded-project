@@ -8,6 +8,18 @@ import java.io.IOException;
 public class FileInput extends BoardFileIO {
 
     public Board[] loadMatch(File file) throws IOException {
+
+        if (file == null || !file.exists()) {
+            System.err.println("Save file not found: " + (file != null ? file.getAbsolutePath() : "null"));
+            System.exit(0); // stop cleanly, no crash, no changes to main
+            throw new AssertionError("unreachable"); // keeps compiler happy
+        }
+        if (file.length() == 0) {
+            System.err.println("Save file is empty: " + file.getAbsolutePath());
+            System.exit(0);
+            throw new AssertionError("unreachable");
+        }
+        
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
             String sizeLine = req(br.readLine(), "size");
@@ -24,6 +36,11 @@ public class FileInput extends BoardFileIO {
             readSection(br, p2, "SHOTS", Board.GridType.SHOTS, n);
 
             return new Board[]{ p1, p2 };
+        } 
+        catch (IOException ioe) {
+            System.err.println("Error reading save: " + ioe.getMessage());
+            System.exit(0);
+            throw new AssertionError("unreachable");
         }
     }
 
