@@ -5,6 +5,7 @@ battleship\BattleshipGame.class
 battleship\Board$Direction.class
 battleship\Board.class
 battleship\FileInput.class
+battleship\Test.class
 battleship\Board$Result.class
 battleship\FileOutput.class
 battleship\BoardFileIO.class
