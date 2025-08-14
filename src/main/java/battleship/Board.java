@@ -31,6 +31,7 @@ public class Board {
         this.size = size;
         this.shipGrid = new char[size][size];
         this.hitMissGrid = new char[size][size];
+        fillWater();
     }
 
     public int getSize() { return size; }
@@ -57,7 +58,7 @@ public class Board {
         return Result.OK;
     }
 
-    public void clear() {
+    public final void fillWater() {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 shipGrid[r][c] = WATER;
@@ -98,6 +99,10 @@ public class Board {
     public Result markHit(int row, int col)  { return setCell(row, col, HIT,  GridType.SHOTS); }
     
     public Result markMiss(int row, int col) { return setCell(row, col, MISS, GridType.SHOTS); }
+    
+    public Result shipHit(int row, int col)  { return setCell(row, col, HIT,  GridType.SHIPS); }
+    
+    public Result shipMiss(int row, int col) { return setCell(row, col, MISS, GridType.SHIPS); }
     
     public Result placeShip(int r0,int c0,int length,Direction dir){ return fillLine(r0,c0,length,dir,SHIP); }
 }

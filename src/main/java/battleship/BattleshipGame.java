@@ -44,7 +44,6 @@ public class BattleshipGame {
         Scanner input = new Scanner(System.in);
         
         Board board = new Board(10);
-        board.clear();
         
         Fleet fleet = new Fleet();
        

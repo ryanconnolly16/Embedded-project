@@ -20,7 +20,7 @@ public final class BoardRenderer {
         String titleR = center("[ Hits / Misses ]", rw);
         String gap = "   ";
 
-        StringBuilder out = new StringBuilder((L.length+2)*(lw+rw+gap.length()+1));
+        StringBuilder out = new StringBuilder((L.length + 2)*(lw + rw + gap.length() + 1));
         out.append(titleL).append(gap).append(titleR).append('\n');
         int rows = Math.max(L.length, R.length);
         for (int i=0;i<rows;i++) {
@@ -46,6 +46,7 @@ public final class BoardRenderer {
                 sb.append(center(String.valueOf((char)('A' + c)), cellW));
                 if (c < n-1) sb.append(' ');
             }
+            sb.append(' ');
             sb.append('\n');
         }
 
@@ -62,8 +63,7 @@ public final class BoardRenderer {
                 sb.append('|');
 
                 for (int c=0;c<n;c++) {
-                    char raw = board.cellAt(r, c, which);
-                    char glyph = (inner == cellH/2) ? raw : ' ';
+                    char glyph = (inner == cellH/2) ? board.cellAt(r, c, which) : ' ';
                     String content = (inner == cellH/2) ? center(String.valueOf(glyph), cellW) : " ".repeat(cellW);
                     sb.append(content).append('|');
                 }
@@ -86,17 +86,18 @@ public final class BoardRenderer {
         // Bottom letters
         if (showBottomLetters) {
             pad(sb, rowWidth + 2);
-            for (int c=0;c<n;c++) {
+            for (int c = 0; c < n; c++) {
                 sb.append(center(String.valueOf((char)('a' + c)), cellW));
-                if (c < n-1) sb.append(' ');
+                if (c < n - 1) sb.append(' ');
             }
+            sb.append(' ');
             sb.append('\n');
         }
 
         return sb.toString();
     }
 
-    private static void repeat(StringBuilder sb, char ch, int count){ for(int i=0;i<count;i++) sb.append(ch); }
+    private static void repeat(StringBuilder sb, char ch, int count){ for(int i = 0; i < count; i++) sb.append(ch); }
     
     private static void pad(StringBuilder sb, int n){ for(int i=0;i<n;i++) sb.append(' '); }
     
