@@ -8,51 +8,38 @@ import java.io.IOException;
 public class FileOutput extends BoardFileIO {
 
     @Override
-    public void process(Board board, Board.GridType which) {
+    public void process(Board player1, Board player2) {
         try {
-            saveToFile(board, defaultFile, which);
-            System.out.println("Board saved to: " + defaultFile.getAbsolutePath());
+            saveMatch(player1, player2, defaultFile);
+            System.out.println("Match saved to: " + defaultFile.getAbsolutePath());
         } catch (IOException e) {
-            System.err.println("Error saving board: " + e.getMessage());
+            System.err.println("Error saving match: " + e.getMessage());
         }
     }
 
-    public void saveToFile(Board board, File file, Board.GridType which) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            int n = getBoardSize(board);
-            writer.write(Integer.toString(n));
-            writer.newLine();
-            writer.write(which.name()); // store which grid this is
-            writer.newLine();
+    public void saveMatch(Board player1, Board player2, File file) throws IOException {
+        int n = player1.getSize();
+        if (n != player2.getSize())
+            throw new IllegalArgumentException("Boards must be same size.");
 
-            for (int r = 0; r < n; r++) {
-                for (int c = 0; c < n; c++) {
-                    char cell = board.cellAt(r, c, which);
-                    writer.write(encode(cell));
-                }
-                writer.newLine();
-            }
-        }
-    }
+        try (BufferedWriter w = new BufferedWriter(new FileWriter(file))) {
+            // write size once
+            w.write(Integer.toString(n)); 
+            w.newLine();
 
-    public void saveBoth(Board board, File file) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            int n = getBoardSize(board);
-            writer.write(Integer.toString(n)); writer.newLine();
+            // --- Player 1 ---
+            w.write("PLAYER1"); w.newLine();
+            w.write("SHIPS");   w.newLine();
+            for (int r = 0; r < n; r++) { for (int c = 0; c < n; c++) w.write(encode(player1.cellAt(r,c, Board.GridType.SHIPS))); w.newLine(); }
+            w.write("SHOTS");   w.newLine();
+            for (int r = 0; r < n; r++) { for (int c = 0; c < n; c++) w.write(encode(player1.cellAt(r,c, Board.GridType.SHOTS))); w.newLine(); }
 
-            // SHIPS section
-            writer.write("SHIPS"); writer.newLine();
-            for (int r = 0; r < n; r++) {
-                for (int c = 0; c < n; c++) writer.write(encode(board.cellAt(r, c, Board.GridType.SHIPS)));
-                writer.newLine();
-            }
-
-            // SHOTS section
-            writer.write("SHOTS"); writer.newLine();
-            for (int r = 0; r < n; r++) {
-                for (int c = 0; c < n; c++) writer.write(encode(board.cellAt(r, c, Board.GridType.SHOTS)));
-                writer.newLine();
-            }
+            // --- Player 2 ---
+            w.write("PLAYER2"); w.newLine();
+            w.write("SHIPS");   w.newLine();
+            for (int r = 0; r < n; r++) { for (int c = 0; c < n; c++) w.write(encode(player2.cellAt(r,c, Board.GridType.SHIPS))); w.newLine(); }
+            w.write("SHOTS");   w.newLine();
+            for (int r = 0; r < n; r++) { for (int c = 0; c < n; c++) w.write(encode(player2.cellAt(r,c, Board.GridType.SHOTS))); w.newLine(); }
         }
     }
 }

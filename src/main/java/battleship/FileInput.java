@@ -8,69 +8,60 @@ import java.io.IOException;
 public class FileInput extends BoardFileIO {
 
     @Override
-    public void process(Board board, Board.GridType which) {
+    public void process(Board player1, Board player2) {
         try {
-            loadFromFile(board, defaultFile, which);
-            System.out.println("Board loaded from: " + defaultFile.getAbsolutePath());
-        } catch (IOException | IllegalArgumentException e) {
-            System.err.println("Error loading board: " + e.getMessage());
+            Board[] boards = loadMatch(defaultFile);
+            copyBoard(boards[0], player1);
+            copyBoard(boards[1], player2);
+            System.out.println("Boards loaded from: " + defaultFile.getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error loading boards: " + e.getMessage());
         }
     }
 
-    public void loadFromFile(Board board, File file, Board.GridType which) throws IOException {
+    public Board[] loadMatch(File file) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String first = br.readLine();
-            if (first == null) throw new IOException("Empty save file");
-            int n = Integer.parseInt(first.trim());
-            if (n != board.getSize()) throw new IllegalArgumentException("Board size mismatch: file=" + n + ", board=" + board.getSize());
+            String sizeLine = br.readLine();
+            if (sizeLine == null) throw new IOException("Empty save file");
+            int n = Integer.parseInt(sizeLine.trim());
 
-            // Peek the next line to decide format
-            br.mark(4096);
-            String header = br.readLine();
-            if (header == null) throw new IOException("Unexpected EOF after size");
+            Board p1 = new Board(n);
+            Board p2 = new Board(n);
 
-            header = header.trim().toUpperCase();
+            readSection(br, p1, "SHIPS", Board.GridType.SHIPS, n);
+            readSection(br, p1, "SHOTS", Board.GridType.SHOTS, n);
+            readSection(br, p2, "SHIPS", Board.GridType.SHIPS, n);
+            readSection(br, p2, "SHOTS", Board.GridType.SHOTS, n);
 
-            if ("SHIPS".equals(header) || "SHOTS".equals(header)) {
-                // Format B: dual-sections present. Load both sections into the board.
-                loadSection(br, board, n, headerToGridType(header)); // first section
-                String header2 = br.readLine();
-                if (header2 == null) throw new IOException("Missing second section header");
-                header2 = header2.trim().toUpperCase();
-                loadSection(br, board, n, headerToGridType(header2)); // second section
-            } else {
-                // Format A: single grid; the line we read is likely the first data row or an optional WHICH header
-                Board.GridType target = which;
-                if ("SHIPS".equalsIgnoreCase(header) || "SHOTS".equalsIgnoreCase(header)) {
-                    target = headerToGridType(header);
-                } else {
-                    // header is actually the first data row; rewind to re-read it as data
-                    br.reset();
-                }
-                loadBody(br, board, n, target);
+            return new Board[]{p1, p2};
+        }
+    }
+
+    private void readSection(BufferedReader br, Board board,
+                              String expectedHeader, Board.GridType which, int n) throws IOException {
+        String hdr = br.readLine();
+        if (!expectedHeader.equals(hdr))
+            throw new IOException("Expected " + expectedHeader + " header, got: " + hdr);
+        for (int r = 0; r < n; r++) {
+            String line = br.readLine();
+            if (line == null || line.length() < n)
+                throw new IOException("Corrupt row " + r + " for " + which);
+            for (int c = 0; c < n; c++) {
+                char state = decode(line.charAt(c));
+                Board.Result res = board.setCell(r, c, state, which);
+                if (res != Board.Result.OK)
+                    throw new IOException("Failed to set (" + r + "," + c + "): " + res);
             }
         }
     }
 
-    private static Board.GridType headerToGridType(String s) {
-        return "SHIPS".equalsIgnoreCase(s) ? Board.GridType.SHIPS : Board.GridType.SHOTS;
-    }
-
-    private void loadSection(BufferedReader br, Board board, int n, Board.GridType which) throws IOException {
-        loadBody(br, board, n, which);
-    }
-
-    private void loadBody(BufferedReader br, Board board, int n, Board.GridType which) throws IOException {
-        for (int r = 0; r < n; r++) {
-            String line = br.readLine();
-            if (line == null || line.length() < n)
-                throw new IOException("Corrupt save: missing or short row at r=" + r);
-            for (int c = 0; c < n; c++) {
-                char state = decode(line.charAt(c));
-                // write into the requested grid
-                Board.Result res = board.setCell(r, c, state, which);
-                if (res != Board.Result.OK)
-                    throw new IOException("Failed to set cell ("+r+","+c+"): "+res);
+    private void copyBoard(Board src, Board dest) {
+        int n = src.getSize();
+        for (Board.GridType type : Board.GridType.values()) {
+            for (int r = 0; r < n; r++) {
+                for (int c = 0; c < n; c++) {
+                    dest.setCell(r, c, src.cellAt(r, c, type), type);
+                }
             }
         }
     }
