@@ -1,11 +1,14 @@
 package battleship;
 
 public class Board {
-    // Cell symbols (stick with chars for now)
     public static final char WATER = ' ';
     public static final char HIT   = 'X';
     public static final char MISS  = 'O';
     public static final char SHIP  = 'S';
+    
+    private final char[][] shipGrid;
+    private final char[][] hitMissGrid;
+    private final int size;
 
     // Status codes for user-driven operations (no crashes)
     public enum Result { 
@@ -20,10 +23,8 @@ public class Board {
             this.deltar = dr; this.deltac = dc; 
         }
     }
-
-    private final char[][] shipGrid;
-    private final char[][] hitMissGrid;
-    private final int size;
+    
+    public enum GridType { SHIPS, SHOTS }
 
     public Board(int size) {
         if (size <= 0 && size < 20) throw new IllegalArgumentException("size must be between 0 and 20");
@@ -34,12 +35,11 @@ public class Board {
 
     public int getSize() { return size; }
     
-    public char[][] getShipGrid() {
-        return shipGrid;
-    }
-
-    public char[][] getHitMissGrid() {
-        return hitMissGrid;
+    public char cellAt(int row, int col, GridType which) {
+        if (!inBounds(row, col)) {
+            throw new IndexOutOfBoundsException("row=" + row + " col=" + col);
+        }
+        return (which == GridType.SHIPS) ? shipGrid[row][col] : hitMissGrid[row][col];
     }
 
     public char getCell(int row, int col, char[][] grid) { // Dont use
@@ -49,14 +49,14 @@ public class Board {
         return grid[row][col];
     }
 
-    public Result setCell(int row, int col, char state, char[][] grid) {
+    public Result setCell(int row, int col, char state, GridType which) {
         if (!inBounds(row, col)) return Result.OUT_OF_BOUNDS;
         if (!isAllowed(state))   return Result.INVALID_STATE;
-        grid[row][col] = state;
+        if (which == GridType.SHIPS) shipGrid[row][col] = state; 
+        else hitMissGrid[row][col] = state;
         return Result.OK;
     }
 
-    // Fill entire board with water
     public void clear() {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
@@ -66,7 +66,6 @@ public class Board {
         }
     }
 
-    //Fill a straight line starting at (r0,c0) with length cells, going in 'dir', using 'state'.
     private Result fillLine(int r0, int c0, int length, Direction dir, char state) {
         if (!isAllowed(state)) return Result.INVALID_STATE;
         if (length <= 0)       return Result.INVALID_LENGTH;
@@ -92,28 +91,13 @@ public class Board {
         return Result.OK;
     }
 
-    private boolean inBounds(int row, int col) {
-        return row >= 0 && row < size && col >= 0 && col < size;
-    }
-
-    private boolean isAllowed(char state) {
-        return state == WATER || state == SHIP || state == HIT || state == MISS;
-    }
+    private boolean inBounds(int row, int col) { return row>=0 && row<size && col>=0 && col<size; }
     
-    public Result markHit(int row, int col) { 
-        return setCell(row, col, HIT, hitMissGrid); 
-    }
+    private boolean isAllowed(char s) { return s==WATER || s==SHIP || s==HIT || s==MISS; }
     
-    public Result markMiss(int row, int col) { 
-        return setCell(row, col, MISS, hitMissGrid); 
-    }
+    public Result markHit(int row, int col)  { return setCell(row, col, HIT,  GridType.SHOTS); }
     
-    public Result placeShip(int r0, int c0, int length, Direction dir) {
-        return fillLine(r0, c0, length, dir, SHIP);
-    }
+    public Result markMiss(int row, int col) { return setCell(row, col, MISS, GridType.SHOTS); }
     
-    public char cellState(int row, int col, char[][] grid){
-        if (!inBounds(row, col)) return 'L';
-        return grid[row][col];
-    }
+    public Result placeShip(int r0,int c0,int length,Direction dir){ return fillLine(r0,c0,length,dir,SHIP); }
 }

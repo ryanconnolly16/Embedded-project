@@ -1,10 +1,11 @@
 package battleship;
 
 import java.io.File;
-import java.io.IOException;
 
 public abstract class BoardFileIO {
     protected final File defaultFile = new File("save.log");
+
+    protected int getBoardSize(Board b) { return b.getSize(); }
 
     protected char encode(char state) {
         if (state == Board.WATER) return '.';
@@ -19,12 +20,8 @@ public abstract class BoardFileIO {
         if (ch == 'S') return Board.SHIP;
         if (ch == 'X') return Board.HIT;
         if (ch == 'O') return Board.MISS;
-        return Board.WATER; // default fallback
+        return Board.WATER;
     }
 
-    protected int getBoardSize(Board board) {
-        return board.getSize();
-    }
-    
-    public abstract void process(Board board, char[][] grid) throws IOException;
+    public abstract void process(Board board, Board.GridType which);
 }

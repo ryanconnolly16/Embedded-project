@@ -102,13 +102,13 @@ public class BattleshipGame {
                 System.out.println("There are " + fleet.getActiveCount());
                 
                 
-                System.out.println("\n" + BoardRenderer.render(board));
+                System.out.println("\n" + BoardRenderer.renderBoth(board));
             }
         }
         
         
         
-        System.out.println("\n" + BoardRenderer.render(board));
+        System.out.println("\n" + BoardRenderer.renderBoth(board));
         
         //board.markHit(row, col);
         //Fleet.Ship hitShip = fleet.processHit(row, col);
@@ -147,7 +147,7 @@ public class BattleshipGame {
                 }
 
                 // Display board
-                System.out.println("\n" + BoardRenderer.render(board));
+                System.out.println("\n" + BoardRenderer.renderBoth(board));
             }
         }
         

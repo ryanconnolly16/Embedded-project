@@ -1,4 +1,5 @@
 battleship\BoardRenderer.class
+battleship\Board$GridType.class
 battleship\Fleet$Ship.class
 battleship\BattleshipGame.class
 battleship\Board$Direction.class
