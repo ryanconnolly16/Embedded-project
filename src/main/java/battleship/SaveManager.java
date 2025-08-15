@@ -2,6 +2,8 @@ package battleship;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SaveManager {
     public static final String DIR = "saves";
@@ -15,7 +17,8 @@ public class SaveManager {
     }
     
     public static File writeTurnAutosave(Board p1, Board p2) throws IOException {
-        File tmp = new File(dir(), "save_" + System.currentTimeMillis() + ".tmp");
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        File tmp = new File(dir(), "save_" + timestamp + ".tmp");
         new FileOutput().saveMatch(p1, p2, tmp);
         return tmp;
     }

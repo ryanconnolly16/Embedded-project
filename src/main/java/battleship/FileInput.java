@@ -11,13 +11,10 @@ public class FileInput extends BoardFileIO {
 
         if (file == null || !file.exists()) {
             System.err.println("Save file not found: " + (file != null ? file.getAbsolutePath() : "null"));
-            System.exit(0); // stop cleanly, no crash, no changes to main
-            throw new AssertionError("unreachable"); // keeps compiler happy
         }
         if (file.length() == 0) {
             System.err.println("Save file is empty: " + file.getAbsolutePath());
             System.exit(0);
-            throw new AssertionError("unreachable");
         }
         
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
