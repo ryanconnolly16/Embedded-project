@@ -46,7 +46,9 @@ public class BattleshipGame {
         Board board = new Board(10);
         
         Fleet fleet = new Fleet();
-       
+        
+        System.out.println(fleet.getShips());
+        
         // 0=Carrier-5, 1=Battleship-4, 2=Cruiser-3, 3=Submarine-3, 4=Destroyer-2
         
         //fleet.placeShip(board, ship, x, y, direction);

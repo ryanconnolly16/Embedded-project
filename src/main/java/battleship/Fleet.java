@@ -1,6 +1,8 @@
 package battleship;
 
 import java.util.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Fleet {
     public static class Ship {
@@ -35,27 +37,52 @@ public class Fleet {
         }
         
         void hit() { if (hits < size) hits++; }
-        void reset() { hits = 0; row = -1; col = -1; dir = null; }
+        
+        @Override
+        public String toString() {
+            return name + size ;
+        }
     }
     
-    private final List<Ship> ships;
+    public final List<Ship> ships;
     
     public Fleet() {
-        ships = Arrays.asList(
-            new Ship("Carrier", 5),
-            new Ship("Battleship", 4),
-            new Ship("Cruiser", 3),
-            new Ship("Submarine", 3),
-            new Ship("Destroyer", 2)
-        );
+        ships = new ArrayList<>();   
+        List<Ship> loaded = loadShipsFromFile("ships.txt");
+        if (loaded != null) {
+            ships.addAll(loaded);
+            System.out.println("✓ Loaded " + loaded.size() + " ships from file");
+        }else {
+        System.out.println("✗ File loading failed - ships list is empty");
+        }
+        //ships.addAll(loadShipsFromFile("ships.txt")); 
     }
     
-    // Custom fleet constructor
-    public Fleet(Ship... customShips) {
-        ships = Arrays.asList(customShips);
+    public static List<Ship> loadShipsFromFile(String fileName) {  
+        List<Ship> shipList = new ArrayList<>();
+        
+        try (InputStream inputStream = Fleet.class.getResourceAsStream("/" + fileName);
+             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    int size = Integer.parseInt(parts[1].trim());
+                    shipList.add(new Ship(name, size));
+                }
+            }
+
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("fail");
+        }
+        return shipList; 
     }
     
     public List<Ship> getShips() { return new ArrayList<>(ships); }
+    
     
     public int getActiveCount() {
         int count = 0;
@@ -85,6 +112,42 @@ public class Fleet {
     }
     
     
+    // Returns ship if hit, null if miss
+    public Ship processHit(int row, int col) {
+        for (Ship s : ships) {
+            if (s.contains(row, col)) {
+                s.hit();
+                return s;
+            }
+        }
+        return null;
+    }
+    
+    public String getStatus() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Fleet: %d active, %d sunk\n", getActiveCount(), getSunkCount()));
+        for (int i = 0; i < ships.size(); i++) {
+            Ship s = ships.get(i);
+            char status = !s.isPlaced() ? '-' : s.isSunk() ? 'X' : 'O';
+            sb.append(String.format("[%d] %s(%d): %c", i, s.name, s.size, status));
+            if (s.isPlaced() && !s.isSunk()) 
+                sb.append(String.format(" HP:%d/%d", s.getHealth(), s.size));
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+    
+    
+    public void preset(Board board){
+        placeShip(board, 0, 0, 0, Board.Direction.RIGHT);
+        placeShip(board, 1, 2, 3, Board.Direction.DOWN);
+        placeShip(board, 4, 8, 8, Board.Direction.LEFT);
+        placeShip(board, 3, 9, 4, Board.Direction.LEFT);
+        placeShip(board, 2, 5, 7, Board.Direction.UP);
+    }
+    
+    
+    
     //checks if the ship fits, isnt already placed, isnt overlapping
     // Place ship by index (0-4 for standard fleet)
     public Board.Result placeShip(Board board, int shipIndex, int row, int col, Board.Direction dir) {
@@ -100,35 +163,6 @@ public class Fleet {
             ship.place(row, col, dir);
         }
         return result;
-    }
-    
-    // Returns ship if hit, null if miss
-    public Ship processHit(int row, int col) {
-        for (Ship s : ships) {
-            if (s.contains(row, col)) {
-                s.hit();
-                return s;
-            }
-        }
-        return null;
-    }
-    
-    public void reset() {
-        for (Ship s : ships) s.reset();
-    }
-    
-    public String getStatus() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Fleet: %d active, %d sunk\n", getActiveCount(), getSunkCount()));
-        for (int i = 0; i < ships.size(); i++) {
-            Ship s = ships.get(i);
-            char status = !s.isPlaced() ? '-' : s.isSunk() ? 'X' : 'O';
-            sb.append(String.format("[%d] %s(%d): %c", i, s.name, s.size, status));
-            if (s.isPlaced() && !s.isSunk()) 
-                sb.append(String.format(" HP:%d/%d", s.getHealth(), s.size));
-            sb.append('\n');
-        }
-        return sb.toString();
     }
 }
 

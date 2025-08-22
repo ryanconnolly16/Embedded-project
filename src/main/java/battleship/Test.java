@@ -1,7 +1,9 @@
 package battleship;
 
+import battleship.Fleet.Ship;
 import java.io.IOException;
 import java.io.File;
+import java.util.List;
 // class for testing shit
 
 public class Test {
@@ -10,13 +12,22 @@ public class Test {
         // create 2 players
         Board player1 = new Board(10);
         Board player2 = new Board(10);
+        Fleet fleet1 = new Fleet();
+        
+        if(UI_Output.Startup().equals("y")){
+            fleet1.preset(player1);
+        }
+        
+        
+        
+        
         
         // placing a ship for demonstration
-        player2.placeShip(6, 0, 5, Board.Direction.UP);
+        //player2.placeShip(6, 0, 5, Board.Direction.UP);
         
         // after user asks to hit (6,0) and you check that the state is hit use:
-        player1.markHit(6, 0);// marks hit on player 1's hit/miss board
-        player2.shipHit(6, 0);// marks hit on player 2's ship board
+        //player1.markHit(6, 0);// marks hit on player 1's hit/miss board
+        //player2.shipHit(6, 0);// marks hit on player 2's ship board
         // there are also markMiss and shipMiss
         
         // use renderBoth for rendering both boards for a player
