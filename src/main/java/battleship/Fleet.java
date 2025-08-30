@@ -37,6 +37,12 @@ public class Fleet {
         }
         
         void hit() { if (hits < size) hits++; }
+        public void addHit() {
+            if (!isSunk()) {
+                hits++;
+            }
+        }
+        
         
         @Override
         public String toString() {
@@ -45,13 +51,16 @@ public class Fleet {
     }
     
     public final List<Ship> ships;
+    static ArrayList<String> pieces = new ArrayList<>();
+    Scanner input = new Scanner(System.in);
+    
     
     public Fleet() {
         ships = new ArrayList<>();   
         List<Ship> loaded = loadShipsFromFile("ships.txt");
         if (loaded != null) {
             ships.addAll(loaded);
-            System.out.println("✓ Loaded " + loaded.size() + " ships from file");
+            
         }else {
         System.out.println("✗ File loading failed - ships list is empty");
         }
@@ -60,24 +69,28 @@ public class Fleet {
     
     public static List<Ship> loadShipsFromFile(String fileName) {  
         List<Ship> shipList = new ArrayList<>();
-        
-        try (InputStream inputStream = Fleet.class.getResourceAsStream("/" + fileName);
-             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+        pieces.clear();
+            try (InputStream inputStream = Fleet.class.getResourceAsStream("/" + fileName);
+                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    String name = parts[0].trim();
-                    int size = Integer.parseInt(parts[1].trim());
-                    shipList.add(new Ship(name, size));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 2) {
+                        String name = parts[0].trim();
+                        int size = Integer.parseInt(parts[1].trim());
+                        shipList.add(new Ship(name, size));
+                        
+                        pieces.add(name);
+}
+                    
                 }
-            }
 
-        } catch (IOException | NumberFormatException e) {
-            System.out.println("fail");
-        }
+            } catch (IOException | NumberFormatException e) {
+                System.out.println("fail");
+            }
+        
         return shipList; 
     }
     
@@ -112,6 +125,7 @@ public class Fleet {
     }
     
     
+    
     // Returns ship if hit, null if miss
     public Ship processHit(int row, int col) {
         for (Ship s : ships) {
@@ -138,19 +152,87 @@ public class Fleet {
     }
     
     
-    public void preset(Board board){
-        placeShip(board, 0, 0, 0, Board.Direction.RIGHT);
-        placeShip(board, 1, 2, 3, Board.Direction.DOWN);
-        placeShip(board, 4, 8, 8, Board.Direction.LEFT);
-        placeShip(board, 3, 9, 4, Board.Direction.LEFT);
-        placeShip(board, 2, 5, 7, Board.Direction.UP);
+    static ArrayList<String> printinglist = new ArrayList<>();
+    
+    public void preset(Fleet fleet, Board board){
+        Random rand = new Random();
+        boolean placementgood = false;
+
+        for(int i = 0; i < pieces.size(); i++){
+            placementgood = false;
+            while (placementgood == false){
+                int rshipnum = i;
+                int rxpos = rand.nextInt(10);
+                int rypos = rand.nextInt(10);
+                int rdirc = rand.nextInt(4);
+                
+                Board.Direction dir = null;
+                if (rdirc == 0) dir = Board.Direction.UP;
+                else if (rdirc == 1) dir = Board.Direction.DOWN;
+                else if (rdirc == 2) dir = Board.Direction.LEFT;
+                else if (rdirc == 3) dir = Board.Direction.RIGHT;
+
+                Board.Result result = fleet.placeShip(board, rshipnum, rxpos, rypos, dir);
+                
+                if(result == Board.Result.OK){
+                    placementgood = true;
+                }   
+            }
+        }
     }
     
     
+    public void userpalcement(Fleet fleet, Board board){
+        while(printinglist.size() < pieces.size()){
+            try{
+                System.out.println("\nPlease input where you would like to place the ships in format:");
+                System.out.println("Ship number, X posistion, Y posistion, Direction");
+                System.out.println("\n" + BoardRenderer.renderBoth(board));
+                System.out.println("Ship Numbers;");
+                
+                for(int i = 0; i < pieces.size(); i++){
+                    if (printinglist.contains(pieces.get(i))) continue;
+                    System.out.println((i+1) + ". " + pieces.get(i));
+                }
+
+                String posistions = Test.getInput(input);
+                String[] list = posistions.split(",");
+                    
+                int type = Integer.parseInt(list[0].trim()) -1 ;
+                list[1].trim();
+                list[2].trim();
+                int ypos;
+                int xpos = list[1].charAt(0) - 'a';
+                if(list[2].equals("10")){
+                    ypos = 9;
+                }else{
+                    ypos = list[2].charAt(0) - '0' -1;
+                }
+                String pos = list[3].trim();
+                Board.Direction dir = null;
+
+
+                if (pos.contains("up")) dir = Board.Direction.UP;
+                else if (pos.contains("down")) dir = Board.Direction.DOWN;
+                else if (pos.contains("left")) dir = Board.Direction.LEFT;
+                else if (pos.contains("right")) dir = Board.Direction.RIGHT;
+
+                if(fleet.placeShip(board, type, xpos, ypos, dir) == Board.Result.OK){
+                    printinglist.add(pieces.get(type));
+                }
+                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Board.Result.OCCUPIED){
+                    System.out.println("Space is occupied, try again.");
+                }
+                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Board.Result.OUT_OF_BOUNDS){
+                    System.out.println("Ship is out of bounds, check you origin and direction.");
+                }
+            }catch(Exception e){
+                System.out.println("Invalid input try again");
+            }
+        }
+    }
     
-    //checks if the ship fits, isnt already placed, isnt overlapping
-    // Place ship by index (0-4 for standard fleet)
-    public Board.Result placeShip(Board board, int shipIndex, int row, int col, Board.Direction dir) {
+    public Board.Result placeShip(Board board, int shipIndex, int col, int row, Board.Direction dir) {
         if (shipIndex < 0 || shipIndex >= ships.size()) 
             return Board.Result.INVALID_STATE;
         
@@ -164,6 +246,14 @@ public class Fleet {
         }
         return result;
     }
+    
+
+    
+    
+    
+    
+    
+    
 }
 
 
