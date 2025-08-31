@@ -36,10 +36,7 @@ public class Test {
         }
         
         else if(answer.equals("2") || answer.equals("two")){
-            Board board1 = new Board(10);
-            Board board2 = new Board(10);
-            Fleet fleet1 = new Fleet();
-            Fleet fleet2 = new Fleet();
+            
             TwoPlayers.twoplayersetup(fleet1, board1, fleet2, board2);
             System.out.println("\n" + BoardRenderer.renderBoth(board1));
             System.out.println("\n" + BoardRenderer.renderBoth(board2));

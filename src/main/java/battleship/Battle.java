@@ -11,8 +11,8 @@ package battleship;
 public class Battle {
     
                                 //shooting player, receieving fleet, receiving board
-    public static void usershot(String usershot, Board p1board, Fleet fleet, Board p2board){
-        if(!fleet.allSunk()){
+    public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
+        if(!p2fleet.allSunk()){
             int col = usershot.charAt(0) - 'a';
             int row = usershot.charAt(1) - '1';
             //incase of 10 in row
@@ -25,7 +25,7 @@ public class Battle {
             }
 
             else{
-                Fleet.Ship hit = fleet.processHit(row, col);
+                Fleet.Ship hit = p2fleet.processHit(row, col);
 
                 if(hit == null){
                     System.out.println("Miss.");
@@ -37,13 +37,31 @@ public class Battle {
                     System.out.println("Hit " + 
                         (hit.isSunk() ? "SUNK!" + hit.name: ""));
                     p2board.shipHit(row, col);
-                    if(fleet.allSunk()){
+                    if(p2fleet.allSunk()){
                         System.exit(0);
                     }
                 }
 
                 // Display board
                 //System.out.println("\n" + BoardRenderer.renderBoth(board));
+            }
+        }
+    }
+    public static void aishot(int xpos,int ypos, Board aiboard, Fleet pfleet, Board pboard){
+        Fleet.Ship hit = pfleet.processHit(xpos, ypos);
+
+        if(hit == null){
+            System.out.println("Miss.");
+            aiboard.markMiss(xpos, ypos);
+            pboard.shipMiss(xpos, ypos);
+        }
+        else{
+            aiboard.markHit(xpos, ypos);
+            System.out.println("Hit " + 
+                (hit.isSunk() ? "SUNK!" + hit.name: ""));
+            pboard.shipHit(xpos, ypos);
+            if(pfleet.allSunk()){
+                System.exit(0);
             }
         }
     }

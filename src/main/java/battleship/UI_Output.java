@@ -8,8 +8,9 @@ import java.util.*;
 
 public class UI_Output {
     String pieceremove;
-    
-
+    public static void clearConsole() {
+        System.out.println("\n".repeat(100));
+    }
 
     public static String Startup(){
         Scanner input = new Scanner(System.in);

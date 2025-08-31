@@ -21,6 +21,7 @@ public class OnePlayer {
     }
     
     public static void playersetup(Fleet fleet, Board board){
+        UI_Output.clearConsole();
         System.out.println("Player Setup:");
         String answer = UI_Output.usingpreset();
         if(answer.equals("y")){
@@ -36,11 +37,24 @@ public class OnePlayer {
     }
     
     public static void playershoot(){
+        
         Scanner input = new Scanner(System.in);
         System.out.println("Where would you look to shoot?:");
         String usershot = Test.getInput(input);
         Battle.usershot(usershot, board, aifleet, aiboard);
         System.out.println("\n" + BoardRenderer.renderBoth(board));
-        System.out.println("\n" + BoardRenderer.renderBoth(aiboard));
+    }
+    
+    public static void aishoot(){
+        Random rand = new Random();
+        int xpos = rand.nextInt(10);
+        int ypos = rand.nextInt(10);
+        
+        Board.cellAt(xpos, ypos, gridtype.SHIPS);
+        
+        Battle.aishot(xpos, ypos, aiboard)
+        //Board.cellAt(xpos, ypos, board);
+        
+    }
     }
 }

@@ -9,6 +9,10 @@ package battleship;
  * @author ryanconnolly
  */
 public class TwoPlayers {
+    static Board board1 = new Board(10);
+    static Board board2 = new Board(10);
+    static Fleet fleet1 = new Fleet();
+    static Fleet fleet2 = new Fleet();
     public static void twoplayersetup(Fleet fleet1, Board board1, Fleet fleet2, Board board2){
         player1setup(fleet1,board1);
         player2setup(fleet2,board2);
