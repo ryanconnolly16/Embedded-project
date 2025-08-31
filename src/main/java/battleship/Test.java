@@ -23,23 +23,18 @@ public class Test {
         
         String answer = UI_Output.Startup();
         
-        if(answer.equals("1") ){
-            
-            
+        if(answer.equals("1") || answer.equals("one")){
             OnePlayer.playersetup();
-            
-            for(int i = 0; i < 10; i++){
-                OnePlayer.playershoot();
-            }
+            OnePlayer.PlayGame();
             
             
         }
         
         else if(answer.equals("2") || answer.equals("two")){
             
-            TwoPlayers.twoplayersetup(fleet1, board1, fleet2, board2);
-            System.out.println("\n" + BoardRenderer.renderBoth(board1));
-            System.out.println("\n" + BoardRenderer.renderBoth(board2));
+            //TwoPlayers.twoplayersetup(fleet1, board1, fleet2, board2);
+            //System.out.println("\n" + BoardRenderer.renderBoth(board1));
+            //System.out.println("\n" + BoardRenderer.renderBoth(board2));
         }
 
 

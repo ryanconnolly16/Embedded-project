@@ -26,7 +26,7 @@ public class UI_Output {
 
     public static String usingpreset(){
         Scanner input = new Scanner(System.in);
-        System.out.println("Would you like to use a preset for the layout of your fleet?");
+        System.out.println("Would you like to use a preset for the layout of your fleet?(y/n)");
         String preset = Test.getInput(input);  
         return preset;
     }

@@ -13,8 +13,20 @@ public class Battle {
                                 //shooting player, receieving fleet, receiving board
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){
-            int col = usershot.charAt(0) - 'a';
-            int row = usershot.charAt(1) - '1';
+            int col;
+            int row;
+            //if usershot num num
+            if (!Character.isLetter(usershot.charAt(0))) {
+                col = usershot.charAt(0) - '1'+1;
+                row = usershot.charAt(1) - '1'+1;
+            }
+            //if usershot letter num
+            else{
+                col = usershot.charAt(0) - 'a';
+                row = usershot.charAt(1) - '1';
+            }
+            
+            
             //incase of 10 in row
             if(usershot.length() > 2){
                row = 9;
@@ -41,9 +53,6 @@ public class Battle {
                         System.exit(0);
                     }
                 }
-
-                // Display board
-                //System.out.println("\n" + BoardRenderer.renderBoth(board));
             }
         }
     }
