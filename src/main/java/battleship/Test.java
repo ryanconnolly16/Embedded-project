@@ -7,92 +7,30 @@ import java.util.*;
 // class for testing shit
 
 public class Test {
-    
-    public static String getInput(Scanner scanner){
-        String input = scanner.nextLine();
-        if (input.trim().equalsIgnoreCase("x")) {
-            System.out.println("Thanks for playing!");
-            System.exit(0);
-        }
-        return input;
-    }
-    
-    
     public static void main(String[] args) throws IOException {
         Scanner input = new Scanner(System.in);
+        int count = 0;
         
-        String answer = UI_Output.Startup();
-        
-        if(answer.equals("1") || answer.equals("one")){
-            OnePlayer.playersetup();
-            OnePlayer.PlayGame();
+        while(true){
+            String answer = UI_Output.Startup(count);
+            if(answer.equals("1") || answer.equals("one")){
+                OnePlayer.playersetup();
+                OnePlayer.PlayGame();
+            }
+
+            else if(answer.equals("2") || answer.equals("two")){
+                TwoPlayers.twoplayersetup();
+                TwoPlayers.PlayGame();
+            }
             
-            
+            else{
+                System.out.println("Invalid input, try agin.");
+                count++;
+            }
         }
-        
-        else if(answer.equals("2") || answer.equals("two")){
-            
-            //TwoPlayers.twoplayersetup(fleet1, board1, fleet2, board2);
-            //System.out.println("\n" + BoardRenderer.renderBoth(board1));
-            //System.out.println("\n" + BoardRenderer.renderBoth(board2));
-        }
-
 
         
         
-        
-//        for(int i = 0; i<3; i++){
-//        System.out.println("Where would you look to shoot?:");
-//        String usershot = Test.getInput(input);
-//        
-//        //player2 shooting
-//        Battle.usershot(usershot, player2, fleet1, player1);
-//        //Battle.usershot(usershot, player1, fleet2, player2);
-//        //System.out.println(fleet1.processHit(0,0));
-//        
-//        //player1.markHit(0, 0);
-//        System.out.println(BoardRenderer.renderBoth(player1));
-//        System.out.println(BoardRenderer.renderBoth(player2));
-//        }
-        
-        
-//        while(fleet1.allSunk() == false){
-//            System.out.println("Where would you look to shoot?:");
-//            String usershot = Test.getInput(input);
-//            
-//            
-//            int col = usershot.charAt(0) - 'a';
-//            int row = usershot.charAt(1) - '1';
-//            
-//            //incase of 10 in row
-//            if(usershot.length() > 2){
-//               row = 9;
-//            }
-//            
-//            if(col > 9 || row > 10){
-//                System.out.println("Input is out of bounds, try again.\n\n");
-//            }
-//            
-//            else{
-//                
-//                Fleet.Ship hit = fleet1.processHit(row, col);
-//
-//                if (hit != null) {
-//                    board.markHit(row, col);
-//                    System.out.println("Hit " + 
-//                        (hit.isSunk() ? "SUNK!" + hit.name: ""));
-//                }
-//                else{
-//                    System.out.println("Miss.");
-//                    board.markMiss(row, col);
-//                }
-//
-//                // Display board
-//                System.out.println("\n" + BoardRenderer.renderBoth(board));
-//            }
-//
-
-
 
 
 

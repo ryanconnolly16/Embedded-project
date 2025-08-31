@@ -12,23 +12,38 @@ public class UI_Output {
         System.out.println("\n".repeat(100));
     }
 
-    public static String Startup(){
+    public static String Startup(int count){
         Scanner input = new Scanner(System.in);
-        System.out.println("Welcome to Battle Ship.");
-        System.out.println("To shoot a shot type the grid coordinated when prompted, e.g. a3.");
-        System.out.println("To quit the game type x.\n\n");
-        
+        if(count <1){
+            System.out.println("Welcome to Battle Ship.");
+            System.out.println("To shoot a shot type the grid coordinated when prompted, e.g. a3.");
+            System.out.println("To quit the game type x.\n\n");
+        }
         
         System.out.println("Are you playing with one or two people?");
-        String preset = Test.getInput(input);  
+        String preset = getInput(input);  
         return preset;
     }
 
     public static String usingpreset(){
         Scanner input = new Scanner(System.in);
         System.out.println("Would you like to use a preset for the layout of your fleet?(y/n)");
-        String preset = Test.getInput(input);  
+        String preset = getInput(input);  
         return preset;
+    }
+    
+    
+    public static String getInput(Scanner scanner){
+        String input = scanner.nextLine();
+        if (input.isEmpty()) {
+            System.out.println("Invalid input, try again");
+            getInput(scanner);
+        }
+        else if (input.trim().equalsIgnoreCase("x")) {
+            System.out.println("Thanks for playing!");
+            System.exit(0);
+        }
+        return input;
     }
     
 }

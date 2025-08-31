@@ -195,7 +195,7 @@ public class Fleet {
                     System.out.println((i+1) + ". " + pieces.get(i));
                 }
 
-                String posistions = Test.getInput(input);
+                String posistions = UI_Output.getInput(input);
                 String[] list = posistions.split(",");
                     
                 int type = Integer.parseInt(list[0].trim()) -1 ;
