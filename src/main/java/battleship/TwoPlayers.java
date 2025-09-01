@@ -9,47 +9,35 @@ import java.util.*;
  * @author ryanconnolly
  */
 public class TwoPlayers {
+    //global variables
     static Board board1 = new Board(10);
     static Board board2 = new Board(10);
     static Fleet fleet1 = new Fleet();
     static Fleet fleet2 = new Fleet();
     
     public static void twoplayersetup(){
-        player1setup(fleet1,board1);
-        player2setup(fleet2,board2);
+        playersetup(fleet1,board1);
+        playersetup(fleet2,board2);
     }
     
-    public static void player1setup(Fleet fleet1, Board board1){
+    //set up function asking player if they want to use a preset board or not wioth error handling
+    public static void playersetup(Fleet fleet, Board board){
         System.out.println("Player 1 Setup:");
         String answer = UI_Output.usingpreset();
         
-        if(answer.equals("y")){
-            fleet1.preset(fleet1, board1);
+        if(answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")){
+            fleet.preset(fleet, board);
         }
-        else if(answer.equals("n")){
-            fleet1.userpalcement(fleet1, board1);
+        else if(answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")){
+            fleet.userpalcement(fleet, board);
         }
         else{
             System.out.println("Invalid answer, try again.");
-            player1setup(fleet1, board1);
+            playersetup(fleet, board);
         }
     }
     
-    public static void player2setup(Fleet fleet2, Board board2){
-        System.out.println("Player 2 Setup:");
-        
-        String answer = UI_Output.usingpreset();
-        if(answer.equals("y")){
-            fleet2.preset(fleet2, board2);
-        }
-        else if(answer.equals("n")){
-            fleet2.userpalcement(fleet2, board2);
-        }
-        else{
-            System.out.println("Invalid answer, try again.");
-            player2setup(fleet2, board2);
-        }
-    }
+    //function for player taking a shot
     public static void playershoot(Board shooterboard, Fleet receiverfleet, Board receiverboard){
         Scanner input = new Scanner(System.in);
         System.out.println("\n" + BoardRenderer.renderBoth(shooterboard));
@@ -57,21 +45,31 @@ public class TwoPlayers {
         String usershot = null;
         usershot = UI_Output.getInput(input);
         
+        //checking input format is correct
         if(!Character.isLetter(usershot.charAt(0)) || Character.isLetter(usershot.charAt(1))){
             System.out.println("Invalid shot, try again.");
             playershoot(shooterboard, receiverfleet, receiverboard);
         }
         
-        int xpos = usershot.charAt(0) - 'a';
-        int ypos = usershot.charAt(1) - '1';
+        //getting x and y possition
+        int xpos = Character.toLowerCase(usershot.charAt(0) - 'a');
+        int ypos;
+        if(usershot.length() > 2){
+            ypos = 9;
+        }
+        else{
+            ypos = usershot.charAt(1) - '1';
+        }
         
         
-        if(xpos >10 || xpos <1 || ypos >10 || ypos < 0){
+        //checkign if out of bounds 
+        if(xpos >10 || xpos <0 || ypos >10 || ypos < 0){
             System.out.println("Shooot out of bounds try again.");
             playershoot(shooterboard, receiverfleet, receiverboard);
         }
         
-        char trial_shot = receiverboard.cellAt(xpos, ypos, Board.GridType.SHIPS);
+        //checking chosen cell state
+        char trial_shot = receiverboard.cellAt(ypos, xpos, Board.GridType.SHIPS);
         
         if (trial_shot == 'X' || trial_shot == 'O'){
             System.out.println("\n\nShot already taken there.");
@@ -84,6 +82,7 @@ public class TwoPlayers {
         
     }
     
+    //will alternate between player one and two until either fleet is all sunk
     public static void PlayGame(){
         while(!fleet1.allSunk() || !fleet2.allSunk()){
             UI_Output.clearConsole();

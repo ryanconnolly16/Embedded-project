@@ -11,24 +11,30 @@ import java.util.*;
  * @author ryanconnolly
  */
 public class OnePlayer {
-        static Board pboard = new Board(10);
-        static Fleet pfleet = new Fleet();
-        static Board aiboard = new Board(10);
-        static Fleet aifleet = new Fleet();
-        public static void playersetup(){
+    
+    //global variables for each fleet and board
+    static Board pboard = new Board(10);
+    static Fleet pfleet = new Fleet();
+    static Board aiboard = new Board(10);
+    static Fleet aifleet = new Fleet();
+    
+    
+    public static void playersetup(){
         playersetup(pfleet,pboard);
         aisetup(aifleet, aiboard);
     }
-    
+
+    //set up function asking player if they want to use a preset board or not wioth error handling
     public static void playersetup(Fleet fleet, Board board){
         //UI_Output.clearConsole();
         System.out.println("Player Setup:");
         String answer = UI_Output.usingpreset();
-        if(answer.equals("y")){
+        
+        if(answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")){
             fleet.preset(fleet, board);
             System.out.println("\nHere is your board;");
         }
-        else if(answer.equals("n")){
+        else if(answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")){
             fleet.userpalcement(fleet, board);
         }
         else{
@@ -37,18 +43,22 @@ public class OnePlayer {
         }
     }
 
+    //setting up aiboard with preset function in fleet class
     public static void aisetup(Fleet aifleet, Board aiboard){
         aifleet.preset(aifleet, aiboard);
         
     }
     
+    //will alternate between player and ai shots until either fleet is sunk
     public static void PlayGame(){
         while(!pfleet.allSunk() || !aifleet.allSunk()){
+            UI_Output.clearConsole();
             playershoot();
             aishoot();
         }
     }
     
+    //function for player taking a shot
     public static void playershoot(){
         Scanner input = new Scanner(System.in);
         System.out.println("\n" + BoardRenderer.renderBoth(pboard));
@@ -57,23 +67,34 @@ public class OnePlayer {
         
         usershot = UI_Output.getInput(input);
         
+        //checking input format
         if(!Character.isLetter(usershot.charAt(0)) || Character.isLetter(usershot.charAt(1))){
             System.out.println("Invalid shot, try again.");
             playershoot();
         }
         
-        int xpos = usershot.charAt(0) - 'a';
-        int ypos = usershot.charAt(1) - '1';
-        
-        
-        if(xpos >9 || xpos <1 || ypos >9 || ypos < 0){
+        //getting x and y posistion
+        int ypos;
+        int xpos = Character.toLowerCase(usershot.charAt(0) - 'a');
+        if(usershot.length() > 2){
+            ypos = 9;
+        }
+        else{
+            ypos = usershot.charAt(1) - '1';
+        }
+        //checking for out of bounds
+        if(xpos >9 || xpos <0 || ypos >9 || ypos < 0){
             System.out.println("Shot out of bounds try again.");
             playershoot();
         }
                 
-                
-        char trial_shot = aiboard.cellAt(xpos, ypos, Board.GridType.SHIPS);
+        //checking what state the cell they chose is
+        char trial_shot = aiboard.cellAt(ypos, xpos, Board.GridType.SHIPS);
         
+        
+        UI_Output.clearConsole();
+        
+        //checking if they already shot in that space 
         if (trial_shot == 'X' || trial_shot == 'O'){
             System.out.println("\n\nShot already taken there.");
             System.out.println("Try again.\n\n");
@@ -84,13 +105,15 @@ public class OnePlayer {
         }
     }
     
+    //using random function to chose a square, checks if already shot their
     public static void aishoot(){
         Random rand = new Random();
         int xpos = rand.nextInt(10);
         int ypos = rand.nextInt(10);
+        //checking what state the chosen cell is
+        char trial_shot = pboard.cellAt(ypos, xpos, Board.GridType.SHIPS);
         
-        char trial_shot = pboard.cellAt(xpos, ypos, Board.GridType.SHIPS);
-        
+        //checking if they already shot in that space 
         if (trial_shot == 'X' || trial_shot == 'O'){
             aishoot();
         }

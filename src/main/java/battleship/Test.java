@@ -13,12 +13,12 @@ public class Test {
         
         while(true){
             String answer = UI_Output.Startup(count);
-            if(answer.equals("1") || answer.equals("one")){
+            if(answer.equals("1") || answer.equalsIgnoreCase("one")){
                 OnePlayer.playersetup();
                 OnePlayer.PlayGame();
             }
 
-            else if(answer.equals("2") || answer.equals("two")){
+            else if(answer.equals("2") || answer.equalsIgnoreCase("two")){
                 TwoPlayers.twoplayersetup();
                 TwoPlayers.PlayGame();
             }
@@ -32,15 +32,6 @@ public class Test {
         
         
 
-
-
-        // after user asks to hit (6,0) and you check that the state is hit use:
-        //player1.markHit(6, 0);// marks hit on player 1's hit/miss board
-        //player2.shipHit(6, 0);// marks hit on player 2's ship board
-        // there are also markMiss and shipMiss
-
-        // use renderBoth for rendering both boards for a player
-        //System.out.println(BoardRenderer.renderBoth(player1));
 
 
         // after each turn use:
