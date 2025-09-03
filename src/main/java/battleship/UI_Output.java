@@ -124,7 +124,7 @@ public class UI_Output extends FileInput{
     }
     
     public static String UsingPreset() throws IOException{
-        System.out.println("Would you like to use a preset for the layout, or your own fleet?(y/n)");
+        System.out.println("Would you like to use a preset for the layout?(y/n)");
         String preset = GetInput(input);  
         return preset;
     }
