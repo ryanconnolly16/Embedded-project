@@ -25,6 +25,7 @@ public class UI_Output extends FileInput{
             PlayerAmount();
     }
     
+    public static int startedgame = 0;
     public static void PlayerAmount() throws IOException{
         System.out.println("Are you playing with one or two people?");
         String amount = GetInput(input).trim();
@@ -32,11 +33,13 @@ public class UI_Output extends FileInput{
             if(amount.equals("1") || amount.equalsIgnoreCase("one")){
                 LoadSavedGame(1);
                 OnePlayer oneplayer = new OnePlayer();
+                startedgame = 1;
                 oneplayer.PlayGame();
             }
             else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
                 LoadSavedGame(2);
                 TwoPlayers twoplayers = new TwoPlayers();
+                startedgame = 1;
                 twoplayers.PlayGame();
             }
             else{
@@ -139,20 +142,22 @@ public class UI_Output extends FileInput{
         }
         else if (input.trim().equalsIgnoreCase("x")) {
             System.out.println("Thanks for playing!");
-            System.out.println("Would you like to save the current turn to a file?(y/n)");
-            String savetheturn = scanner.nextLine();
-            while(true){
-                if (savetheturn.equals("y")){
-                    SaveManager.keep(autosave);
-                    break;
-                }
-                else if(savetheturn.equals("n")){
-                    SaveManager.discard(autosave);
-                    break;
-                }
-                else {  
-                    System.out.println("Invalid, only input y or n please.");
-                    savetheturn = scanner.nextLine();
+            if (startedgame == 1){
+                System.out.println("Would you like to save the current turn to a file?(y/n)");
+                String savetheturn = scanner.nextLine();
+                while(true){
+                    if (savetheturn.equals("y")){
+                        SaveManager.keep(autosave);
+                        break;
+                    }
+                    else if(savetheturn.equals("n")){
+                        SaveManager.discard(autosave);
+                        break;
+                    }
+                    else {  
+                        System.out.println("Invalid, only input y or n please.");
+                        savetheturn = scanner.nextLine();
+                    }
                 }
             }
             System.exit(0);

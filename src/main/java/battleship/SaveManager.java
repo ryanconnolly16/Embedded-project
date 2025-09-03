@@ -71,6 +71,7 @@ public class SaveManager {
                 filenames.add(file.getName());
                 
             }
+            Collections.reverse(filenames);
             for(int i = 0; i < filenames.size(); i++){
                 System.out.println((i +1) + ". " + filenames.get(i));
             }
@@ -92,5 +93,7 @@ public class SaveManager {
         
         return folderPath.toAbsolutePath().toString();
     }
+    
+    
 }
     
