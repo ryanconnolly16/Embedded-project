@@ -10,7 +10,7 @@ import battleship.enums.GridType;
 import java.io.*;
 import java.util.*;
 
-public class TwoPlayers {
+public class TwoPlayersold{
     //global variables
     static Board board1 = new Board(10);
     static Board board2 = new Board(10);

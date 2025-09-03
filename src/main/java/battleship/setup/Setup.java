@@ -1,0 +1,37 @@
+package battleship.setup;
+
+import battleship.Fleet;
+import battleship.UI_Output;
+import battleship.domain.Board;
+import battleship.interfaces.*;
+import java.io.IOException;
+
+public class Setup implements GameSetup {
+    
+    public Setup() {
+        //simple constructor like your style
+    }
+    
+    //match your exact method signature and logic
+    public void PlayerSetup(Fleet fleet, Board board, String name) throws IOException {
+        System.out.println("\n\n" + name + " Setup:");
+        String answer = UI_Output.UsingPreset();
+        
+        if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
+            fleet.Preset(fleet, board);
+            System.out.println("\nHere is your board:");
+        }
+        else if (answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")) {
+            fleet.UserPalcement(fleet, board);
+        }
+        else {
+            System.out.println("Invalid answer, try again.");
+            PlayerSetup(fleet, board, name);
+        }
+    }
+    
+    @Override
+    public void setupPlayers() throws IOException {
+        //interface implementation - but we mainly use PlayerSetup directly
+    }
+}

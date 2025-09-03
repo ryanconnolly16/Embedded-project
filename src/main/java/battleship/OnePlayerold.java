@@ -7,7 +7,7 @@ import battleship.enums.Cell;
 import java.io.*;
 import java.util.*;
 
-public class OnePlayer extends TwoPlayers {
+public class OnePlayerold extends TwoPlayers {
     
     //global variables for each fleet and board
     static Board pboard = new Board(10);
