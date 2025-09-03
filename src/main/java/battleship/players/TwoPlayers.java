@@ -1,6 +1,6 @@
 package battleship.players;
 
-import battleship.Fleet;
+import battleship.fleetplacements.*;
 import battleship.domain.*;
 import battleship.setup.*;
 import battleship.playinggame.*;

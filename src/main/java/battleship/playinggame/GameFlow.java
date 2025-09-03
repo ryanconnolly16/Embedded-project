@@ -1,6 +1,6 @@
 package battleship.playinggame;
 
-import battleship.Fleet;
+import battleship.fleetplacements.*;
 import battleship.domain.Board;
 import battleship.interfaces.*;
 import battleship.io.SaveManager;

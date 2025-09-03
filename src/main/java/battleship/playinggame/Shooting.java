@@ -1,6 +1,6 @@
 package battleship.playinggame;
 
-import battleship.*;
+import battleship.fleetplacements.*;
 import battleship.domain.*;
 import battleship.enums.*;
 import battleship.interfaces.*;

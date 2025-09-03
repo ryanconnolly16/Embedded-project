@@ -19,14 +19,14 @@ public class InputManager implements UserInput {
     
     //same method name and logic as your original
     public String getInput() throws IOException {
-        String input = this.input.nextLine();
-        if (input.isEmpty()) {
-            System.out.println("Invalid input, try again");
-            return getInput();
-        }
-        else if (input.trim().equalsIgnoreCase("x")) {
-            System.out.println("Thanks for playing!");
-            if (startedGame == 1){
+        while (true) {
+            String input = this.input.nextLine();
+            if (input.isEmpty()) {
+                System.out.println("Invalid input, try again.............");
+                continue;  // Ask for input again
+            }
+            else if (input.trim().equalsIgnoreCase("x")) {
+                System.out.println("Thanks for playing!");
                 System.out.println("Would you like to save the current turn to a file?(y/n)");
                 String savetheturn = this.input.nextLine();
                 while(true){
@@ -43,15 +43,48 @@ public class InputManager implements UserInput {
                         savetheturn = this.input.nextLine();
                     }
                 }
+                System.exit(0);
             }
-            System.exit(0);
+            return input;
         }
-        return input;
     }
+        
+        
+        
+//        String input = this.input.nextLine();
+//        if (input.isEmpty()) {
+//            System.out.println("Invalid input, try again");
+//            return getInput();
+//        }
+//        else if (input.trim().equalsIgnoreCase("x")) {
+//            System.out.println("Thanks for playing!");
+//            if (startedGame == 1){
+//                System.out.println("Would you like to save the current turn to a file?(y/n)");
+//                String savetheturn = this.input.nextLine();
+//                while(true){
+//                    if (savetheturn.equals("y")){
+//                        SaveManager.keep(autosave);
+//                        break;
+//                    }
+//                    else if(savetheturn.equals("n")){
+//                        SaveManager.discard(autosave);
+//                        break;
+//                    }
+//                    else {  
+//                        System.out.println("Invalid, only input y or n please.");
+//                        savetheturn = this.input.nextLine();
+//                    }
+//                }
+//            }
+//            System.exit(0);
+//        }
+//        return input;
+    
     
     public static String AskPreset() throws IOException{
-        Input input = new Input();
+        InputManager input = new InputManager();
         return input.askPreset();
+        
     }
     
     
@@ -64,7 +97,7 @@ public class InputManager implements UserInput {
     
     //static method like your style
     public static String GetInput(Scanner scanner) throws IOException {
-        Input handler = new Input();
+        InputManager handler = new InputManager();
         return handler.getInput();
     }
 }

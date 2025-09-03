@@ -1,12 +1,13 @@
 
 package battleship.io;
 import battleship.interfaces.*;
+import battleship.fleetplacements.Fleet;
 import java.util.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 // Single Responsibility: File loading only
-class ShipFileLoader implements ShipLoader {
+public class ShipFileLoader implements ShipLoader {
     
     public ShipFileLoader() {
         //simple constructor like your style

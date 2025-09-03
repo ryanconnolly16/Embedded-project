@@ -20,7 +20,9 @@ class PresetPlacer implements ShipPlacer {
         for(int i = 0; i < Fleet.pieces.size(); i++){
             //will loop until the ship fit into board, including not overlapping and making sure it doesnt extend over edge of board
             boolean placementgood = false;
+            int attempts = 0;
             while (placementgood == false){
+                attempts++;
                 int rshipnum = i;
                 int rxpos = rand.nextInt(10);
                 int rypos = rand.nextInt(10);
@@ -33,10 +35,10 @@ class PresetPlacer implements ShipPlacer {
                 else if (rdirc == 3) dir = Direction.RIGHT;
 
                 Result result = fleet.PlaceShip(board, rshipnum, rxpos, rypos, dir);
-                //end loop
+                
                 if(result == Result.OK){
                     placementgood = true;
-                }   
+                } 
             }
         }
     }

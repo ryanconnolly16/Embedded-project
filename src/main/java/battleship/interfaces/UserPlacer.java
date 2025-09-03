@@ -1,8 +1,8 @@
 
 package battleship.interfaces;
 import battleship.domain.Board;
-import battleship.enums.Direction;
-import battleship.enums.Result;
+import battleship.enums.*;
+import battleship.fleetplacements.*;
 import java.util.List;
 
 public interface UserPlacer {

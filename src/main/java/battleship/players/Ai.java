@@ -1,17 +1,18 @@
 package battleship.players;
 
 import battleship.playinggame.Battle;
-import battleship.*;
+import battleship.fleetplacements.*;
 import battleship.domain.*;
 import battleship.enums.*;
 import battleship.interfaces.*;
+import battleship.fleetplacements.*;
 import java.util.Random;
 
 class Ai implements AiShooter {
     //simple naming like your style
-    private Board playerboard;
-    private Board aiboard;  
-    private Fleet playerfleet;
+    private final Board playerboard;
+    private final Board aiboard;  
+    private final Fleet playerfleet;
     
     public Ai(Board playerboard, Board aiboard, Fleet playerfleet) {
         this.playerboard = playerboard;

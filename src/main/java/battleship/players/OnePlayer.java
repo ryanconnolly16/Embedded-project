@@ -1,12 +1,12 @@
 package battleship.players;
 
-import battleship.Fleet;
 import battleship.playinggame.Shooting;
 import battleship.setup.Setup;
 
 import battleship.domain.Board;
 import battleship.io.SaveManager;
 import battleship.ui.*;
+import battleship.fleetplacements.*;
 import java.io.IOException;
 
 // OnePlayer as standalone class - no inheritance confusion
@@ -36,9 +36,9 @@ public class OnePlayer {
     }
     
     public static void OnePlayerSetup() throws IOException {
-    OnePlayer game = new OnePlayer();
-    game.onePlayerSetup();  // delegate to instance method
-}
+        OnePlayer game = new OnePlayer();
+        game.onePlayerSetup();  // delegate to instance method
+    }
     
     //same method name as your original
     public void onePlayerSetup() throws IOException {
@@ -68,8 +68,6 @@ public class OnePlayer {
     
     //same method name as your original
     public static void AiShoot() {
-        //kept for compatibility
-        System.out.println("Use instance method aiHandler.aiShoot() instead");
     }
     
 }
