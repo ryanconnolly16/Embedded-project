@@ -1,16 +1,11 @@
-
 package battleship;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-//import java.io.File;
-//import java.io.IOException;
-//import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-//import java.util.ArrayList;
-//import java.util.stream.Stream;
+
 
 public class SaveManager {
     public static final String DIR = "saves";
@@ -30,7 +25,7 @@ public class SaveManager {
         return tmp;
     }
     
-    //when they press x
+    //when they press x and want to save
     public static File keep(File tmp) throws IOException {
         if (tmp == null) throw new IllegalArgumentException("tmp is null");
         String name = tmp.getName();
@@ -40,12 +35,14 @@ public class SaveManager {
         return dst;
     }
      
+    //when they press x and want to delete
     public static void discard(File tmp) {
         if (tmp != null && tmp.exists()) {
             tmp.delete();
         }
     }
     
+    //checks that the file exists and arent empty before opening
     public static int checkfilesexist(){
         File[] arr = new File(SaveManager.getProjectFolderPath("saves")).listFiles((d, name) -> name.startsWith("save_") && name.endsWith(".txt"));
         

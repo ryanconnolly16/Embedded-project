@@ -1,9 +1,6 @@
 
 package battleship;
 
-import battleship.Board;
-import battleship.Fleet;
-import battleship.Fleet.Ship;
 import java.io.*;
 import java.util.*;
 
@@ -25,7 +22,7 @@ public class UI_Output extends FileInput{
             PlayerAmount();
     }
     
-    public static int startedgame = 0;
+    public static int startedGame = 0;
     public static void PlayerAmount() throws IOException{
         System.out.println("Are you playing with one or two people?");
         String amount = GetInput(input).trim();
@@ -33,13 +30,13 @@ public class UI_Output extends FileInput{
             if(amount.equals("1") || amount.equalsIgnoreCase("one")){
                 LoadSavedGame(1);
                 OnePlayer oneplayer = new OnePlayer();
-                startedgame = 1;
+                startedGame = 1;
                 oneplayer.PlayGame();
             }
             else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
                 LoadSavedGame(2);
                 TwoPlayers twoplayers = new TwoPlayers();
-                startedgame = 1;
+                startedGame = 1;
                 twoplayers.PlayGame();
             }
             else{
@@ -142,7 +139,7 @@ public class UI_Output extends FileInput{
         }
         else if (input.trim().equalsIgnoreCase("x")) {
             System.out.println("Thanks for playing!");
-            if (startedgame == 1){
+            if (startedGame == 1){
                 System.out.println("Would you like to save the current turn to a file?(y/n)");
                 String savetheturn = scanner.nextLine();
                 while(true){

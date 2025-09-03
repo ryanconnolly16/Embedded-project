@@ -4,10 +4,12 @@ import static battleship.Board.GridType;
 
 public final class BoardRenderer {
 
+    //Default renderBoth method
     public static String renderBoth(Board b) {
         return renderBoth(b, 3, 1, true, true);
     }
 
+    //Editable settings renderBoth method
     public static String renderBoth(Board b, int cellW, int cellH, boolean showTopLetters, boolean showBottomLetters) {
         String left  = renderGrid(b, GridType.SHIPS, cellW, cellH, showTopLetters, showBottomLetters);
         String right = renderGrid(b, GridType.SHOTS, cellW, cellH, showTopLetters, showBottomLetters);
@@ -30,7 +32,8 @@ public final class BoardRenderer {
         }
         return out.toString();
     }
-
+    
+    //prints each grid individually
     public static String renderGrid(Board board, GridType which, int cellW, int cellH, boolean showTopLetters, boolean showBottomLetters) {
         int n = board.getSize();
         int rowWidth = Integer.toString(n).length();
@@ -97,6 +100,7 @@ public final class BoardRenderer {
         return sb.toString();
     }
 
+    //helpers for formating
     private static void repeat(StringBuilder sb, char ch, int count){ for(int i = 0; i < count; i++) sb.append(ch); }
     
     private static void pad(StringBuilder sb, int n){ for(int i=0;i<n;i++) sb.append(' '); }

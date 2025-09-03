@@ -1,6 +1,7 @@
 package battleship;
+
 public class Battle {
-                                //shooting player, receieving fleet, receiving board
+    //shooting player, receieving fleet, receiving board
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){
             int col;
@@ -15,7 +16,6 @@ public class Battle {
                 col = usershot.charAt(0) - 'a';
                 row = usershot.charAt(1) - '1';
             }
-            
             
             //incase of 10 in row
             if(usershot.length() > 2){

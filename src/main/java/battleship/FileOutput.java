@@ -7,15 +7,8 @@ import java.io.IOException;
 
 public class FileOutput extends BoardFileIO {
 
-    public void saveMatch(Board player1, Board player2) {
-        try {
-            saveMatch(player1, player2, defaultFile);
-            System.out.println("Match saved to: " + defaultFile.getAbsolutePath());
-        } catch (IOException e) {
-            System.err.println("Error saving match: " + e.getMessage());
-        }
-    }
-
+    
+    //Saves the match to a file with a specific format
     public void saveMatch(Board player1, Board player2, File file) throws IOException {
         int n = player1.getSize();
         if (n != player2.getSize())

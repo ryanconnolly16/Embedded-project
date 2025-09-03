@@ -24,8 +24,10 @@ public class Board {
         }
     }
     
+    //type of grid enum
     public enum GridType { SHIPS, SHOTS }
 
+    //constructor
     public Board(int size) {
         if (size <= 0 && size < 20) throw new IllegalArgumentException("size must be between 0 and 20");
         this.size = size;
@@ -34,8 +36,10 @@ public class Board {
         fillWater();
     }
 
+    //returns board size
     public int getSize() { return size; }
     
+    //retrieves cell at a given coordinate (to be used elsewhere)
     public char cellAt(int row, int col, GridType which) {
         if (!inBounds(row, col)) {
             throw new IndexOutOfBoundsException("row=" + row + " col=" + col);
@@ -43,13 +47,7 @@ public class Board {
         return (which == GridType.SHIPS) ? shipGrid[row][col] : hitMissGrid[row][col];
     }
 
-    public char getCell(int row, int col, char[][] grid) { // Dont use
-        if (!inBounds(row, col)) {
-            throw new IndexOutOfBoundsException("row=" + row + ", col=" + col + " out of bounds for size " + size);
-        }
-        return grid[row][col];
-    }
-
+    //sets a specified cell to a certain state
     public Result setCell(int row, int col, char state, GridType which) {
         if (!inBounds(row, col)) return Result.OUT_OF_BOUNDS;
         if (!isAllowed(state))   return Result.INVALID_STATE;
@@ -58,6 +56,7 @@ public class Board {
         return Result.OK;
     }
 
+    //clears board (constructor)
     public final void fillWater() {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
@@ -67,6 +66,7 @@ public class Board {
         }
     }
 
+    //places a line of a certain state, is used to place ship but has error handling behind the scenes
     private Result fillLine(int r0, int c0, int length, Direction dir, char state) {
         if (!isAllowed(state)) return Result.INVALID_STATE;
         if (length <= 0)       return Result.INVALID_LENGTH;
@@ -92,10 +92,12 @@ public class Board {
         return Result.OK;
     }
 
+    //helpers
     private boolean inBounds(int row, int col) { return row>=0 && row<size && col>=0 && col<size; }
     
     private boolean isAllowed(char s) { return s==WATER || s==SHIP || s==HIT || s==MISS; }
     
+    //Methods to be used elsewhere
     public Result markHit(int row, int col)  { return setCell(row, col, HIT,  GridType.SHOTS); }
     
     public Result markMiss(int row, int col) { return setCell(row, col, MISS, GridType.SHOTS); }

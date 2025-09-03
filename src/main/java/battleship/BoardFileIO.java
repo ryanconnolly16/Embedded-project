@@ -1,11 +1,8 @@
 package battleship;
 
-import java.io.File;
-
 public abstract class BoardFileIO {
-    
-    protected final File defaultFile = new File("save.log");
 
+    //Converts board states to a readable output within the save file
     protected char encode(char state) {
         if (state == Board.WATER) return '.';
         if (state == Board.SHIP)  return 'S';
@@ -14,6 +11,7 @@ public abstract class BoardFileIO {
         return '?';
     }
 
+    //Converts save file back to ship stated
     protected char decode(char ch) {
         if (ch == '.') return Board.WATER;
         if (ch == 'S') return Board.SHIP;

@@ -4,20 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class FileInput extends BoardFileIO {
 
     
     //loads the board save into 2 new instances 
-    //
     public Board[] loadMatch(File file) throws IOException {
         
         if (file == null || !file.exists()) {
             System.err.println("Save file not found: " + (file != null ? file.getAbsolutePath() : "null"));
         }
-        if (file.length() == 0) {
+        else if (file.length() == 0) {
             System.err.println("Save file is empty: " + file.getAbsolutePath());
             System.exit(0);
         }
