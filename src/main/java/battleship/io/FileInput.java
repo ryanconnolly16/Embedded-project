@@ -1,16 +1,20 @@
-package battleship;
+package battleship.io;
 
+import battleship.io.CellSymbolIO;
+import battleship.domain.Board;
+import battleship.enums.Cell;
+import battleship.enums.GridType;
+import battleship.enums.Result;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class FileInput extends BoardFileIO {
+public class FileInput extends CellSymbolIO {
 
-    
-    //loads the board save into 2 new instances 
+    // loads the board save into 2 new instances 
     public Board[] loadMatch(File file) throws IOException {
-        
+
         if (file == null || !file.exists()) {
             System.err.println("Save file not found: " + (file != null ? file.getAbsolutePath() : "null"));
         }
@@ -18,7 +22,7 @@ public class FileInput extends BoardFileIO {
             System.err.println("Save file is empty: " + file.getAbsolutePath());
             System.exit(0);
         }
-        
+
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
             String sizeLine = req(br.readLine(), "size");
@@ -26,16 +30,16 @@ public class FileInput extends BoardFileIO {
 
             expect(req(br.readLine(), "PLAYER1 header"), "PLAYER1");
             Board p1 = new Board(n);
-            readSection(br, p1, "SHIPS", Board.GridType.SHIPS, n);
-            readSection(br, p1, "SHOTS", Board.GridType.SHOTS, n);
+            readSection(br, p1, "SHIPS", GridType.SHIPS, n);
+            readSection(br, p1, "SHOTS", GridType.SHOTS, n);
 
             expect(req(br.readLine(), "PLAYER2 header"), "PLAYER2");
             Board p2 = new Board(n);
-            readSection(br, p2, "SHIPS", Board.GridType.SHIPS, n);
-            readSection(br, p2, "SHOTS", Board.GridType.SHOTS, n);
+            readSection(br, p2, "SHIPS", GridType.SHIPS, n);
+            readSection(br, p2, "SHOTS", GridType.SHOTS, n);
 
             return new Board[]{ p1, p2 };
-        } 
+        }
         catch (IOException ioe) {
             System.err.println("Error reading save: " + ioe.getMessage());
             System.exit(0);
@@ -54,7 +58,7 @@ public class FileInput extends BoardFileIO {
     }
 
     private void readSection(BufferedReader br, Board board,
-                             String expectedHeader, Board.GridType which, int n) throws IOException {
+                             String expectedHeader, GridType which, int n) throws IOException {
         String hdr = req(br.readLine(), expectedHeader + " header");
         if (!expectedHeader.equals(hdr))
             throw new IOException("Expected '" + expectedHeader + "', got: '" + hdr + "'");
@@ -64,9 +68,9 @@ public class FileInput extends BoardFileIO {
             if (line.length() < n)
                 throw new IOException("Short row " + r + " for " + which + ": " + line.length() + " < " + n);
             for (int c = 0; c < n; c++) {
-                char state = decode(line.charAt(c));
-                Board.Result res = board.setCell(r, c, state, which);
-                if (res != Board.Result.OK)
+                Cell state = decode(line.charAt(c));
+                Result res = board.setCell(r, c, state, which);
+                if (res != Result.OK)
                     throw new IOException("Failed to set (" + r + "," + c + "): " + res);
             }
         }

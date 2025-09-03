@@ -1,5 +1,11 @@
 package battleship;
 
+import battleship.domain.Board;
+import battleship.enums.Direction;
+import battleship.enums.Result;
+import battleship.ui.BoardRenderer;
+import battleship.ui.DefaultGlyphs;
+
 import java.util.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -11,7 +17,7 @@ public class Fleet {
         public final int size;
         private int hits;
         private int row, col;
-        private Board.Direction dir;
+        private Direction dir;
         
         public Ship(String name, int size) {
             this.name = name;
@@ -24,7 +30,7 @@ public class Fleet {
         public boolean isSunk() { return hits >= size; }
         public int getHealth() { return size - hits; }
         
-        void place(int r, int c, Board.Direction d) {
+        void place(int r, int c, Direction d) {
             row = r; col = c; dir = d;
         }
         
@@ -128,15 +134,15 @@ public class Fleet {
                 int rypos = rand.nextInt(10);
                 int rdirc = rand.nextInt(4);
                 
-                Board.Direction dir = null;
-                if (rdirc == 0) dir = Board.Direction.UP;
-                else if (rdirc == 1) dir = Board.Direction.DOWN;
-                else if (rdirc == 2) dir = Board.Direction.LEFT;
-                else if (rdirc == 3) dir = Board.Direction.RIGHT;
+                Direction dir = null;
+                if (rdirc == 0) dir = Direction.UP;
+                else if (rdirc == 1) dir = Direction.DOWN;
+                else if (rdirc == 2) dir = Direction.LEFT;
+                else if (rdirc == 3) dir = Direction.RIGHT;
 
-                Board.Result result = fleet.PlaceShip(board, rshipnum, rxpos, rypos, dir);
+                Result result = fleet.PlaceShip(board, rshipnum, rxpos, rypos, dir);
                 //end loop
-                if(result == Board.Result.OK){
+                if(result == Result.OK){
                     placementgood = true;
                 }   
             }
@@ -149,7 +155,7 @@ public class Fleet {
             try{
                 System.out.println("\nPlease input where you would like to place the ships in format:");
                 System.out.println("Ship number, X posistion, Y posistion, Direction");
-                System.out.println("\n" + BoardRenderer.renderBoth(board));
+                System.out.println("\n" + BoardRenderer.renderBoth(board, new DefaultGlyphs()));
                 System.out.println("Ship Numbers;");
                 
                 //outputing not placed ships
@@ -187,24 +193,24 @@ public class Fleet {
                 }
                 String pos = list[3].trim();
                 
-                Board.Direction dir = null;
+                Direction dir = null;
                 
-                if (pos.contains("up")) dir = Board.Direction.UP;
-                else if (pos.contains("down")) dir = Board.Direction.DOWN;
-                else if (pos.contains("left")) dir = Board.Direction.LEFT;
-                else if (pos.contains("right")) dir = Board.Direction.RIGHT;
+                if (pos.contains("up")) dir = Direction.UP;
+                else if (pos.contains("down")) dir = Direction.DOWN;
+                else if (pos.contains("left")) dir = Direction.LEFT;
+                else if (pos.contains("right")) dir = Direction.RIGHT;
                 
                 //error checking for ship already placed, placement out of bounds, placing ship in a square allready taken
                 if (printinglist.contains(pieces.get(type))){
                     System.out.println("Ship already placed, place another.\n\n");
                 }
-                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Board.Result.OK){
+                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Result.OK){
                     printinglist.add(pieces.get(type));
                 }
-                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Board.Result.OCCUPIED){
+                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Result.OCCUPIED){
                     System.out.println("Space is occupied, try again.");
                 }
-                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Board.Result.OUT_OF_BOUNDS){
+                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Result.OUT_OF_BOUNDS){
                     System.out.println("Ship is out of bounds, check you origin and direction.");
                 }
             }catch(Exception e){
@@ -214,16 +220,16 @@ public class Fleet {
     }
     
     //placing the ship no the board
-    public Board.Result PlaceShip(Board board, int shipIndex, int col, int row, Board.Direction dir) {
+    public Result PlaceShip(Board board, int shipIndex, int col, int row, Direction dir) {
         if (shipIndex < 0 || shipIndex >= ships.size()) 
-            return Board.Result.INVALID_STATE;
+            return Result.INVALID_STATE;
         
         Ship ship = ships.get(shipIndex);
         if (ship.isPlaced()) 
-            return Board.Result.OCCUPIED;
+            return Result.OCCUPIED;
         
-        Board.Result result = board.placeShip(row, col, ship.size, dir);
-        if (result == Board.Result.OK) {
+        Result result = board.placeShip(row, col, ship.size, dir);
+        if (result == Result.OK) {
             ship.place(row, col, dir);
         }
         return result;

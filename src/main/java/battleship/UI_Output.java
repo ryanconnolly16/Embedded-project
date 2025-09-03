@@ -1,6 +1,9 @@
 
 package battleship;
 
+import battleship.io.FileInput;
+import battleship.io.SaveManager;
+import battleship.domain.Board;
 import java.io.*;
 import java.util.*;
 

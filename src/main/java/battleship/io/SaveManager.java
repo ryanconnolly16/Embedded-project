@@ -1,5 +1,6 @@
-package battleship;
+package battleship.io;
 
+import battleship.domain.Board;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
