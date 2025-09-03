@@ -10,7 +10,7 @@ import java.util.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class Fleet {
+public class Fleetold {
     //contructor
     public static class Ship {
         public final String name;
@@ -166,7 +166,7 @@ public class Fleet {
                 
                 //seperating userinput to save to a list for each part
                 System.out.println("\n");
-                String posistions = UI_Output.GetInput(input);
+                String posistions = UI_Outputold.GetInput(input);
                 String[] list = posistions.split(",");
                     
                 int type = Integer.parseInt(list[0].trim()) -1 ;

@@ -1,5 +1,8 @@
 package battleship;
 
+import battleship.playinggame.Battle;
+import battleship.TwoPlayersold.*;
+import battleship.UI_Output.*;
 import battleship.io.SaveManager;
 import battleship.domain.Board;
 import battleship.enums.GridType;
@@ -7,7 +10,7 @@ import battleship.enums.Cell;
 import java.io.*;
 import java.util.*;
 
-public class OnePlayerold extends TwoPlayers {
+public class OnePlayerold extends TwoPlayersold {
     
     //global variables for each fleet and board
     static Board pboard = new Board(10);

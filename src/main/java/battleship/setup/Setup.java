@@ -1,9 +1,9 @@
 package battleship.setup;
 
 import battleship.Fleet;
-import battleship.UI_Output;
 import battleship.domain.Board;
 import battleship.interfaces.*;
+import battleship.ui.*;
 import java.io.IOException;
 
 public class Setup implements GameSetup {
@@ -15,7 +15,7 @@ public class Setup implements GameSetup {
     //match your exact method signature and logic
     public void PlayerSetup(Fleet fleet, Board board, String name) throws IOException {
         System.out.println("\n\n" + name + " Setup:");
-        String answer = UI_Output.UsingPreset();
+        String answer = InputManager.AskPreset();
         
         if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
             fleet.Preset(fleet, board);

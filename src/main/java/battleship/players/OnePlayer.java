@@ -1,21 +1,21 @@
 package battleship.players;
 
 import battleship.Fleet;
-import battleship.UI_Output;
 import battleship.playinggame.Shooting;
 import battleship.setup.Setup;
 
 import battleship.domain.Board;
 import battleship.io.SaveManager;
+import battleship.ui.*;
 import java.io.IOException;
 
 // OnePlayer as standalone class - no inheritance confusion
 public class OnePlayer {
     //simple naming like your original - no parent class variables to worry about
-    private Board pboard;
-    private Fleet pfleet;
-    private Board aiboard;
-    private Fleet aifleet;
+    public static Board pboard;
+    public static Fleet pfleet;
+    public static Board aiboard;
+    public static Fleet aifleet;
     
     //handlers for SOLID design
     private Setup setup;
@@ -35,8 +35,13 @@ public class OnePlayer {
         ai = new Ai(pboard, aiboard, pfleet);
     }
     
+    public static void OnePlayerSetup() throws IOException {
+    OnePlayer game = new OnePlayer();
+    game.onePlayerSetup();  // delegate to instance method
+}
+    
     //same method name as your original
-    public void OnePlayerSetup() throws IOException {
+    public void onePlayerSetup() throws IOException {
         setup.PlayerSetup(pfleet, pboard, "Player");
         AiSetup(aifleet, aiboard);
     }
@@ -57,7 +62,7 @@ public class OnePlayer {
         while (!pfleet.allSunk() || !aifleet.allSunk()) {
             ai.aiShoot();
             PlayerShoot(pboard, aifleet, aiboard);
-            UI_Output.autosave = SaveManager.writeTurnAutosave(pboard, aiboard);
+            InputManager.autosave = SaveManager.writeTurnAutosave(pboard, aiboard);
         }
     }
     

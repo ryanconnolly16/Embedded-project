@@ -1,0 +1,50 @@
+
+package battleship.playinggame;
+
+
+import battleship.interfaces.*;
+import battleship.ui.*;
+import battleship.io.*;
+import battleship.players.*;
+import java.io.IOException;
+
+// Single Responsibility: Game launching only
+public class GameLauncher implements GameStarter {
+    private InputManager input;
+    private LoadGame save;
+    
+    public GameLauncher() {
+        input = new InputManager();
+        save = new LoadGame();
+    }
+    
+    //same method name and logic as your original
+    public void playerAmount() throws IOException {
+        System.out.println("Are you playing with one or two people?");
+        String amount = input.getInput().trim();
+        while(true){
+            if(amount.equals("1") || amount.equalsIgnoreCase("one")){
+                save.loadSavedGame(1);
+                OnePlayer oneplayer = new OnePlayer();
+                InputManager.startedGame = 1;
+                oneplayer.PlayGame();
+            }
+            else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
+                save.loadSavedGame(2);
+                TwoPlayers twoplayers = new TwoPlayers();
+                InputManager.startedGame = 1;
+                twoplayers.PlayGame();
+            }
+            else{
+                System.out.println("Invalid input, try agin.");
+                playerAmount();
+                return;
+            }
+        }
+    }
+    
+    @Override
+    public void startGame() throws IOException {
+        playerAmount();
+    }
+}

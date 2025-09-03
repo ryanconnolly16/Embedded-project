@@ -1,5 +1,6 @@
 package battleship;
 
+import battleship.playinggame.Battle;
 import battleship.io.SaveManager;
 import battleship.ui.BoardRenderer;
 import battleship.ui.DefaultGlyphs;

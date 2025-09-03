@@ -1,5 +1,6 @@
 package battleship.players;
 
+import battleship.playinggame.Battle;
 import battleship.*;
 import battleship.domain.*;
 import battleship.enums.*;

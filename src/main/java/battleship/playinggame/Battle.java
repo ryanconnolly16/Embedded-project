@@ -1,5 +1,6 @@
-package battleship;
+package battleship.playinggame;
 
+import battleship.Fleet;
 import battleship.domain.Board;
 
 public class Battle {

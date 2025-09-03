@@ -7,7 +7,7 @@ import battleship.domain.Board;
 import java.io.*;
 import java.util.*;
 
-public class UI_Output extends FileInput{
+public class UI_Outputold extends FileInput{
     public static File autosave;
     public static Scanner input = new Scanner(System.in);
     

@@ -18,7 +18,7 @@ public class Shooting implements PlayerShooter {
         Scanner input = new Scanner(System.in);
         System.out.println("\n" + BoardRenderer.renderBoth(receiverboard, new DefaultGlyphs()));
         System.out.println("\bWhere would you like to shoot?:");
-        String usershot = UI_Output.GetInput(input);
+        String usershot = InputManager.GetInput(input);
         
         //checking input format is correct - same as your code
         if (usershot.length() < 1 || !Character.isLetter(usershot.charAt(0)) || !Character.isDigit(usershot.charAt(1))) {
@@ -58,7 +58,7 @@ public class Shooting implements PlayerShooter {
             playerShoot(shooterboard, receiverfleet, receiverboard);
         }
         else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
-            UI_Output.ClearConsole();
+            Console.ClearConsole();
             Battle.usershot(usershot, shooterboard, receiverfleet, receiverboard);
         }
     }

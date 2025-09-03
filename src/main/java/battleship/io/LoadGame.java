@@ -1,0 +1,96 @@
+package battleship.io;
+
+import battleship.io.*;
+import battleship.domain.*;
+import battleship.interfaces.*;
+import battleship.players.*;
+import battleship.ui.*;
+import java.io.*;
+
+// Single Responsibility: Save game loading only
+public class LoadGame implements LoadGameImplement {
+    //same variable names as your original
+    public static int count = 0;
+    public static int chosefilenum = 0;
+    
+    private final InputManager input;
+    
+    public LoadGame() {
+        input = new InputManager();
+    }
+    
+    //same method name and logic as your original
+    public void loadSavedGame(int pplamount) throws IOException {
+        if(count <1){
+            System.out.println("Would you like to use a saved file?(y/n)");
+            String usesavefile = input.getInput().trim();
+            if(usesavefile.equals("y")){
+                int loadingworked = SaveManager.checkfilesexist();
+                //1 means it worked
+                if (loadingworked == 1){
+                    if (chosefilenum < 1){
+                        System.out.println("\n\nWhich file would you like to use?\n");
+                    }
+                    SaveManager.listSaves();
+
+                    System.out.println("\n\n");
+                    String filenum = input.getInput();
+                    for (char c : filenum.toCharArray()) {
+                        if (!Character.isDigit(c)) {
+                            System.out.println("Please input a file number.");
+                            chosefilenum = 1;
+                            loadSavedGame(pplamount);
+                        }
+                    }
+                    int filenumber = Integer.parseInt(filenum);
+                    
+                    if(SaveManager.filenames.size() < filenumber || filenumber <1){
+                        System.out.println("Please input a actual file number");
+                        chosefilenum = 1;
+                        loadSavedGame(pplamount);
+                    }
+                    
+                    FileInput input = new FileInput();
+                    
+                    Board[] boards;
+                    boards = input.loadMatch(new File(SaveManager.getProjectFolderPath("saves") + "/" + SaveManager.filenames.get(filenumber-1)));
+                    if (pplamount == 1){
+                        OnePlayer.pboard = boards[0];
+                        OnePlayer.aiboard = boards[1];
+                    }
+                    if (pplamount == 2){
+                        TwoPlayers.board1 = boards[0];
+                        TwoPlayers.board2 = boards[1];
+                    }
+                    
+                }
+                //0 means that there are no files to read from
+                else if (loadingworked == 0){
+                    System.out.println("No saved files to use.");
+                    count = 1;
+                    loadSavedGame(pplamount);
+                }
+            }
+            else if (usesavefile.equals("n")){
+                if(pplamount == 1){
+                    OnePlayer.OnePlayerSetup();
+                }
+                else if (pplamount == 2){
+                    TwoPlayers.TwoPlayerSetup();
+                }
+            }
+            else{
+                System.out.println("Please answer with y or n.");
+                loadSavedGame(pplamount);
+            }
+        }
+        else{
+            if(pplamount == 1){
+                OnePlayer.OnePlayerSetup();
+            }
+            else if (pplamount == 2){
+                TwoPlayers.TwoPlayerSetup();
+            }
+        }
+    }
+}
