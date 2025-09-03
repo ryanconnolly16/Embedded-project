@@ -9,8 +9,6 @@ package battleship;
  * @author ryanconnolly
  */
 public class Battle {
-    
-    
                                 //shooting player, receieving fleet, receiving board
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){

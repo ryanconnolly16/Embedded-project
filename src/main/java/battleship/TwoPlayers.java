@@ -48,13 +48,14 @@ public class TwoPlayers {
         String usershot = UI_Output.getInput(input);
         
         //checking input format is correct
-        if(usershot.length() < 1 || !Character.isLetter(usershot.charAt(0)) || Character.isLetter(usershot.charAt(1))){
+        if(usershot.length() < 1 || !Character.isLetter(usershot.charAt(0)) || !Character.isDigit(usershot.charAt(1))){
             System.out.println("Invalid shot, try again.");
             playershoot(shooterboard, receiverfleet, receiverboard);
+            return;
         }
         
         //getting x and y possition
-        int xpos = Character.toLowerCase(usershot.charAt(0) - 'a');
+        int xpos = Character.toLowerCase(usershot.charAt(0)) - 'a';
         int ypos = 0;
         
         if(usershot.length() == 3 ){
@@ -73,9 +74,10 @@ public class TwoPlayers {
         }
         
         //checkign if out of bounds 
-        if(xpos >9 || xpos <0 || ypos < 0){
+        if(xpos <0 || xpos <0 || ypos < 0){
             System.out.println("Shoot out of bounds try again.");
             playershoot(shooterboard, receiverfleet, receiverboard);
+            return;
         }
         
         //checking chosen cell state
@@ -86,6 +88,7 @@ public class TwoPlayers {
             System.out.println("Try again.\n\n");
             System.out.println(trial_shot+"--");
             playershoot(shooterboard, receiverfleet, receiverboard);
+            return;
         }
         else if (trial_shot == ' ' || trial_shot == 'S'){
             UI_Output.clearConsole();

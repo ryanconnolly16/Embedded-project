@@ -20,8 +20,8 @@ public class UI_Output extends FileInput{
     //intial ouput for the prgram, asks how many people are playing
     public static void Startup() throws IOException{
             System.out.println("Welcome to Battle Ship.");
-            System.out.println("To shoot a shot type the grid coordinated when prompted, e.g. a3.");
-            System.out.println("To quit the game type x.\n\n");
+            System.out.println("To shoot, type the grid coordinate when prompted, e.g. a3.");
+            System.out.println("To quit the game, type x.\n\n");
             playeramount();
             
             
@@ -114,7 +114,7 @@ public class UI_Output extends FileInput{
     
     
     public static String usingpreset() throws IOException{
-        System.out.println("Would you like to use a preset for the layout of your fleet?(y/n)");
+        System.out.println("Would you like to use a preset for the layout, or your own fleet?(y/n)");
         String preset = getInput(input);  
         return preset;
     }
@@ -125,7 +125,7 @@ public class UI_Output extends FileInput{
         String input = scanner.nextLine();
         if (input.isEmpty()) {
             System.out.println("Invalid input, try again");
-            getInput(scanner);
+            return getInput(scanner);
         }
         else if (input.trim().equalsIgnoreCase("x")) {
             System.out.println("Thanks for playing!");
@@ -142,6 +142,7 @@ public class UI_Output extends FileInput{
                 }
                 else {  
                     System.out.println("Invalid, only input y or n please.");
+                    savetheturn = scanner.nextLine();
                 }
             }
             System.exit(0);
