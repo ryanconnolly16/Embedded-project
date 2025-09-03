@@ -37,7 +37,7 @@ public class OnePlayer {
     
     public static void OnePlayerSetup() throws IOException {
         OnePlayer game = new OnePlayer();
-        game.onePlayerSetup();  // delegate to instance method
+        game.onePlayerSetup(); 
     }
     
     //same method name as your original

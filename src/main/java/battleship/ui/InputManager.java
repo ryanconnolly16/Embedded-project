@@ -23,7 +23,7 @@ public class InputManager implements UserInput {
             String input = this.input.nextLine();
             if (input.isEmpty()) {
                 System.out.println("Invalid input, try again.............");
-                continue;  // Ask for input again
+                return getInput();  // Ask for input again
             }
             else if (input.trim().equalsIgnoreCase("x")) {
                 System.out.println("Thanks for playing!");

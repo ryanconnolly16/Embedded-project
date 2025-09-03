@@ -19,8 +19,6 @@ class UserShipPlacer implements UserPlacer {
     @Override
     public void placeShipsInteractive(Fleet fleet, Board board) {
         while(Fleet.printinglist.size() < Fleet.pieces.size()){
-            System.out.println("DEBUG: board object = " + board); // Shows object reference
-            System.out.println("\n" + BoardRenderer.renderBoth(board, new DefaultGlyphs()));
             try{
                 System.out.println("\nPlease input where you would like to place the ships in format:");
                 System.out.println("Ship number, X posistion, Y posistion, Direction");

@@ -16,7 +16,7 @@ public class Shooting implements PlayerShooter {
     //match your exact method signature and logic
     public void playerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
         Scanner input = new Scanner(System.in);
-        System.out.println("\n" + BoardRenderer.renderBoth(receiverboard, new DefaultGlyphs()));
+        System.out.println("\n" + BoardRenderer.renderBoth(shooterboard, new DefaultGlyphs()));
         System.out.println("\bWhere would you like to shoot?:");
         String usershot = InputManager.GetInput(input);
         
