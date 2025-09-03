@@ -30,12 +30,12 @@ public class UI_Output extends FileInput{
         String amount = GetInput(input).trim();
         while(true){
             if(amount.equals("1") || amount.equalsIgnoreCase("one")){
-                LoadSavedGame("Player", "Ai",1);
+                LoadSavedGame(1);
                 OnePlayer oneplayer = new OnePlayer();
                 oneplayer.PlayGame();
             }
             else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
-                LoadSavedGame("Player1", "Player2",1);
+                LoadSavedGame(2);
                 TwoPlayers twoplayers = new TwoPlayers();
                 twoplayers.PlayGame();
             }
@@ -48,7 +48,8 @@ public class UI_Output extends FileInput{
     }
     
     public static int count = 0;
-    public static void LoadSavedGame(String player1, String player2, int pplamount) throws IOException{
+    public static int chosefilenum = 0;
+    public static void LoadSavedGame(int pplamount) throws IOException{
         if(count <1){
             System.out.println("Would you like to use a saved file?(y/n)");
             String usesavefile = GetInput(input).trim();
@@ -56,29 +57,47 @@ public class UI_Output extends FileInput{
                 int loadingworked = SaveManager.checkfilesexist();
                 //1 means it worked
                 if (loadingworked == 1){
-                    System.out.println("\n\nWhich file would you like to use?\n");
+                    if (chosefilenum < 1){
+                        System.out.println("\n\nWhich file would you like to use?\n");
+                    }
                     SaveManager.listSaves();
 
                     System.out.println("\n\n");
                     String filenum = GetInput(input);
+                    for (char c : filenum.toCharArray()) {
+                        if (!Character.isDigit(c)) {
+                            System.out.println("Please input a file number.");
+                            chosefilenum = 1;
+                            LoadSavedGame(pplamount);
+                        }
+                    }
                     int filenumber = Integer.parseInt(filenum);
-
+                    
+                    if(SaveManager.filenames.size() < filenumber || filenumber <1){
+                        System.out.println("Please input a actual file number");
+                        chosefilenum = 1;
+                        LoadSavedGame(pplamount);
+                    }
+                    
                     FileInput input = new FileInput();
-
+                    
                     Board[] boards;
-                    boards = input.loadMatch(new File(SaveManager.getProjectFolderPath("saves") + "/" + SaveManager.filenames.get(filenumber-1)),
-                    player1, player2);
-                    // save player1 to boards 0 ect...
-                    Board player1_new = boards[0];
-                    Board player2_new = boards[1];
-                    System.out.println(battleship.BoardRenderer.renderBoth(player1_new));
-                    System.out.println(battleship.BoardRenderer.renderBoth(player2_new));
+                    boards = input.loadMatch(new File(SaveManager.getProjectFolderPath("saves") + "/" + SaveManager.filenames.get(filenumber-1)));
+                    if (pplamount == 1){
+                        OnePlayer.pboard = boards[0];
+                        OnePlayer.aiboard = boards[1];
+                    }
+                    if (pplamount == 2){
+                        OnePlayer.board1 = boards[0];
+                        OnePlayer.board2 = boards[1];
+                    }
+                    
                 }
                 //0 means that there are no files to read from
                 else if (loadingworked == 0){
                     System.out.println("No saved files to use.");
                     count = 1;
-                    LoadSavedGame(player1, player2, pplamount);
+                    LoadSavedGame(pplamount);
                 }
             }
             else if (usesavefile.equals("n")){
@@ -91,7 +110,7 @@ public class UI_Output extends FileInput{
             }
             else{
                 System.out.println("Please answer with y or n.");
-                LoadSavedGame( player1, player2, pplamount);
+                LoadSavedGame(pplamount);
             }
         }
         else{

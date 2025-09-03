@@ -12,11 +12,7 @@ public class FileInput extends BoardFileIO {
     
     //loads the board save into 2 new instances 
     //
-    public Board[] loadMatch(File file, String player1, String player2) throws IOException {
-        
-        //Path folderPath = Paths.get(file);
-        //file = folderPath.toAbsolutePath().toString();
-        
+    public Board[] loadMatch(File file) throws IOException {
         
         if (file == null || !file.exists()) {
             System.err.println("Save file not found: " + (file != null ? file.getAbsolutePath() : "null"));
