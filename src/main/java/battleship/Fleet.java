@@ -96,30 +96,6 @@ public class Fleet {
         return shipList; 
     }
     
-    public List<Ship> getShips() { return new ArrayList<>(ships); }
-    
-    
-    public int getActiveCount() {
-        int count = 0;
-        for (Ship s : ships) 
-            if (s.isPlaced() && !s.isSunk()) count++;
-        return count;
-    }
-    
-    public int getSunkCount() {
-        int count = 0;
-        for (Ship s : ships) 
-            if (s.isPlaced() && s.isSunk()) count++;
-        return count;
-    }
-    
-   
-    public boolean allPlaced() {
-        for (Ship s : ships) 
-            if (!s.isPlaced()) return false;
-        return true;
-    }
-    
     public boolean allSunk() {
         for (Ship s : ships) 
             if (s.isPlaced() && !s.isSunk()) return false;
@@ -138,32 +114,14 @@ public class Fleet {
         }
         return null;
     }
-    
-    
-    public String getStatus() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Fleet: %d active, %d sunk\n", getActiveCount(), getSunkCount()));
-        for (int i = 0; i < ships.size(); i++) {
-            Ship s = ships.get(i);
-            char status = !s.isPlaced() ? '-' : s.isSunk() ? 'X' : 'O';
-            sb.append(String.format("[%d] %s(%d): %c", i, s.name, s.size, status));
-            if (s.isPlaced() && !s.isSunk()) 
-                sb.append(String.format(" HP:%d/%d", s.getHealth(), s.size));
-            sb.append('\n');
-        }
-        return sb.toString();
-    }
-    
-    
+        
     
     //uses random function to place ships on board
-    public void preset(Fleet fleet, Board board){
+    public void Preset(Fleet fleet, Board board){
         Random rand = new Random();
-        boolean placementgood = false;
-        
         for(int i = 0; i < pieces.size(); i++){
             //will loop until the ship fit into board, including not overlapping and making sure it doesnt extend over edge of board
-            placementgood = false;
+            boolean placementgood = false;
             while (placementgood == false){
                 int rshipnum = i;
                 int rxpos = rand.nextInt(10);
@@ -176,7 +134,7 @@ public class Fleet {
                 else if (rdirc == 2) dir = Board.Direction.LEFT;
                 else if (rdirc == 3) dir = Board.Direction.RIGHT;
 
-                Board.Result result = fleet.placeShip(board, rshipnum, rxpos, rypos, dir);
+                Board.Result result = fleet.PlaceShip(board, rshipnum, rxpos, rypos, dir);
                 //end loop
                 if(result == Board.Result.OK){
                     placementgood = true;
@@ -185,10 +143,8 @@ public class Fleet {
         }
     }
     
-    
-    
     //for when user wants to place their own pieces
-    public void userpalcement(Fleet fleet, Board board){
+    public void UserPalcement(Fleet fleet, Board board){
         while(printinglist.size() < pieces.size()){
             try{
                 System.out.println("\nPlease input where you would like to place the ships in format:");
@@ -204,7 +160,7 @@ public class Fleet {
                 
                 //seperating userinput to save to a list for each part
                 System.out.println("\n");
-                String posistions = UI_Output.getInput(input);
+                String posistions = UI_Output.GetInput(input);
                 String[] list = posistions.split(",");
                     
                 int type = Integer.parseInt(list[0].trim()) -1 ;
@@ -218,7 +174,7 @@ public class Fleet {
                         ( !list[2].matches("[0-9]+") )
                         ){
                     System.out.println("Invalid input try again.");
-                    userpalcement( fleet, board);
+                    UserPalcement( fleet, board);
                 }
                 
                 //saving each part of userinput to variables 
@@ -242,13 +198,13 @@ public class Fleet {
                 if (printinglist.contains(pieces.get(type))){
                     System.out.println("Ship already placed, place another.\n\n");
                 }
-                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Board.Result.OK){
+                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Board.Result.OK){
                     printinglist.add(pieces.get(type));
                 }
-                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Board.Result.OCCUPIED){
+                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Board.Result.OCCUPIED){
                     System.out.println("Space is occupied, try again.");
                 }
-                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Board.Result.OUT_OF_BOUNDS){
+                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Board.Result.OUT_OF_BOUNDS){
                     System.out.println("Ship is out of bounds, check you origin and direction.");
                 }
             }catch(Exception e){
@@ -258,7 +214,7 @@ public class Fleet {
     }
     
     //placing the ship no the board
-    public Board.Result placeShip(Board board, int shipIndex, int col, int row, Board.Direction dir) {
+    public Board.Result PlaceShip(Board board, int shipIndex, int col, int row, Board.Direction dir) {
         if (shipIndex < 0 || shipIndex >= ships.size()) 
             return Board.Result.INVALID_STATE;
         
@@ -272,18 +228,4 @@ public class Fleet {
         }
         return result;
     }
-    
-
-    
-    
-    
-    
-    
-    
 }
-
-
-
-
-
-

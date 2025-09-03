@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package battleship;
-
-/**
- *
- * @author ryanconnolly
- */
 public class Battle {
                                 //shooting player, receieving fleet, receiving board
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){

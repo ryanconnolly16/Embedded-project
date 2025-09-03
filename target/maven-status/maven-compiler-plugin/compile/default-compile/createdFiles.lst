@@ -7,7 +7,6 @@ battleship/FileInput.class
 battleship/UI_Output.class
 battleship/TwoPlayers.class
 battleship/SaveManager.class
-battleship/Test.class
 battleship/BoardRenderer.class
 battleship/Fleet$Ship.class
 battleship/Board.class
