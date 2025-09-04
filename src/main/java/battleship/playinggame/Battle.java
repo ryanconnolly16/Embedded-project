@@ -53,21 +53,21 @@ public class Battle {
     }
     
     
-    public static void aishot(int xpos,int ypos, Board aiboard, Fleet pfleet, Board pboard){
-        Fleet.Ship hit = pfleet.processHit(xpos, ypos);
+    public static void aishot(int xpos,int ypos, Board aiboard, Fleet playerfleet, Board playerboard){
+        Fleet.Ship hit = playerfleet.processHit(xpos, ypos);
         //checks if cell hits or misses a ship
         if(hit == null){
             System.out.println("Miss.");
             aiboard.markMiss(xpos, ypos);
-            pboard.shipMiss(xpos, ypos);
+            playerboard.shipMiss(xpos, ypos);
         }
         else{
             aiboard.markHit(xpos, ypos);
             //will display which ship is sunk if the ship runs out of health
             System.out.println("Hit " + 
                 (hit.isSunk() ? "SUNK!" + hit.name: ""));
-            pboard.shipHit(xpos, ypos);
-            if(pfleet.allSunk()){
+            playerboard.shipHit(xpos, ypos);
+            if(playerfleet.allSunk()){
                 System.exit(0);
             }
         }

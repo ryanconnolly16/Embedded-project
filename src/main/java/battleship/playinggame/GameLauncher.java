@@ -26,13 +26,15 @@ public class GameLauncher implements GameStarter {
             if(amount.equals("1") || amount.equalsIgnoreCase("one")){
                 save.loadSavedGame(1);
                 OnePlayer oneplayer = new OnePlayer();
-                InputManager.startedGame = 1;
+                oneplayer.onePlayerSetup();
+                
                 oneplayer.PlayGame();
             }
             else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
                 save.loadSavedGame(2);
                 TwoPlayers twoplayers = new TwoPlayers();
-                InputManager.startedGame = 1;
+                twoplayers.twoPlayerSetup();
+                
                 twoplayers.PlayGame();
             }
             else{

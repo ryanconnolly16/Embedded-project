@@ -2,6 +2,8 @@ package battleship.setup;
 
 import battleship.fleetplacements.*;
 import battleship.domain.Board;
+import battleship.enums.Cell;
+import battleship.enums.GridType;
 import battleship.interfaces.*;
 import battleship.ui.*;
 import java.io.IOException;
@@ -11,7 +13,6 @@ public class Setup implements GameSetup {
     public Setup() {
         //simple constructor like your style
     }
-    
     //match your exact method signature and logic
     public void PlayerSetup(Fleet fleet, Board board, String name) throws IOException {
         System.out.println("\n\n" + name + " Setup:");

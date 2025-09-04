@@ -111,7 +111,6 @@ public class Fleet {
     
     //same method signature as your original
     public Result PlaceShip(Board board, int shipIndex, int col, int row, Direction dir) {
-        System.out.println("DEBUG: PlaceShip board object = " + board);
         if (shipIndex < 0 || shipIndex >= ships.size()) 
             return Result.INVALID_STATE;
         
@@ -122,6 +121,9 @@ public class Fleet {
         Result result = board.placeShip(row, col, ship.size, dir);
         if (result == Result.OK) {
             ship.place(row, col, dir);
+        }
+        else {
+            return Result.INVALID_STATE;
         }
         return result;
     }

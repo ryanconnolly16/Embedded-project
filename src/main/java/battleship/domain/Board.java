@@ -31,7 +31,9 @@ public class Board implements ReadOnlyBoard {
     @Override
     public Cell cellAt(int row, int col, GridType which) {
         checkBounds(row, col);
-        return (which == GridType.SHIPS) ? shipGrid[row][col] : hitMissGrid[row][col];
+        Cell result =  (which == GridType.SHIPS) ? shipGrid[row][col] : hitMissGrid[row][col];
+    
+        return result;
     }
 
     private void checkBounds(int r, int c) {

@@ -1,9 +1,14 @@
 package battleship.fleetplacements;
 
 import battleship.domain.Board;
+import battleship.enums.Cell;
 import battleship.enums.Direction;
+import battleship.enums.GridType;
 import battleship.enums.Result;
 import battleship.interfaces.*;
+import static battleship.players.OnePlayer.pboard;
+import battleship.ui.BoardRenderer;
+import battleship.ui.DefaultGlyphs;
 import java.util.Random;
 
 // Single Responsibility: Random ship placement only
@@ -38,7 +43,7 @@ class PresetPlacer implements ShipPlacer {
                 
                 if(result == Result.OK){
                     placementgood = true;
-                } 
+                }
             }
         }
     }

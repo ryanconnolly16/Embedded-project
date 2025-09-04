@@ -1,10 +1,14 @@
 package battleship.ui;
 
 
+import battleship.enums.Cell;
 import battleship.interfaces.Glyphs;
 import battleship.enums.GridType;
 import battleship.interfaces.*;
-
+import battleship.domain.Board;
+import static battleship.enums.GridType.*;
+import java.util.ArrayList;
+import java.util.List;
 public final class BoardRenderer {
     private BoardRenderer() {}
 
@@ -16,6 +20,16 @@ public final class BoardRenderer {
                                     int cellW, int cellH,
                                     boolean showTopLetters,
                                     boolean showBottomLetters) {
+        
+        List<GridType> stringList = new ArrayList<>();
+        stringList.add(SHIPS);
+        
+        stringList.add(SHOTS);
+       
+        
+        
+        
+        
         String left  = renderGrid(b, GridType.SHIPS, g, cellW, cellH, showTopLetters, showBottomLetters);
         String right = renderGrid(b, GridType.SHOTS, g, cellW, cellH, showTopLetters, showBottomLetters);
 
@@ -42,6 +56,8 @@ public final class BoardRenderer {
                                     int cellW, int cellH,
                                     boolean showTopLetters,
                                     boolean showBottomLetters) {
+        
+    
         int n = board.size();
         int rowWidth = Integer.toString(n).length();
         if (cellW < 1) cellW = 1;

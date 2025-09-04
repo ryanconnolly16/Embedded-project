@@ -4,6 +4,8 @@ import battleship.playinggame.Shooting;
 import battleship.setup.Setup;
 
 import battleship.domain.Board;
+import battleship.enums.Cell;
+import battleship.enums.GridType;
 import battleship.io.SaveManager;
 import battleship.ui.*;
 import battleship.fleetplacements.*;
@@ -35,9 +37,10 @@ public class OnePlayer {
         ai = new Ai(pboard, aiboard, pfleet);
     }
     
-    public static void OnePlayerSetup() throws IOException {
+    public static OnePlayer OnePlayerSetup() throws IOException {
         OnePlayer game = new OnePlayer();
         game.onePlayerSetup(); 
+        return game;
     }
     
     //same method name as your original
@@ -60,6 +63,7 @@ public class OnePlayer {
     public void PlayGame() throws IOException {
         //match your while loop structure exactly
         while (!pfleet.allSunk() || !aifleet.allSunk()) {
+            InputManager.startedGame = 1;
             ai.aiShoot();
             PlayerShoot(pboard, aifleet, aiboard);
             InputManager.autosave = SaveManager.writeTurnAutosave(pboard, aiboard);

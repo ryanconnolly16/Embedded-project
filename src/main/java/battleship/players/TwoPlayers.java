@@ -4,6 +4,7 @@ import battleship.fleetplacements.*;
 import battleship.domain.*;
 import battleship.setup.*;
 import battleship.playinggame.*;
+import battleship.ui.InputManager;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -53,6 +54,7 @@ public class TwoPlayers {
     
     //same method signature as your original
     public void PlayGame() throws IOException {
+        InputManager.startedGame = 1;
         gameFlow.runTwoPlayerGame(board1, board2, fleet1, fleet2, shooting);
     }
     
