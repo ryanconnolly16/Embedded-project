@@ -71,7 +71,12 @@ public class LoadGame implements LoadGameImplement {
                 }
             }
             else if (usesavefile.equals("n")){
-                return;
+                if (pplamount == 1){
+                        OnePlayer.onePlayerSetup();
+                    }
+                    if (pplamount == 2){
+                        TwoPlayers.twoPlayerSetup();
+                    }
             }
             else{
                 System.out.println("Please answer with y or n.");
