@@ -26,7 +26,7 @@ public class SaveManager {
         return tmp;
     }
     
-    //wfor when the user presses x, will discard or save 
+    //for when the user presses x, will discard or save 
     public static File keep(File tmp) throws IOException {
         if (tmp == null) throw new IllegalArgumentException("tmp is null");
         String name = tmp.getName();

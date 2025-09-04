@@ -5,7 +5,7 @@ import battleship.domain.Board;
 
 public class Battle {
     //function to check what the user inputted for the shot and then shoot
-                                //shooting player, receieving fleet, receiving board
+    //shooting player, receieving fleet, receiving board
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){
             int col;

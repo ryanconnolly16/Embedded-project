@@ -16,10 +16,10 @@ public class OnePlayer {
     public static Board aiboard;
     public static Fleet aifleet;
     
-    private Setup setup;
-    private Shooting shooting;
-    private Ai ai;
-    private GameFlow gameFlow;
+    private final Setup setup;
+    private final Shooting shooting;
+    private final Ai ai;
+    private final GameFlow gameFlow;
     
     //constructor
     public OnePlayer() {

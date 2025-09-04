@@ -10,15 +10,14 @@ import java.io.IOException;
 
 //function to get how many players are playing, thens asks if they want to load a save, then will play game
 public class GameLauncher implements GameStarter {
-    private InputManager input;
-    private LoadGame save;
+    private final  InputManager input;
+    private final LoadGame save;
     
     public GameLauncher() {
         input = new InputManager();
         save = new LoadGame();
     }
     
-    //same method name and logic as your original
     public void playerAmount() throws IOException {
         System.out.println("Are you playing with one or two people?");
         String amount = input.getInput().trim();

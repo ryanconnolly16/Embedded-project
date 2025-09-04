@@ -6,9 +6,9 @@ import battleship.players.*;
 import battleship.ui.*;
 import java.io.*;
 
-// Single Responsibility: Save game loading only
+
 public class LoadGame implements LoadGameImplement {
-    //same variable names as your original
+    
     public static int count = 0;
     public static int chosefilenum = 0;
     
@@ -18,7 +18,7 @@ public class LoadGame implements LoadGameImplement {
         input = new InputManager();
     }
     
-    //same method name and logic as your original
+    
     public void loadSavedGame(int pplamount) throws IOException {
         if(count <1){
             System.out.println("Would you like to use a saved file?(y/n)");

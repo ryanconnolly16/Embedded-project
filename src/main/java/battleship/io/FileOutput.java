@@ -11,7 +11,7 @@ public class FileOutput extends CellSymbolIO {
 
     // Saves the match to a file with a specific format
     public void saveMatch(Board player1, Board player2, File file) throws IOException {
-        int n = player1.size(); // now using size() method
+        int n = player1.size();
         if (n != player2.size())
             throw new IllegalArgumentException("Boards must be same size.");
 
@@ -23,7 +23,8 @@ public class FileOutput extends CellSymbolIO {
             writeBoard(w, "PLAYER2", player2, n);
         }
     }
-
+    
+    // Saves the match to a file with a specific format
     private void writeBoard(BufferedWriter w, String playerName, Board board, int n) throws IOException {
         w.write(playerName); w.newLine();
 

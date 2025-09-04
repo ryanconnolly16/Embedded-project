@@ -30,6 +30,6 @@ public class Setup implements GameSetup {
     
     @Override
     public void setupPlayers() throws IOException {
-        //interface implementation - but we mainly use PlayerSetup directly
+        //interface implementation 
     }
 }
