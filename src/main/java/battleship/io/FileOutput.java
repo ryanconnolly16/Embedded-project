@@ -1,6 +1,5 @@
 package battleship.io;
 
-import battleship.io.CellSymbolIO;
 import battleship.domain.Board;
 import battleship.enums.GridType;
 import java.io.BufferedWriter;

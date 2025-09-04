@@ -6,14 +6,11 @@ import java.util.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-// Single Responsibility: File loading only
+//function to get the fleet from the txt file
 public class ShipFileLoader implements ShipLoader {
     
     public ShipFileLoader() {
-        //simple constructor like your style
     }
-    
-    //same method logic as your original
     @Override
     public List<Fleet.Ship> loadShips(String fileName) {
         List<Fleet.Ship> shipList = new ArrayList<>();
@@ -41,7 +38,6 @@ public class ShipFileLoader implements ShipLoader {
         return shipList;
     }
     
-    //static method like your style
     public static List<Fleet.Ship> loadShipsFromFile(String fileName) {
         ShipFileLoader loader = new ShipFileLoader();
         return loader.loadShips(fileName);

@@ -4,38 +4,36 @@ import battleship.playinggame.Shooting;
 import battleship.setup.Setup;
 
 import battleship.domain.Board;
-import battleship.enums.Cell;
-import battleship.enums.GridType;
-import battleship.io.SaveManager;
 import battleship.ui.*;
 import battleship.fleetplacements.*;
+import battleship.playinggame.*;
 import java.io.IOException;
 
-// OnePlayer as standalone class - no inheritance confusion
+
 public class OnePlayer {
-    //simple naming like your original - no parent class variables to worry about
     public static Board pboard;
     public static Fleet pfleet;
     public static Board aiboard;
     public static Fleet aifleet;
     
-    //handlers for SOLID design
     private Setup setup;
     private Shooting shooting;
     private Ai ai;
+    private GameFlow gameFlow;
     
+    //constructor
     public OnePlayer() {
-        //clean and simple - no parent variables to set
         pboard = new Board(10);
         pfleet = new Fleet();
         aiboard = new Board(10);
         aifleet = new Fleet();
         
-        //create handlers
         setup = new Setup();
         shooting = new Shooting();
         ai = new Ai(pboard, aiboard, pfleet);
+        gameFlow = new GameFlow();
     }
+    
     
     public static OnePlayer OnePlayerSetup() throws IOException {
         OnePlayer game = new OnePlayer();
@@ -43,35 +41,23 @@ public class OnePlayer {
         return game;
     }
     
-    //same method name as your original
+    //will call the relevant functions to set up the ai and player boards
     public void onePlayerSetup() throws IOException {
         setup.PlayerSetup(pfleet, pboard, "Player");
         AiSetup(aifleet, aiboard);
     }
-    
-    //same method name as your original
     public static void AiSetup(Fleet aifleet, Board aiboard) {
         aifleet.Preset(aifleet, aiboard);
     }
-    
-    //same method name as your original - but no inheritance issues
+    //function to call shooter function in shooting
     public void PlayerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
         shooting.playerShoot(shooterboard, receiverfleet, receiverboard);
     }
     
-    //same method name as your original
+    //calls GameFlow file to alternate between ai and player shots
     public void PlayGame() throws IOException {
-        //match your while loop structure exactly
-        while (!pfleet.allSunk() || !aifleet.allSunk()) {
-            InputManager.startedGame = 1;
-            ai.aiShoot();
-            PlayerShoot(pboard, aifleet, aiboard);
-            InputManager.autosave = SaveManager.writeTurnAutosave(pboard, aiboard);
-        }
-    }
-    
-    //same method name as your original
-    public static void AiShoot() {
+        InputManager.startedGame = 1;
+        gameFlow.runOnePlayerGame(pboard, aiboard, pfleet, aifleet, shooting, ai);
     }
     
 }

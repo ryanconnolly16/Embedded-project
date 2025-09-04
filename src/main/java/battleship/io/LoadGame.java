@@ -1,6 +1,5 @@
 package battleship.io;
 
-import battleship.io.*;
 import battleship.domain.*;
 import battleship.interfaces.*;
 import battleship.players.*;

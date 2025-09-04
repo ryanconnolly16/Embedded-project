@@ -18,7 +18,7 @@ public class SaveManager {
         return d;
     }
     
-    //call after every turn
+    //saves the current turn to the file
     public static File writeTurnAutosave(Board p1, Board p2) throws IOException {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
         File tmp = new File(dir(), "save_" + timestamp + ".tmp");
@@ -26,7 +26,7 @@ public class SaveManager {
         return tmp;
     }
     
-    //when they press x and want to save
+    //wfor when the user presses x, will discard or save 
     public static File keep(File tmp) throws IOException {
         if (tmp == null) throw new IllegalArgumentException("tmp is null");
         String name = tmp.getName();
@@ -36,7 +36,7 @@ public class SaveManager {
         return dst;
     }
      
-    //when they press x and want to delete
+    //will idscard what has been done
     public static void discard(File tmp) {
         if (tmp != null && tmp.exists()) {
             tmp.delete();
@@ -80,7 +80,7 @@ public class SaveManager {
         }
         
     }
-    // Gets the Path of a specific folder in the project
+    //gets the path of a specific folder in the project
     public static String getProjectFolderPath(String relativePath) {
         Path folderPath = Paths.get(relativePath);
         

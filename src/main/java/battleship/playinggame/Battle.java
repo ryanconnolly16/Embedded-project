@@ -4,7 +4,8 @@ import battleship.fleetplacements.*;
 import battleship.domain.Board;
 
 public class Battle {
-    //shooting player, receieving fleet, receiving board
+    //function to check what the user inputted for the shot and then shoot
+                                //shooting player, receieving fleet, receiving board
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){
             int col;
@@ -52,7 +53,7 @@ public class Battle {
         }
     }
     
-    
+    //function for the ai to shot 
     public static void aishot(int xpos,int ypos, Board aiboard, Fleet playerfleet, Board playerboard){
         Fleet.Ship hit = playerfleet.processHit(xpos, ypos);
         //checks if cell hits or misses a ship

@@ -8,7 +8,6 @@ import battleship.interfaces.*;
 import java.util.*;
 
 public class Fleet {
-    //same Ship inner class as your original
     public static class Ship {
         public final String name;
         public final int size;
@@ -53,17 +52,16 @@ public class Fleet {
         }
     }
     
-    //same global variables as your original
+    //global variables
     public final List<Ship> ships;
     public static ArrayList<String> pieces = new ArrayList<>();
     static ArrayList<String> printinglist = new ArrayList<>();
     
-    //components - match your simple naming
     private ShipLoader shipLoader;
     private ShipPlacer presetPlacer;
     private UserPlacer userPlacer;
     
-    //same constructor logic as your original
+    //constructor
     public Fleet() {
         ships = new ArrayList<>();   
         
@@ -81,24 +79,24 @@ public class Fleet {
         }
     }
     
-    //same method name as your original - delegates to file loader
+    //sends to preset file to use function to randomly place ships
     public void Preset(Fleet fleet, Board board){
         presetPlacer.placeShips(fleet, board);
     }
     
-    //same method name as your original - delegates to user placer
+    //sends to usershipplace file to let user place ships
     public void UserPalcement(Fleet fleet, Board board){
         userPlacer.placeShipsInteractive(fleet, board);
     }
     
-    //same methods as your original - core fleet logic stays here
+    //checks if the whole fleet has been sunk
     public boolean allSunk() {
         for (Ship s : ships) 
             if (s.isPlaced() && !s.isSunk()) return false;
         return ships.stream().anyMatch(Ship::isPlaced);
     }
     
-    // Returns ship if hit, null if miss
+    // will minus a "health point" from the ship 
     public Ship processHit(int row, int col) {
         for (Ship s : ships) {
             if (s.contains(row, col)) {
@@ -109,7 +107,7 @@ public class Fleet {
         return null;
     }
     
-    //same method signature as your original
+    //error checking to see if ship can fit where it is specified
     public Result PlaceShip(Board board, int shipIndex, int col, int row, Direction dir) {
         if (shipIndex < 0 || shipIndex >= ships.size()) 
             return Result.INVALID_STATE;
@@ -128,7 +126,7 @@ public class Fleet {
         return result;
     }
     
-    //keep static method like your original for backward compatibility
+    //sends to ShipFileLoader to use function to load fleet from a .txt file
     public static List<Ship> loadShipsFromFile(String fileName) {
         return ShipFileLoader.loadShipsFromFile(fileName);
     }

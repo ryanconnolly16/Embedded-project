@@ -7,15 +7,13 @@ import battleship.interfaces.*;
 import battleship.ui.*;
 import java.util.Scanner;
 
-// Single Responsibility: User interactive ship placement only
+// function to let users place the ships
 class UserShipPlacer implements UserPlacer {
     private Scanner input;
     
     public UserShipPlacer() {
         input = new Scanner(System.in);
     }
-    
-    //same method name and logic as your original
     @Override
     public void placeShipsInteractive(Fleet fleet, Board board) {
         while(Fleet.printinglist.size() < Fleet.pieces.size()){
@@ -33,7 +31,7 @@ class UserShipPlacer implements UserPlacer {
                 
                 //seperating userinput to save to a list for each part
                 System.out.println("\n");
-                String posistions = UI_Output.GetInput(input);
+                String posistions = UiOutput.GetInput(input);
                 String[] list = posistions.split(",");
                     
                 int type = Integer.parseInt(list[0].trim()) -1 ;

@@ -6,7 +6,6 @@ import battleship.setup.*;
 import battleship.playinggame.*;
 import battleship.ui.InputManager;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class TwoPlayers {
     
@@ -19,6 +18,7 @@ public class TwoPlayers {
     private Shooting shooting;
     private GameFlow gameFlow;
     
+    //constructor
     public TwoPlayers() {
         board1 = new Board(10);
         board2 = new Board(10);
@@ -32,33 +32,22 @@ public class TwoPlayers {
     
     public static void TwoPlayerSetup() throws IOException {
         TwoPlayers game = new TwoPlayers();
-        game.twoPlayerSetup();  // delegate to instance method  
+        game.twoPlayerSetup();  
     }
     
-    //same method signature as your original
+    //function to setup the boards for 2 players
     public void twoPlayerSetup() throws IOException {
         setup.PlayerSetup(fleet1, board1, "Player 1");
         setup.PlayerSetup(fleet2, board2, "Player 2");
     }
     
-    //same method signature as your original
-
-//    public void PlayerSetup(Fleet fleet, Board board, String name) throws IOException {
-//        setup.PlayerSetup(fleet, board, name);
-//    }
-//    
-//    //same method signature as your original  
-//    public void PlayerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
-//        shooting.playerShoot(shooterboard, receiverfleet, receiverboard);
-//    }
     
-    //same method signature as your original
+    //calls gameflow file to alternate between each player
     public void PlayGame() throws IOException {
         InputManager.startedGame = 1;
         gameFlow.runTwoPlayerGame(board1, board2, fleet1, fleet2, shooting);
     }
     
-    //keep static methods like your style
     public static void PlayerSetup(Fleet fleet, Board board, String name) throws IOException {
         Setup setup = new Setup();
         setup.PlayerSetup(fleet, board, name);

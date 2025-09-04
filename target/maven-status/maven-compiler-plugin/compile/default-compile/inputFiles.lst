@@ -1,7 +1,6 @@
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/players/TwoPlayers.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/PlayerShooter.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/BattleshipGame.java
-/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/Fleetold.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/GameStarter.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/setup/Setup.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/playinggame/GameLauncher.java
@@ -9,7 +8,6 @@
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/ui/InputManager.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/ui/Console.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/GameRunner.java
-/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/TwoPlayersold.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/LoadGameImplement.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/io/CellSymbolIO.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/enums/Direction.java
@@ -22,12 +20,10 @@
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/AiShooter.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/io/FileInput.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/fleetplacements/UserShipPlacer.java
-/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/OnePlayerold.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/fleetplacements/Fleet.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/io/SaveManager.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/players/OnePlayer.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/ConsoleOutput.java
-/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/UI_Outputold.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/ui/BoardRenderer.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/playinggame/GameFlow.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/ShipLoader.java
@@ -38,7 +34,7 @@
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/io/LoadGame.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/UserPlacer.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/UserInput.java
-/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/ui/UI_Output.java
+/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/ui/UiOutput.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/domain/Board.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/ReadOnlyBoard.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/players/Ai.java

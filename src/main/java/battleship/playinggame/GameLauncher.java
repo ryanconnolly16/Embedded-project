@@ -8,7 +8,7 @@ import battleship.io.*;
 import battleship.players.*;
 import java.io.IOException;
 
-// Single Responsibility: Game launching only
+//function to get how many players are playing, thens asks if they want to load a save, then will play game
 public class GameLauncher implements GameStarter {
     private InputManager input;
     private LoadGame save;
