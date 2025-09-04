@@ -29,7 +29,7 @@ public class GameFlow implements GameRunner {
     public void runOnePlayerGame(Board pboard, Board aiboard, Fleet pfleet, Fleet aifleet, Shooting shooter, Ai ai)throws IOException {
         while (!pfleet.allSunk() || !aifleet.allSunk()) {
             InputManager.startedGame = 1;
-            ai.aiShoot();
+            ai.aiShoot(aiboard, pfleet, pboard);
             shooter.playershoot(pboard, aifleet, aiboard);
             InputManager.autosave = SaveManager.writeTurnAutosave(pboard, aiboard);
         }
