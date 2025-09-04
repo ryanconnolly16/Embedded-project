@@ -19,8 +19,8 @@ class UserShipPlacer implements UserPlacer {
     public void placeShipsInteractive(Fleet fleet, Board board) {
         while(Fleet.printinglist.size() < Fleet.pieces.size()){
             try{
-                System.out.println("\nPlease input where you would like to place the ships in format:");
-                System.out.println("Ship number, X posistion, Y posistion, Direction");
+                System.out.println("\nPlease input where you would like to place the ships in the format:");
+                System.out.println("Ship number, X position, Y position, Direction");
                 System.out.println("\n" + BoardRenderer.renderBoth(board, new DefaultGlyphs()));
                 System.out.println("Ship Numbers;");
                 
@@ -45,7 +45,7 @@ class UserShipPlacer implements UserPlacer {
                         ( String.valueOf(list[1]).length() > 1 || !list[1].matches("[a-zA-z]+") ) ||
                         ( !list[2].matches("[0-9]+") )
                         ){
-                    System.out.println("Invalid input try again.");
+                    System.out.println("Invalid input, try again.");
                     placeShipsInteractive(fleet, board);
                 }
                 
@@ -77,10 +77,10 @@ class UserShipPlacer implements UserPlacer {
                     System.out.println("Space is occupied, try again.");
                 }
                 else if(fleet.placeShip(board, type, xpos, ypos, dir) == Result.OUT_OF_BOUNDS){
-                    System.out.println("Ship is out of bounds, check you origin and direction.");
+                    System.out.println("Ship is out of bounds, check your origin and direction.");
                 }
             }catch(IOException | NumberFormatException e){
-                System.out.println("Invalid input try again");
+                System.out.println("Invalid input, try again");
             }
         }
     }
