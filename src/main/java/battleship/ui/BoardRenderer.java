@@ -16,50 +16,56 @@ public final class BoardRenderer {
         return renderBoth(b, g, 3, 1, true, true);
     }
 
-    public static String renderBoth(ReadOnlyBoard b, Glyphs g,
-                                    int cellW, int cellH,
-                                    boolean showTopLetters,
-                                    boolean showBottomLetters) {
+    public static String renderBoth(
+        ReadOnlyBoard b, 
+        Glyphs g,
+        int cellW, int cellH,
+        boolean showTopLetters,
+        boolean showBottomLetters) {
         
         List<GridType> stringList = new ArrayList<>();
         stringList.add(SHIPS);
-        
         stringList.add(SHOTS);
-       
-        
-        
-        
-        
+
         String left  = renderGrid(b, GridType.SHIPS, g, cellW, cellH, showTopLetters, showBottomLetters);
         String right = renderGrid(b, GridType.SHOTS, g, cellW, cellH, showTopLetters, showBottomLetters);
 
         String[] L = left.split("\n");
         String[] R = right.split("\n");
+        
         int lw = (L.length == 0 ? 0 : L[0].length());
         int rw = (R.length == 0 ? 0 : R[0].length());
+        
         String titleL = center("[ Ships ]", lw);
         String titleR = center("[ Hits / Misses ]", rw);
+        
         String gap = "   ";
 
         StringBuilder out = new StringBuilder((L.length + 2) * (lw + rw + gap.length() + 1));
         out.append(titleL).append(gap).append(titleR).append('\n');
+        
         int rows = Math.max(L.length, R.length);
+        
         for (int i = 0; i < rows; i++) {
             String l = (i < L.length) ? L[i] : " ".repeat(lw);
             String r = (i < R.length) ? R[i] : " ".repeat(rw);
+            
             out.append(l).append(gap).append(r).append('\n');
         }
         return out.toString();
     }
 
-    public static String renderGrid(ReadOnlyBoard board, GridType which, Glyphs glyphs,
-                                    int cellW, int cellH,
-                                    boolean showTopLetters,
-                                    boolean showBottomLetters) {
-        
+    public static String renderGrid(
+        ReadOnlyBoard board,
+        GridType which,
+        Glyphs glyphs,
+        int cellW, int cellH,
+        boolean showTopLetters,
+        boolean showBottomLetters) {
     
         int n = board.size();
         int rowWidth = Integer.toString(n).length();
+        
         if (cellW < 1) cellW = 1;
         if (cellH < 1) cellH = 1;
 
@@ -132,11 +138,11 @@ public final class BoardRenderer {
         for (int i = 0; i < n; i++) sb.append(' ');
     }
 
-    private static String center(String s, int w) {
-        if (w <= 1) return s.substring(0, Math.min(1, s.length()));
-        if (s.length() >= w) return s.substring(0, w);
-        int left = (w - s.length()) / 2;
-        int right = w - s.length() - left;
-        return " ".repeat(left) + s + " ".repeat(right);
+    private static String center(String string, int width) {
+        if (width <= 1) return string.substring(0, Math.min(1, string.length()));
+        if (string.length() >= width) return string.substring(0, width);
+        int left = (width - string.length()) / 2;
+        int right = width - string.length() - left;
+        return " ".repeat(left) + string + " ".repeat(right);
     }
 }
