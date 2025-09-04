@@ -18,27 +18,27 @@ public class GameLauncher implements GameStarter {
         save = new LoadGame();
     }
     
-    public void playerAmount() throws IOException {
+    public void playeramount() throws IOException {
         System.out.println("Are you playing with one or two people?");
-        String amount = input.getInput().trim();
+        String amount = input.getinput().trim();
         while(true){
             if(amount.equals("1") || amount.equalsIgnoreCase("one")){
-                save.loadSavedGame(1);
+                save.loadsavedgame(1);
                 OnePlayer oneplayer = new OnePlayer();
-                oneplayer.onePlayerSetup();
+                oneplayer.oneplayerSetup();
                 
                 oneplayer.PlayGame();
             }
             else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
-                save.loadSavedGame(2);
+                save.loadsavedgame(2);
                 TwoPlayers twoplayers = new TwoPlayers();
-                twoplayers.twoPlayerSetup();
+                twoplayers.twoplayerSetup();
                 
-                twoplayers.PlayGame();
+                twoplayers.playGame();
             }
             else{
                 System.out.println("Invalid input, try agin.");
-                playerAmount();
+                playeramount();
                 return;
             }
         }
@@ -46,6 +46,6 @@ public class GameLauncher implements GameStarter {
     
     @Override
     public void startGame() throws IOException {
-        playerAmount();
+        playeramount();
     }
 }

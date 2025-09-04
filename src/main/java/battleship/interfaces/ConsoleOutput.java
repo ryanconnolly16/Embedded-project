@@ -3,6 +3,6 @@ package battleship.interfaces;
 
 
 public interface ConsoleOutput {
-    void clearConsole();
-    void showWelcome();
+    void clearconsole();
+    void showwelcome();
 }

@@ -15,12 +15,12 @@ public class GameFlow implements GameRunner {
     //function for twoplayers, will alternate between each player
     public void runTwoPlayerGame(Board board1, Board board2, Fleet fleet1, Fleet fleet2, Shooting shooter) throws IOException {
         while (!fleet1.allSunk() || !fleet2.allSunk()) {
-            Console.ClearConsole();
+            Console.clearConsole();
             System.out.println("Player one's turn:");
-            shooter.playerShoot(board1, fleet2, board2);
-            Console.ClearConsole();
+            shooter.playershoot(board1, fleet2, board2);
+            Console.clearConsole();
             System.out.println("Player two's turn:");
-            shooter.playerShoot(board2, fleet1, board1);
+            shooter.playershoot(board2, fleet1, board1);
             InputManager.autosave = SaveManager.writeTurnAutosave(board1, board2);
         }
     }
@@ -30,7 +30,7 @@ public class GameFlow implements GameRunner {
         while (!pfleet.allSunk() || !aifleet.allSunk()) {
             InputManager.startedGame = 1;
             ai.aiShoot();
-            shooter.playerShoot(pboard, aifleet, aiboard);
+            shooter.playershoot(pboard, aifleet, aiboard);
             InputManager.autosave = SaveManager.writeTurnAutosave(pboard, aiboard);
         }
     }

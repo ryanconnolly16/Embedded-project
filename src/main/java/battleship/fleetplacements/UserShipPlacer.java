@@ -5,11 +5,12 @@ import battleship.domain.*;
 import battleship.enums.*;
 import battleship.interfaces.*;
 import battleship.ui.*;
+import java.io.IOException;
 import java.util.Scanner;
 
 // function to let users place the ships
 class UserShipPlacer implements UserPlacer {
-    private Scanner input;
+    private final Scanner input;
     
     public UserShipPlacer() {
         input = new Scanner(System.in);
@@ -31,7 +32,7 @@ class UserShipPlacer implements UserPlacer {
                 
                 //seperating userinput to save to a list for each part
                 System.out.println("\n");
-                String posistions = UiOutput.GetInput(input);
+                String posistions = UiOutput.getInput(input);
                 String[] list = posistions.split(",");
                     
                 int type = Integer.parseInt(list[0].trim()) -1 ;
@@ -69,16 +70,16 @@ class UserShipPlacer implements UserPlacer {
                 if (Fleet.printinglist.contains(Fleet.pieces.get(type))){
                     System.out.println("Ship already placed, place another.\n\n");
                 }
-                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Result.OK){
+                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Result.OK){
                     Fleet.printinglist.add(Fleet.pieces.get(type));
                 }
-                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Result.OCCUPIED){
+                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Result.OCCUPIED){
                     System.out.println("Space is occupied, try again.");
                 }
-                else if(fleet.PlaceShip(board, type, xpos, ypos, dir) == Result.OUT_OF_BOUNDS){
+                else if(fleet.placeShip(board, type, xpos, ypos, dir) == Result.OUT_OF_BOUNDS){
                     System.out.println("Ship is out of bounds, check you origin and direction.");
                 }
-            }catch(Exception e){
+            }catch(IOException | NumberFormatException e){
                 System.out.println("Invalid input try again");
             }
         }

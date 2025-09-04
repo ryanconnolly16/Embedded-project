@@ -24,28 +24,28 @@ public class UiOutput extends FileInput {
         startup = new Startup();
     }
     //static methods to call all the non-static methods by creating instances
-    public static void ClearConsole() {
-        console.clearConsole();
+    public static void clearConsole() {
+        console.clearconsole();
     }
 
-    public static void StartUp() throws IOException {
+    public static void startUp() throws IOException {
         startup.startup();
     }
     
-    public static void PlayerAmount() throws IOException {
-        gameLauncher.playerAmount();
+    public static void playerAmount() throws IOException {
+        gameLauncher.playeramount();
     }
     
-    public static void LoadSavedGame(int pplamount) throws IOException {
-        loadgame.loadSavedGame(pplamount);
+    public static void loadSavedGame(int pplamount) throws IOException {
+        loadgame.loadsavedgame(pplamount);
     }
     
-    public static String UsingPreset() throws IOException {
-        return inputmanager.askPreset();
+    public static String usingPreset() throws IOException {
+        return inputmanager.askpreset();
     }
     
-    public static String GetInput(Scanner scanner) throws IOException {
-        return inputmanager.getInput();
+    public static String getInput(Scanner scanner) throws IOException {
+        return inputmanager.getinput();
     }
     
     public static int startedGame = 0;

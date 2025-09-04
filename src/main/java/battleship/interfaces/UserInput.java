@@ -2,6 +2,6 @@
 package battleship.interfaces;
 import java.io.IOException;
 public interface UserInput {
-    String getInput() throws IOException;
-    String askPreset() throws IOException;
+    String getinput() throws IOException;
+    String askpreset() throws IOException;
 }

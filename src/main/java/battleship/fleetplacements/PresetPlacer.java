@@ -33,7 +33,7 @@ class PresetPlacer implements ShipPlacer {
                     }
                 }
 
-                Result result = fleet.PlaceShip(board, rshipnum, rxpos, rypos, dir);
+                Result result = fleet.placeShip(board, rshipnum, rxpos, rypos, dir);
                 
                 if(result == Result.OK){
                     placementgood = true;

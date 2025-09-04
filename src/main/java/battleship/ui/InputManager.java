@@ -15,24 +15,28 @@ public class InputManager implements UserInput {
     public InputManager() {
     }
     
+    public static String getInput(Scanner scanner) throws IOException {
+        InputManager handler = new InputManager();
+        return handler.getinput();
+    }
     
-    public String getInput() throws IOException {
+    public String getinput() throws IOException {
         while (true) {
-            String input = this.input.nextLine();
-            if (input == null) {
+            String userinput = InputManager.input.nextLine();
+            if (userinput == null) {
                 System.out.println("No input received, try again...");
                 continue;
             }
-            if (input.trim().isEmpty()) {
+            if (userinput.trim().isEmpty()) {
                 System.out.println("Invalid input, try again...");
                 continue;
             }
-            if (input.trim().equalsIgnoreCase("x")) {
+            if (userinput.trim().equalsIgnoreCase("x")) {
                 System.out.println("Thanks for playing!");
                 while (true) {
                     if(startedGame == 1){
                         System.out.println("Would you like to save the current turn to a file? (y/n)");
-                        String saveResponse = this.input.nextLine();
+                        String saveResponse = InputManager.input.nextLine();
 
                         if (saveResponse == null) {
                             System.out.println("No input received, please try again.");
@@ -59,23 +63,21 @@ public class InputManager implements UserInput {
                 System.exit(0);
                 return null;
             }
-            return input.trim();
+            return userinput.trim();
         }
     }
     
     
-    public static String AskPreset() throws IOException{
-        InputManager input = new InputManager();
-        return input.askPreset();
+    public static String askPreset() throws IOException{
+        InputManager presetinput = new InputManager();
+        return presetinput.askpreset();
         
     }
-    public String askPreset() throws IOException {
+    @Override
+    public String askpreset() throws IOException {
         System.out.println("Would you like to use a preset for the layout?(y/n)");
-        String preset = getInput();  
+        String preset = getinput();  
         return preset;
     }
-    public static String GetInput(Scanner scanner) throws IOException {
-        InputManager handler = new InputManager();
-        return handler.getInput();
-    }
+    
 }

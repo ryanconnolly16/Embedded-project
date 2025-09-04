@@ -78,12 +78,12 @@ public class Fleet {
     }
     
     //sends to preset file to use function to randomly place ships
-    public void Preset(Fleet fleet, Board board){
+    public void preset(Fleet fleet, Board board){
         presetPlacer.placeShips(fleet, board);
     }
     
     //sends to usershipplace file to let user place ships
-    public void UserPalcement(Fleet fleet, Board board){
+    public void userPalcement(Fleet fleet, Board board){
         userPlacer.placeShipsInteractive(fleet, board);
     }
     
@@ -106,7 +106,7 @@ public class Fleet {
     }
     
     //error checking to see if ship can fit where it is specified
-    public Result PlaceShip(Board board, int shipIndex, int col, int row, Direction dir) {
+    public Result placeShip(Board board, int shipIndex, int col, int row, Direction dir) {
         if (shipIndex < 0 || shipIndex >= ships.size()) 
             return Result.INVALID_STATE;
         

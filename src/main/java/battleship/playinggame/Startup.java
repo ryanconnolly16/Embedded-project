@@ -15,7 +15,7 @@ public class Startup {
     
     //shows game introduction then will get into the game
     public void startup() throws IOException {
-        console.showWelcome();
+        console.showwelcome();
         gameLauncher.startGame();
     }
 }

@@ -19,10 +19,10 @@ public class LoadGame implements LoadGameImplement {
     }
     
     
-    public void loadSavedGame(int pplamount) throws IOException {
+    public void loadsavedgame(int pplamount) throws IOException {
         if(count <1){
             System.out.println("Would you like to use a saved file?(y/n)");
-            String usesavefile = input.getInput().trim();
+            String usesavefile = input.getinput().trim();
             if(usesavefile.equals("y")){
                 int loadingworked = SaveManager.checkfilesexist();
                 //checks where there are files to be used
@@ -33,12 +33,12 @@ public class LoadGame implements LoadGameImplement {
                     SaveManager.listSaves();
 
                     System.out.println("\n\n");
-                    String filenum = input.getInput();
+                    String filenum = input.getinput();
                     for (char c : filenum.toCharArray()) {
                         if (!Character.isDigit(c)) {
                             System.out.println("Please input a file number.");
                             chosefilenum = 1;
-                            loadSavedGame(pplamount);
+                            loadsavedgame(pplamount);
                         }
                     }
                     int filenumber = Integer.parseInt(filenum);
@@ -46,7 +46,7 @@ public class LoadGame implements LoadGameImplement {
                     if(SaveManager.filenames.size() < filenumber || filenumber <1){
                         System.out.println("Please input a actual file number");
                         chosefilenum = 1;
-                        loadSavedGame(pplamount);
+                        loadsavedgame(pplamount);
                     }
                     
                     FileInput input = new FileInput();
@@ -67,7 +67,7 @@ public class LoadGame implements LoadGameImplement {
                 else if (loadingworked == 0){
                     System.out.println("No saved files to use.");
                     count = 1;
-                    loadSavedGame(pplamount);
+                    loadsavedgame(pplamount);
                 }
             }
             else if (usesavefile.equals("n")){
@@ -75,16 +75,16 @@ public class LoadGame implements LoadGameImplement {
             }
             else{
                 System.out.println("Please answer with y or n.");
-                loadSavedGame(pplamount);
+                loadsavedgame(pplamount);
             }
         }
         else{
             //will go to this instead of reoutputting the would you like to use a saved file if there are no files to be used
             if(pplamount == 1){
-                OnePlayer.OnePlayerSetup();
+                OnePlayer.onePlayerSetup();
             }
             else if (pplamount == 2){
-                TwoPlayers.TwoPlayerSetup();
+                TwoPlayers.twoPlayerSetup();
             }
         }
     }

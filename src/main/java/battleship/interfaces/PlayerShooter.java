@@ -6,5 +6,5 @@ import battleship.domain.Board;
 import battleship.fleetplacements.*;
 
 public interface PlayerShooter {
-    void playerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException;
+    void playershoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException;
 }

@@ -1,7 +1,7 @@
 package battleship.players;
 
 import battleship.playinggame.Shooting;
-import battleship.setup.Setup;
+import battleship.setup.SetUp;
 
 import battleship.domain.Board;
 import battleship.ui.*;
@@ -16,7 +16,7 @@ public class OnePlayer {
     public static Board aiboard;
     public static Fleet aifleet;
     
-    private final Setup setup;
+    private final SetUp setup;
     private final Shooting shooting;
     private final Ai ai;
     private final GameFlow gameFlow;
@@ -28,30 +28,30 @@ public class OnePlayer {
         aiboard = new Board(10);
         aifleet = new Fleet();
         
-        setup = new Setup();
+        setup = new SetUp();
         shooting = new Shooting();
         ai = new Ai(pboard, aiboard, pfleet);
         gameFlow = new GameFlow();
     }
     
     
-    public static OnePlayer OnePlayerSetup() throws IOException {
+    public static OnePlayer onePlayerSetup() throws IOException {
         OnePlayer game = new OnePlayer();
-        game.onePlayerSetup(); 
+        game.oneplayerSetup(); 
         return game;
     }
     
     //will call the relevant functions to set up the ai and player boards
-    public void onePlayerSetup() throws IOException {
-        setup.PlayerSetup(pfleet, pboard, "Player");
-        AiSetup(aifleet, aiboard);
+    public void oneplayerSetup() throws IOException {
+        setup.playersetup(pfleet, pboard, "Player");
+        aiSetup(aifleet, aiboard);
     }
-    public static void AiSetup(Fleet aifleet, Board aiboard) {
-        aifleet.Preset(aifleet, aiboard);
+    public static void aiSetup(Fleet aifleet, Board aiboard) {
+        aifleet.preset(aifleet, aiboard);
     }
     //function to call shooter function in shooting
-    public void PlayerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
-        shooting.playerShoot(shooterboard, receiverfleet, receiverboard);
+    public void playerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
+        shooting.playershoot(shooterboard, receiverfleet, receiverboard);
     }
     
     //calls GameFlow file to alternate between ai and player shots

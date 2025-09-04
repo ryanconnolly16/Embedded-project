@@ -14,7 +14,7 @@ public class TwoPlayers {
     public static Fleet fleet1;
     public static Fleet fleet2;
     
-    private Setup setup;
+    private SetUp setup;
     private Shooting shooting;
     private GameFlow gameFlow;
     
@@ -25,37 +25,37 @@ public class TwoPlayers {
         fleet1 = new Fleet();
         fleet2 = new Fleet();
         
-        setup = new Setup();
+        setup = new SetUp();
         shooting = new Shooting();
         gameFlow = new GameFlow();
     }
     
-    public static void TwoPlayerSetup() throws IOException {
+    public static void twoPlayerSetup() throws IOException {
         TwoPlayers game = new TwoPlayers();
-        game.twoPlayerSetup();  
+        game.twoplayerSetup();  
     }
     
     //function to setup the boards for 2 players
-    public void twoPlayerSetup() throws IOException {
-        setup.PlayerSetup(fleet1, board1, "Player 1");
-        setup.PlayerSetup(fleet2, board2, "Player 2");
+    public void twoplayerSetup() throws IOException {
+        setup.playersetup(fleet1, board1, "Player 1");
+        setup.playersetup(fleet2, board2, "Player 2");
     }
     
     
     //calls gameflow file to alternate between each player
-    public void PlayGame() throws IOException {
+    public void playGame() throws IOException {
         InputManager.startedGame = 1;
         gameFlow.runTwoPlayerGame(board1, board2, fleet1, fleet2, shooting);
     }
     
-    public static void PlayerSetup(Fleet fleet, Board board, String name) throws IOException {
-        Setup setup = new Setup();
-        setup.PlayerSetup(fleet, board, name);
+    public static void playerSetup(Fleet fleet, Board board, String name) throws IOException {
+        SetUp setup = new SetUp();
+        setup.playersetup(fleet, board, name);
     }
     
     public static void PlayerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
         Shooting shooter = new Shooting();
-        shooter.playerShoot(shooterboard, receiverfleet, receiverboard);
+        shooter.playershoot(shooterboard, receiverfleet, receiverboard);
     }
     
 }
