@@ -6,7 +6,7 @@ import battleship.players.*;
 import battleship.ui.*;
 import java.io.*;
 
-
+//fucntion to check whether the user would like to use a saved file or start a new game
 public class LoadGame implements LoadGameImplement {
     
     public static int count = 0;
@@ -25,7 +25,7 @@ public class LoadGame implements LoadGameImplement {
             String usesavefile = input.getInput().trim();
             if(usesavefile.equals("y")){
                 int loadingworked = SaveManager.checkfilesexist();
-                //1 means it worked
+                //checks where there are files to be used
                 if (loadingworked == 1){
                     if (chosefilenum < 1){
                         System.out.println("\n\nWhich file would you like to use?\n");
@@ -63,7 +63,7 @@ public class LoadGame implements LoadGameImplement {
                     }
                     
                 }
-                //0 means that there are no files to read from
+                //there are no files to read from
                 else if (loadingworked == 0){
                     System.out.println("No saved files to use.");
                     count = 1;
@@ -79,6 +79,7 @@ public class LoadGame implements LoadGameImplement {
             }
         }
         else{
+            //will go to this instead of reoutputting the would you like to use a saved file if there are no files to be used
             if(pplamount == 1){
                 OnePlayer.OnePlayerSetup();
             }
