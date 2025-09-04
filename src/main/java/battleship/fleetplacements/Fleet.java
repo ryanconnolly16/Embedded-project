@@ -64,8 +64,6 @@ public class Fleet {
     //constructor
     public Fleet() {
         ships = new ArrayList<>();   
-        
-        //create components like your style
         shipLoader = new ShipFileLoader();
         
         presetPlacer = new PresetPlacer();
