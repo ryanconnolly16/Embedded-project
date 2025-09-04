@@ -23,14 +23,14 @@ public class GameLauncher implements GameStarter {
         String amount = input.getinput().trim();
         while(true){
             if(amount.equals("1") || amount.equalsIgnoreCase("one")){
-                save.loadsavedgame(1);
                 OnePlayer oneplayer = new OnePlayer();
+                save.loadsavedgame(1);
                 
                 oneplayer.PlayGame();
             }
             else if(amount.equals("2") || amount.equalsIgnoreCase("two")){
-                save.loadsavedgame(2);
                 TwoPlayers twoplayers = new TwoPlayers();
+                save.loadsavedgame(2);
                 
                 twoplayers.playGame();
             }

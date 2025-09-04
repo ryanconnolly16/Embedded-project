@@ -56,6 +56,7 @@ public class LoadGame implements LoadGameImplement {
                     if (pplamount == 1){
                         OnePlayer.pboard = boards[0];
                         OnePlayer.aiboard = boards[1];
+                        
                     }
                     if (pplamount == 2){
                         TwoPlayers.board1 = boards[0];
@@ -71,12 +72,12 @@ public class LoadGame implements LoadGameImplement {
                 }
             }
             else if (usesavefile.equals("n")){
-                if (pplamount == 1){
-                        OnePlayer.onePlayerSetup();
-                    }
-                    if (pplamount == 2){
-                        TwoPlayers.twoPlayerSetup();
-                    }
+                if(pplamount == 1){
+                    OnePlayer.onePlayerSetup();
+                }
+                else if (pplamount == 2){
+                    TwoPlayers.twoPlayerSetup();
+                }
             }
             else{
                 System.out.println("Please answer with y or n.");
