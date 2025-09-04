@@ -7,14 +7,14 @@ import battleship.ui.*;
 import java.io.IOException;
 
 public class SetUp implements GameSetup {
-    
+
     public SetUp() {
     }
     //asking the user if they want a preset board or make one
     public void playersetup(Fleet fleet, Board board, String name) throws IOException {
         System.out.println("\n\n" + name + " Setup:");
         String answer = InputManager.askPreset();
-        
+
         if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
             fleet.preset(fleet, board);
             System.out.println("\nHere is your board:");
@@ -27,7 +27,7 @@ public class SetUp implements GameSetup {
             playersetup(fleet, board, name);
         }
     }
-    
+
     @Override
     public void setupPlayers() throws IOException {
         //interface implementation 

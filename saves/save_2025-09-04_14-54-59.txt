@@ -1,0 +1,47 @@
+10
+PLAYER1
+SHIPS
+          
+  SSSSSSS 
+      SS  
+    S     
+  S S     
+  S S     
+  X S     
+  S S    S
+  S S    S
+    S    S
+SHOTS
+O         
+          
+          
+          
+          
+          
+          
+          
+          
+          
+PLAYER2
+SHIPS
+OSSS      
+  SSSSSSS 
+ S        
+ S S     S
+ S S     S
+ S S     S
+   S      
+   S S    
+     S    
+          
+SHOTS
+          
+          
+          
+          
+          
+          
+  X       
+          
+          
+          
