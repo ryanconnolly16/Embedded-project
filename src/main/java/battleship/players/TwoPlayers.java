@@ -4,6 +4,8 @@ import battleship.fleetplacements.*;
 import battleship.domain.*;
 import battleship.setup.*;
 import battleship.playinggame.*;
+import battleship.ui.BoardRenderer;
+import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
 import java.io.IOException;
 
@@ -51,6 +53,7 @@ public class TwoPlayers {
     public static void playerSetup(Fleet fleet, Board board, String name) throws IOException {
         SetUp setup = new SetUp();
         setup.playersetup(fleet, board, name);
+        
     }
     
     public static void PlayerShoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {

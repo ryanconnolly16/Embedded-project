@@ -18,6 +18,8 @@ public class SetUp implements GameSetup {
         if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
             fleet.preset(fleet, board);
             System.out.println("\nHere is your board:");
+            System.out.println("\n" + BoardRenderer.renderBoth(board, new DefaultGlyphs()));
+            UiOutput.clearConsole();
         }
         else if (answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")) {
             fleet.userPalcement(fleet, board);
