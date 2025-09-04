@@ -1,11 +1,9 @@
 package battleship.ui;
 
 
-import battleship.enums.Cell;
 import battleship.interfaces.Glyphs;
 import battleship.enums.GridType;
 import battleship.interfaces.*;
-import battleship.domain.Board;
 import static battleship.enums.GridType.*;
 import java.util.ArrayList;
 import java.util.List;
