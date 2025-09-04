@@ -18,24 +18,22 @@ public class SaveManager {
         return d;
     }
     
-    //saves the current turn to the file
+    // saves the current turn to a single temp file (always overwrites)
     public static File writeTurnAutosave(Board p1, Board p2) throws IOException {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
-        File tmp = new File(dir(), "save_" + timestamp + ".tmp");
-        new FileOutput().saveMatch(p1, p2, tmp);
+        File tmp = new File(dir(), "autosave.tmp"); // fixed name
+        new FileOutput().saveMatch(p1, p2, tmp);    // overwrite each turn
         return tmp;
     }
-    
-    //for when the user presses x, will discard or save 
+
+    // when user presses x, save permanent copy with timestamp
     public static File keep(File tmp) throws IOException {
         if (tmp == null) throw new IllegalArgumentException("tmp is null");
-        String name = tmp.getName();
-        if (!name.endsWith(".tmp")) throw new IllegalArgumentException("Not a .tmp: " + name);
-        File dst = new File(tmp.getParentFile(), name.substring(0, name.length() - 4) + ".txt");
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        File dst = new File(tmp.getParentFile(), "save_" + timestamp + ".txt");
         if (!tmp.renameTo(dst)) throw new IOException("Rename failed: " + tmp + " -> " + dst);
         return dst;
     }
-     
+    
     //will idscard what has been done
     public static void discard(File tmp) {
         if (tmp != null && tmp.exists()) {
