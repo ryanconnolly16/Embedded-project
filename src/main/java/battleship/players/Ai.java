@@ -9,16 +9,11 @@ import java.util.Random;
 
 //ai class for when its one player
 public class Ai implements AiShooter {
-    //private final Board playerboard;
-    //private final Board aiboard;  
-    //private final Fleet playerfleet;
     
     public Ai(Board playerboard, Board aiboard, Fleet playerfleet) {
-        //this.playerboard = playerboard;
-        //this.aiboard = aiboard;
-        //this.playerfleet = playerfleet;
     }
     
+    @Override
     public void aiShoot(Board aiboard, Fleet playerfleet, Board playerboard) {
         Random rand = new Random();
         int xpos = rand.nextInt(10);
