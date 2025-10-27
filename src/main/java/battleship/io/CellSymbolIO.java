@@ -8,12 +8,11 @@ public abstract class CellSymbolIO {
             case 'S' -> Cell.SHIP;
             case 'X' -> Cell.HIT;
             case 'O' -> Cell.MISS;
-            case '.' -> Cell.WATER;   // dot means water in files
-            default  -> Cell.WATER;   // fallback to water
+            default  -> Cell.WATER;
         };
     }
 
     protected char encode(Cell cell) {
-        return (cell == Cell.WATER) ? '.' : cell.symbol;  // Water = '.', others keep their symbol
+        return cell.symbol;  // Use the enum's symbol field
     }
 }
