@@ -2,7 +2,6 @@ package battleship;
 
 import battleship.database.Db;
 import battleship.database.Db.Player;
-import static battleship.database.Db.listShots;
 import static battleship.database.Db.recordShot;
 import battleship.ui.*;
 import java.sql.*;

@@ -41,8 +41,8 @@ public final class Db {
                 st.executeUpdate("""
                   CREATE TABLE PLAYER2(
                     ShotNum   INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                    GridSpace VARCHAR(4)  NOT NULL,
-                    HitMiss   VARCHAR(8)  NOT NULL
+                    GridSpace VARCHAR(64)  NOT NULL,
+                    HitMiss   VARCHAR(64)  NOT NULL
                   )
                 """);
             } catch (SQLException e) { if (!"X0Y32".equals(e.getSQLState())) throw e; }   
@@ -60,17 +60,6 @@ public final class Db {
         }
     }
 
-    public static void listShots(Connection c, Player who) throws SQLException {
-        final String table = (who == Player.PLAYER1) ? "PLAYER1" : "PLAYER2";
-        try (var st = c.createStatement();
-             var rs = st.executeQuery("SELECT ShotNum, GridSpace, HitMiss FROM " + table + " ORDER BY ShotNum")) {
-            System.out.println("== " + table + " ==");
-            while (rs.next()) {
-                System.out.printf("%d | %s | %s",
-                    rs.getInt(1), rs.getString(2), rs.getString(3));
-            }
-        }
-    }
 
     
     public static void shutdownQuietly() {
