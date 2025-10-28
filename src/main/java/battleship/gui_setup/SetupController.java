@@ -14,8 +14,10 @@ public class SetupController implements SetupActions {
     private final OnePlayerGame onePlayerGame;
 
     // model used during setup
-    public static Board board5;
-    public static Fleet fleet5;
+    public static Board aiboard;
+    public static Fleet aifleet;
+    public static Board pboard;
+    public static Fleet pfleet;
 
     public SetupController(Navigator nav, String onePlayerCard, String menuCard,
                            OnePlayerGame onePlayerGame) {
@@ -24,14 +26,16 @@ public class SetupController implements SetupActions {
         this.menuCard = menuCard;
         this.onePlayerGame = onePlayerGame;
 
-        board5 = new Board(10);
-        fleet5 = new Fleet();
+        aiboard = new Board(10);
+        aifleet = new Fleet();
+        pboard = new Board(10);
+        pfleet = new Fleet();
     }
 
     @Override
     public void start() {
         // give the view its model and render it, then navigate
-        onePlayerGame.setModel(board5);
+        onePlayerGame.setModel(pboard);
         onePlayerGame.refresh();
         nav.show(onePlayerCard);
     }
@@ -43,8 +47,10 @@ public class SetupController implements SetupActions {
 
     @Override
     public void applyPreset() {
-        SetupServices.setuppresetGUI(fleet5, board5);
-        onePlayerGame.setModel(board5);
-        onePlayerGame.refresh();
+        Setup.preset.setEnabled(false);
+        SetupServices.setuppresetGUI(pfleet, pboard);
+        SetupServices.setuppresetGUI(aifleet, aiboard);
+        
     }
+    
 }
