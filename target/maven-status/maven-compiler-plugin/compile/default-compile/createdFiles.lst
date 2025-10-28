@@ -1,6 +1,6 @@
-battleship\gui_setup\SetupActions.class
-battleship\navigation\CardNavigator.class
-battleship\navigation\Navigator.class
-battleship\gui_setup\SetupServices.class
-battleship\gui_setup\Setup.class
-battleship\gui_setup\SetupController.class
+battleship/gui_setup/SetupController.class
+battleship/navigation/CardNavigator.class
+battleship/navigation/Navigator.class
+battleship/gui_setup/Setup.class
+battleship/gui_setup/SetupServices.class
+battleship/gui_setup/SetupActions.class

@@ -5,7 +5,7 @@ import battleship.enums.*;
 import battleship.interfaces.*;
 import java.util.Random;
 
-class PresetPlacer implements ShipPlacer {
+public class PresetPlacer implements ShipPlacer {
     
     public PresetPlacer() {}
     

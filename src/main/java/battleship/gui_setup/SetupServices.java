@@ -1,13 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package battleship.gui_setup;
 
-/**
- *
- * @author samrc
- */
+import battleship.domain.Board;
+import battleship.fleetplacements.Fleet;
+import battleship.ui.BoardRenderer;
+import battleship.ui.DefaultGlyphs;
+
 public class SetupServices {
-    
+    public static void setuppresetGUI(Fleet fleet, Board board){
+        fleet.preset(fleet, board); 
+
+        System.out.println("\n" + BoardRenderer.renderBoth(board, new DefaultGlyphs()));
+    }
 }
