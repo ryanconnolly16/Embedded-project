@@ -1,6 +1,5 @@
 package battleship;
 
-
 import battleship.domain.Board;
 import battleship.gui_screens.ActionListenerCardSwitch;
 import battleship.gui_screens.Menu;
@@ -15,6 +14,7 @@ import battleship.gui_settings.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class BattleshipGUI extends JFrame {
 
@@ -30,6 +30,7 @@ public class BattleshipGUI extends JFrame {
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screen = kit.getScreenSize();
         int width  = screen.width / 2, height = screen.height / 2;
+        Dimension defaultSize = new Dimension(width, height);
 
         setTitle("Battleship");
         setSize(width, height);
@@ -51,13 +52,15 @@ public class BattleshipGUI extends JFrame {
         Board playerBoard = new Board(10);
         Board aiBoard     = new Board(10);
 
-        // build the view (no args)
         OnePlayerGame one = new OnePlayerGame();
-
-        // build the controller (it hooks itself to the view)
         OnePlayerController controller = new OnePlayerController(one, playerBoard, aiBoard);
+        
         Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one));
-        Settings settings = new Settings(toMenu, null, null);
+        
+        ActionListener goFullscreen = battleship.gui_settings.ScreenSizeUtils.fullscreen(this);
+        ActionListener goWindowed   = battleship.gui_settings.ScreenSizeUtils.windowed(this, defaultSize);
+        battleship.gui_settings.ScreenSizeUtils.bindEscapeToExit(this, goWindowed);
+        Settings settings = new Settings(toMenu, goWindowed, goFullscreen);
 
         // add cards
         cardPanel.add(menu,          CARD_MENU);
