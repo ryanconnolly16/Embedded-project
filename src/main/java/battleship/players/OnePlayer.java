@@ -8,6 +8,7 @@ import battleship.ui.*;
 import battleship.fleetplacements.*;
 import battleship.playinggame.*;
 import java.io.IOException;
+import java.sql.Connection;
 
 
 public class OnePlayer {
@@ -55,9 +56,9 @@ public class OnePlayer {
     }
     
     //calls GameFlow file to alternate between ai and player shots
-    public void PlayGame() throws IOException {
+    public void PlayGame(Connection c) throws IOException, Exception {
         InputManager.startedGame = 1;
-        gameFlow.runOnePlayerGame(pboard, aiboard, pfleet, aifleet, shooting, ai);
+        gameFlow.runOnePlayerGame(pboard, aiboard, pfleet, aifleet, shooting, ai,c);
     }
     
 }

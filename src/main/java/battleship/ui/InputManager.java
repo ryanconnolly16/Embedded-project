@@ -12,6 +12,8 @@ public class InputManager implements UserInput {
     public static int startedGame = 0;
     public static File autosave;
     
+    public boolean save = false;
+    
     public InputManager() {
     }
     
@@ -47,9 +49,11 @@ public class InputManager implements UserInput {
 
                         if (trimmedResponse.equals("y")) {
                             SaveManager.keep(autosave);
+                            
                             break;
                         } else if (trimmedResponse.equals("n")) {
                             SaveManager.discard(autosave);
+                            
                             break;
                         } else {
                             System.out.println("Invalid input. Please enter 'y' for yes or 'n' for no.");
@@ -66,6 +70,8 @@ public class InputManager implements UserInput {
             return userinput.trim();
         }
     }
+    
+    
     
     
     public static String askPreset() throws IOException{

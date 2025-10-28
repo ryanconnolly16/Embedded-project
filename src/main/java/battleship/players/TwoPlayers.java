@@ -8,6 +8,8 @@ import battleship.ui.BoardRenderer;
 import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class TwoPlayers {
     
@@ -45,9 +47,9 @@ public class TwoPlayers {
     
     
     //calls gameflow file to alternate between each player
-    public void playGame() throws IOException {
+    public void playGame(Connection c) throws IOException, SQLException {
         InputManager.startedGame = 1;
-        gameFlow.runTwoPlayerGame(board1, board2, fleet1, fleet2, shooting);
+        gameFlow.runTwoPlayerGame(board1, board2, fleet1, fleet2, shooting,c);
     }
     
     public static void playerSetup(Fleet fleet, Board board, String name) throws IOException {

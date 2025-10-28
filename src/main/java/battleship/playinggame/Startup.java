@@ -3,6 +3,7 @@ package battleship.playinggame;
 
 import battleship.ui.*;
 import java.io.IOException;
+import java.sql.Connection;
 
 public class Startup {
     private Console console;
@@ -14,8 +15,8 @@ public class Startup {
     }
     
     //shows game introduction then will get into the game
-    public void startup() throws IOException {
+    public void startup(Connection c) throws IOException {
         console.showwelcome();
-        gameLauncher.startGame();
+        gameLauncher.startGame(c);
     }
 }

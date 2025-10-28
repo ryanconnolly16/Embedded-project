@@ -1,6 +1,13 @@
 package battleship.database;
 
 import battleship.database.DbPaths;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.sql.*;
 import java.nio.file.Path;
 
@@ -46,6 +53,9 @@ public final class Db {
                   )
                 """);
             } catch (SQLException e) { if (!"X0Y32".equals(e.getSQLState())) throw e; }   
+            try {
+                st.executeUpdate("CREATE TABLE GameState(slot VARCHAR(32) PRIMARY KEY, content CLOB)");
+            } catch (SQLException e) { if (!"X0Y32".equals(e.getSQLState())) throw e; }
         }
     }
     
@@ -66,8 +76,40 @@ public final class Db {
         try { DriverManager.getConnection("jdbc:derby:;shutdown=true"); }
         catch (SQLException e) { if (!"XJ015".equals(e.getSQLState())) e.printStackTrace(); }
     }
+    
+    
+    public static void overwriteOrInsert(Connection c, String slot, File f) throws Exception {
+        int n;
+        try (PreparedStatement up = c.prepareStatement("UPDATE GameState SET content=? WHERE slot=?");
+             Reader r1 = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)) {
+          up.setCharacterStream(1, r1);
+          up.setString(2, slot);
+          n = up.executeUpdate();
+        }
+        if (n == 0) {
+          try (PreparedStatement ins = c.prepareStatement("INSERT INTO GameState(slot,content) VALUES(?,?)");
+               Reader r2 = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)) {
+            ins.setString(1, slot);
+            ins.setCharacterStream(2, r2);
+            ins.executeUpdate();
+          }
+        }
+      }
+    
+//    
+//    public static long saveTempTextFile(Connection c, String name, File tmp) throws Exception {
+//        String sql = "INSERT INTO PASTSAVE(name, content) VALUES (?, ?)";
+//        try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//             Reader r = new BufferedReader(new InputStreamReader(
+//                         new FileInputStream(tmp), StandardCharsets.UTF_8))) {
+//            ps.setString(1, name);
+//            // length can be omitted with recent Derby; if needed use tmp.length()
+//            ps.setCharacterStream(2, r); 
+//            ps.executeUpdate();
+//            try (ResultSet k = ps.getGeneratedKeys()) {
+//                return k.next() ? k.getLong(1) : -1L;
+//            }
+//        }
+//    }
+
 }
-
-
-
-

@@ -4,6 +4,7 @@ package battleship.ui;
 import battleship.io.*;
 import battleship.playinggame.*;
 import java.io.*;
+import java.sql.Connection;
 import java.util.*;
 
 public class UiOutput extends FileInput {
@@ -28,12 +29,12 @@ public class UiOutput extends FileInput {
         console.clearconsole();
     }
 
-    public static void startUp() throws IOException {
-        startup.startup();
+    public static void startUp(Connection c) throws IOException {
+        startup.startup(c);
     }
     
-    public static void playerAmount() throws IOException {
-        gameLauncher.playeramount();
+    public static void playerAmount(Connection c) throws IOException, Exception {
+        gameLauncher.playeramount(c);
     }
     
     public static void loadSavedGame(int pplamount) throws IOException {

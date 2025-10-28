@@ -30,8 +30,10 @@ public class SaveManager {
         if (tmp == null) throw new IllegalArgumentException("tmp is null");
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
         File dst = new File(tmp.getParentFile(), "save_" + timestamp + ".txt");
+        
         if (!tmp.renameTo(dst)) throw new IOException("Rename failed: " + tmp + " -> " + dst);
         return dst;
+        
     }
     
     //will idscard what has been done
