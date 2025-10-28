@@ -9,20 +9,19 @@ public class OnePlayerGame extends JPanel {
     private final JButton[][] shipsGrid = new JButton[10][10];
     private final JButton[][] shotsGrid = new JButton[10][10];
 
-    private Board myBoard; // model reference rendered into the two grids
+    private OnePlayerActions actions;
+    private Board myBoard;
 
-    public OnePlayerGame(OnePlayerActions actions) {
+    public OnePlayerGame() {
         setLayout(new BorderLayout());
 
-        // Title
         add(new JLabel("One Player", JLabel.CENTER), BorderLayout.NORTH);
 
-        // Two boards side-by-side
         JPanel boards = new JPanel(new GridLayout(1, 2, 10, 10));
 
+        // Left: my ships
         JPanel shipsBoard = new JPanel(new BorderLayout());
         shipsBoard.add(new JLabel("Your ships", JLabel.CENTER), BorderLayout.NORTH);
-
         JPanel shipsGridPanel = new JPanel(new GridLayout(10, 10, 2, 2));
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -33,16 +32,17 @@ public class OnePlayerGame extends JPanel {
         }
         shipsBoard.add(shipsGridPanel, BorderLayout.CENTER);
 
+        // Right: my shots
         JPanel shotsBoard = new JPanel(new BorderLayout());
         shotsBoard.add(new JLabel("Your shots", JLabel.CENTER), BorderLayout.NORTH);
-
         JPanel shotsGridPanel = new JPanel(new GridLayout(10, 10, 2, 2));
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
                 final int rr = r, cc = c;
                 JButton b = new JButton();
                 shotsGrid[rr][cc] = b;
-                b.addActionListener(e -> actions.fireShot(rr, cc));
+                // action is bound via setActions()
+                b.addActionListener(e -> { if (actions != null) actions.fireShot(rr, cc); });
                 shotsGridPanel.add(b);
             }
         }
@@ -52,11 +52,10 @@ public class OnePlayerGame extends JPanel {
         boards.add(shotsBoard);
         add(boards, BorderLayout.CENTER);
 
-        // ---- Bottom bar: quit options ----
         JButton quitSave    = new JButton("Quit & Save");
         JButton quitDiscard = new JButton("Quit & Discard");
-        quitSave.addActionListener(e -> actions.quitSave());
-        quitDiscard.addActionListener(e -> actions.quitDiscard());
+        quitSave.addActionListener(e -> { if (actions != null) actions.quitSave(); });
+        quitDiscard.addActionListener(e -> { if (actions != null) actions.quitDiscard(); });
 
         JPanel south = new JPanel();
         south.add(quitSave);
@@ -64,14 +63,14 @@ public class OnePlayerGame extends JPanel {
         add(south, BorderLayout.SOUTH);
     }
 
-    // ----- Public API for controller -----
+    public void setActions(OnePlayerActions actions) {
+        this.actions = actions;
+    }
 
-    /** Inject the model this panel should render. */
     public void setModel(Board board) {
         this.myBoard = board;
     }
 
-    /** Re-render both grids from the current model. */
     public void refresh() {
         if (myBoard == null) return;
         BoardView.refreshAll(shipsGrid, shotsGrid, myBoard);
@@ -80,11 +79,6 @@ public class OnePlayerGame extends JPanel {
     }
 
     public void setShotsEnabled(boolean enabled) {
-        for (var row : shotsGrid)
-            for (var b : row) b.setEnabled(enabled);
-    }
-    public void setShipsEnabled(boolean enabled) {
-        for (var row : shipsGrid)
-            for (var b : row) b.setEnabled(enabled);
+        for (var row : shotsGrid) for (var b : row) b.setEnabled(enabled);
     }
 }

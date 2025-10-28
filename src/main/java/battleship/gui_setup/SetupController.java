@@ -1,42 +1,58 @@
+// battleship/gui_setup/SetupController.java
 package battleship.gui_setup;
 
 import battleship.domain.Board;
 import battleship.fleetplacements.Fleet;
 import battleship.navigation.Navigator;
 import battleship.gui_game.OnePlayerGame;
+import battleship.gui_game.OnePlayerController;
 
 public class SetupController implements SetupActions {
     private final Navigator nav;
     private final String onePlayerCard;
     private final String menuCard;
+    private final OnePlayerGame oneView;  // <-- pass the view in
 
-    // view to paint into
-    private final OnePlayerGame onePlayerGame;
+    // Keep these so applyPreset() is usable later by start()
+    private final Board pboard  = new Board(10);
+    private final Board aiboard = new Board(10);
+    private final Fleet pfleet  = new Fleet();
+    private final Fleet aifleet = new Fleet();
 
-    // model used during setup
-    public static Board aiboard;
-    public static Fleet aifleet;
-    public static Board pboard;
-    public static Fleet pfleet;
+    private boolean presetApplied = false;
 
-    public SetupController(Navigator nav, String onePlayerCard, String menuCard,
-                           OnePlayerGame onePlayerGame) {
+    public SetupController(Navigator nav, String onePlayerCard, String menuCard, OnePlayerGame oneView) {
         this.nav = nav;
+        this.oneView = oneView;
         this.onePlayerCard = onePlayerCard;
         this.menuCard = menuCard;
-        this.onePlayerGame = onePlayerGame;
+    }
 
-        aiboard = new Board(10);
-        aifleet = new Fleet();
-        pboard = new Board(10);
-        pfleet = new Fleet();
+    @Override
+    public void applyPreset() {
+        // If you really have a static button reference, keep it; otherwise expose a method on your Setup panel.
+        // Setup.preset.setEnabled(false);
+
+        SetupServices.setupPresetGUI(pfleet, pboard);
+        SetupServices.setupPresetGUI(aifleet, aiboard);
+        presetApplied = true;
+        // Optional preview in setup screen:
+        // oneView.setModel(pboard);
+        // oneView.refresh();
     }
 
     @Override
     public void start() {
-        // give the view its model and render it, then navigate
-        onePlayerGame.setModel(pboard);
-        onePlayerGame.refresh();
+        // Safety: ensure boards are populated
+        if (!presetApplied) applyPreset();
+
+        // Create the game controller using the boards produced by applyPreset()
+        new OnePlayerController(oneView, pboard, aiboard);
+
+        // (Controller already sets model + refresh on the view, but harmless to call again)
+        oneView.refresh();
+
+        // Navigate to the 1P game screen
         nav.show(onePlayerCard);
     }
 
@@ -44,13 +60,4 @@ public class SetupController implements SetupActions {
     public void back() {
         nav.show(menuCard);
     }
-
-    @Override
-    public void applyPreset() {
-        Setup.preset.setEnabled(false);
-        SetupServices.setuppresetGUI(pfleet, pboard);
-        SetupServices.setuppresetGUI(aifleet, aiboard);
-        
-    }
-    
 }

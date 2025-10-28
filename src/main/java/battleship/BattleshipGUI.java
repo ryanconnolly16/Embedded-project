@@ -1,19 +1,16 @@
 package battleship;
 
-import battleship.gui_game.OnePlayerGame;
 
+import battleship.domain.Board;
 import battleship.gui_screens.ActionListenerCardSwitch;
 import battleship.gui_screens.Menu;
 import battleship.gui_screens.QuitListener;
 import battleship.gui_setup.Setup;
-import battleship.gui_setup.SetupActions;
 import battleship.gui_setup.SetupController;
 import battleship.navigation.CardNavigator;
 import battleship.navigation.Navigator;
 import battleship.gui_game.OnePlayerGame;
 import battleship.gui_game.OnePlayerController;
-import battleship.gui_game.OnePlayerActions;
-
 import battleship.gui_settings.Settings;
 
 import javax.swing.*;
@@ -51,8 +48,14 @@ public class BattleshipGUI extends JFrame {
         Menu menu = new Menu(toSetup, toSettings, quit);
         Navigator navigator = new CardNavigator(cardLayout, cardPanel);
         
+        Board playerBoard = new Board(10);
+        Board aiBoard     = new Board(10);
 
-        OnePlayerGame one = new OnePlayerGame(new OnePlayerController(navigator, CARD_MENU));
+        // build the view (no args)
+        OnePlayerGame one = new OnePlayerGame();
+
+        // build the controller (it hooks itself to the view)
+        OnePlayerController controller = new OnePlayerController(one, playerBoard, aiBoard);
         Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one));
         Settings settings = new Settings(toMenu, null, null);
 
