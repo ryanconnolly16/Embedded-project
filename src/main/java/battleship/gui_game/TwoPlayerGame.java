@@ -1,14 +1,14 @@
-package battleship.gui;
+package battleship.gui_game;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class OnePlayerGame extends JPanel {
-    
-    public OnePlayerGame(ActionListener onBackToMenu) {
+public class TwoPlayerGame extends JPanel {
+    public TwoPlayerGame(ActionListener onBackToMenu) {
         setLayout(new BorderLayout());
-        add(new JLabel("One Player Game Screen"), BorderLayout.CENTER);
+
+        add(new JLabel("Two Player", JLabel.CENTER), BorderLayout.CENTER);
 
         JButton back = new JButton("Back to Menu");
         back.addActionListener(onBackToMenu);

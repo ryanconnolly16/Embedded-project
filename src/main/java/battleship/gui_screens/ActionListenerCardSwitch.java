@@ -1,4 +1,4 @@
-package battleship.gui;
+package battleship.gui_screens;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
