@@ -12,6 +12,8 @@ C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\ReadOnlyBoar
 C:\Users\samrc\Embedded-project\src\main\java\battleship\players\Ai.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\BattleshipGUI.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_screens\ActionListenerCardSwitch.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\navigation\Navigator.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\navigation\CardNavigator.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\playinggame\Startup.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\io\FileOutput.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\setup\SetUp.java
@@ -21,12 +23,16 @@ C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_screens\QuitListene
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\GameSetup.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\enums\Direction.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\Glyphs.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_setup\SetupController.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\players\OnePlayer.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_setup\Setup.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_setup\SetupActions.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\io\CellSymbolIO.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\playinggame\Battle.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\io\ShipFileLoader.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\ShipPlacer.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\players\TwoPlayers.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_setup\SetupServices.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\enums\Cell.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\ui\InputManager.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\BattleshipGame.java
@@ -36,11 +42,9 @@ C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_settings\FullScreen
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\ShipLoader.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\database\DbPaths.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\playinggame\GameFlow.java
-C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_game\TwoPlayerGame.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\GameStarter.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\enums\GridType.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\UserPlacer.java
-C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_screens\GameModePanel.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\ConsoleOutput.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\io\SaveManager.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\io\LoadGame.java
