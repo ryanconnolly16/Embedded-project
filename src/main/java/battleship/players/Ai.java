@@ -5,6 +5,7 @@ import battleship.fleetplacements.*;
 import battleship.domain.*;
 import battleship.enums.*;
 import battleship.interfaces.*;
+import java.awt.Point;
 import java.util.Random;
 
 //ai class for when its one player
@@ -44,4 +45,35 @@ public class Ai implements AiShooter {
         return result;
     }
 
+    
+    public static void AiShot(Board aiboard, Fleet playerfleet, Board playerboard) {
+        Random rand = new Random();
+        int xpos = rand.nextInt(10);
+        int ypos = rand.nextInt(10);
+        Point result = null;
+        //checking what state the chosen cell is
+        Cell trial_shot = playerboard.cellAt(ypos, xpos, GridType.SHIPS);
+        
+        
+        String xposis = String.valueOf((char) ('A' + xpos));
+        String yposis = String.valueOf(ypos);
+        String pos = (xposis + yposis);
+        
+        //checking if they already shot in that space
+        if (trial_shot == Cell.HIT || trial_shot == Cell.MISS) {
+            AiShot(aiboard, playerfleet, playerboard);
+        }
+        else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
+            ypos++;
+            char letterxpos = (char)('a' + xpos);
+            String usershot = "" + letterxpos + ypos;
+            System.out.println("\nThe ai shoots at " + usershot);
+            Battle.usershot(usershot, aiboard, playerfleet, playerboard);
+            
+        }
+        
+    }
+    
+    
+    
 }

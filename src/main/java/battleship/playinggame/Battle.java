@@ -64,9 +64,12 @@ public class Battle {
         }
         else{
             aiboard.markHit(xpos, ypos);
+            
+            
             //will display which ship is sunk if the ship runs out of health
             System.out.println("Hit " + 
                 (hit.isSunk() ? "SUNK!" + hit.name: ""));
+            
             playerboard.shipHit(xpos, ypos);
             if(playerfleet.allSunk()){
                 System.exit(0);

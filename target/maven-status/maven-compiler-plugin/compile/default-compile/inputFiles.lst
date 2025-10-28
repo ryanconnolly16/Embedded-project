@@ -26,6 +26,7 @@
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/players/Ai.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/playinggame/Shooting.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/gui_game/OnePlayerGame.java
+/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/gui_settings/ScreenSizeUtils.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/gui_screens/Menu.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/GameStarter.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/playinggame/GameLauncher.java

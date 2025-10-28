@@ -73,4 +73,28 @@ public class Shooting implements PlayerShooter {
         }
         return result;
     }
+    
+    
+    
+    
+    
+    
+    public static boolean playershooting(int ypos, int xpos, Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
+        String x = String.valueOf((char)('a' + (xpos)));
+        String y = Integer.toString(ypos+1);
+        String usershot = x + y;
+        System.out.println(usershot);
+        
+        Cell trial_shot = receiverboard.cellAt(ypos, xpos, GridType.SHIPS);
+        if (trial_shot == Cell.HIT || trial_shot == Cell.MISS) {
+            return false;
+            
+        }
+        else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
+            Battle.usershot(usershot, shooterboard, receiverfleet, receiverboard);
+            return true;
+            
+        }
+        return false;
+    }
 }
