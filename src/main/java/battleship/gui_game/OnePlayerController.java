@@ -3,29 +3,38 @@ package battleship.gui_game;
 import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.GridType;
+import battleship.fleetplacements.Fleet;
+import battleship.gui_setup.SetupController;
+import battleship.players.Ai;
+import battleship.playinggame.Battle;
+import battleship.playinggame.Shooting;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OnePlayerController implements OnePlayerActions {
     private static final int AI_DELAY_MS = 650;
 
-    private final OnePlayerGame view;
-    private final Board playerBoard; 
-    private final Board aiBoard;     
+    private final OnePlayerGame view; 
 
+    public Board playerBoard = SetupController.pboard;
+    public Fleet playerFleet = SetupController.pfleet;
+    public Board aiBoard = SetupController.aiboard;
+    public Fleet aiFleet = SetupController.aifleet;
+    
+    
     private final Random rng = new Random();
     private final Set<Point> aiTried = new HashSet<>();
     private boolean playerTurn = true;
 
     public OnePlayerController(OnePlayerGame view, Board playerBoard, Board aiBoard) {
         this.view = view;
-        this.playerBoard = playerBoard;
-        this.aiBoard = aiBoard;
-
         this.view.setActions(this);
         this.view.setModel(playerBoard);
         this.view.refresh();
@@ -35,8 +44,11 @@ public class OnePlayerController implements OnePlayerActions {
     @Override
     public void fireShot(int r, int c) {
         if (!playerTurn) return;
-        if (!applyShot(playerBoard, aiBoard, r, c)) return;
-
+        try {
+            if (!Shooting.playershooting(r, c, playerBoard, aiFleet, aiBoard)) return;
+        } catch (IOException ex) {
+            Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         view.refresh();
 
         if (allShipsSunk(aiBoard)) {
@@ -66,10 +78,7 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     private void aiTurn() {
-        Point p = pickAiTarget();
-        if (p == null) return;
-
-        applyShot(aiBoard, playerBoard, p.x, p.y);
+        Ai.AiShot(aiBoard, playerFleet, playerBoard);
         view.refresh();
 
         if (allShipsSunk(playerBoard)) {
@@ -82,35 +91,7 @@ public class OnePlayerController implements OnePlayerActions {
         view.setShotsEnabled(true);
     }
 
-    private Point pickAiTarget() {
-        for (int tries = 0; tries < 500; tries++) {
-            int r = rng.nextInt(playerBoard.size());
-            int c = rng.nextInt(playerBoard.size());
-            Point p = new Point(r, c);
-            if (aiTried.add(p)) return p;
-        }
-        for (int r = 0; r < playerBoard.size(); r++)
-            for (int c = 0; c < playerBoard.size(); c++) {
-                Point p = new Point(r, c);
-                if (!aiTried.contains(p)) { aiTried.add(p); return p; }
-            }
-        return null;
-    }
-
-    private boolean applyShot(Board shooter, Board defender, int r, int c) {
-        Cell prev = shooter.cellAt(r, c, GridType.SHOTS);
-        if (prev == Cell.HIT || prev == Cell.MISS) return false;
-
-        Cell tgt = defender.cellAt(r, c, GridType.SHIPS);
-        if (tgt == Cell.SHIP) {
-            shooter.markHit(r, c);
-            defender.shipHit(r, c);
-        } else {
-            shooter.markMiss(r, c);
-            defender.shipMiss(r, c);
-        }
-        return true;
-    }
+    
 
     private boolean allShipsSunk(Board b) {
         int n = b.size();

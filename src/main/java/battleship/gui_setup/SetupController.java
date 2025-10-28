@@ -14,10 +14,10 @@ public class SetupController implements SetupActions {
     private final OnePlayerGame oneView;  // <-- pass the view in
 
     // Keep these so applyPreset() is usable later by start()
-    private final Board pboard  = new Board(10);
-    private final Board aiboard = new Board(10);
-    private final Fleet pfleet  = new Fleet();
-    private final Fleet aifleet = new Fleet();
+    public static Board pboard  = new Board(10);
+    public static Board aiboard = new Board(10);
+    public static Fleet pfleet  = new Fleet();
+    public static Fleet aifleet = new Fleet();
 
     private boolean presetApplied = false;
 
@@ -36,6 +36,7 @@ public class SetupController implements SetupActions {
         SetupServices.setupPresetGUI(pfleet, pboard);
         SetupServices.setupPresetGUI(aifleet, aiboard);
         presetApplied = true;
+        Setup.preset.setEnabled(false);
         // Optional preview in setup screen:
         // oneView.setModel(pboard);
         // oneView.refresh();
