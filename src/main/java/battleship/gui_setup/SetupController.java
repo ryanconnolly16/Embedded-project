@@ -5,7 +5,6 @@ import battleship.domain.Board;
 import battleship.fleetplacements.Fleet;
 import battleship.navigation.Navigator;
 import battleship.gui_game.OnePlayerGame;
-import battleship.gui_game.OnePlayerController;
 
 public class SetupController implements SetupActions {
     private final Navigator nav;
@@ -47,8 +46,6 @@ public class SetupController implements SetupActions {
         // Safety: ensure boards are populated
         if (!presetApplied) applyPreset();
 
-        // Create the game controller using the boards produced by applyPreset()
-        new OnePlayerController(oneView, pboard, aiboard);
 
         // (Controller already sets model + refresh on the view, but harmless to call again)
         oneView.refresh();

@@ -10,23 +10,19 @@ public class Settings extends JPanel {
                     ActionListener onWindowed,
                     ActionListener onFullscreen) {
         setLayout(new BorderLayout());
-
-        // Title
         add(new JLabel("Settings", JLabel.CENTER), BorderLayout.NORTH);
 
-        // Center buttons
         JPanel center = new JPanel(new GridLayout(0, 1, 10, 10));
         JButton windowedBtn   = new JButton("Windowed");
         JButton fullscreenBtn = new JButton("Fullscreen");
 
-        if (onWindowed != null)   windowedBtn.addActionListener(onWindowed);    
+        if (onWindowed != null)   windowedBtn.addActionListener(onWindowed);
         if (onFullscreen != null) fullscreenBtn.addActionListener(onFullscreen);
 
         center.add(windowedBtn);
         center.add(fullscreenBtn);
         add(center, BorderLayout.CENTER);
 
-        // Back
         JButton back = new JButton("Back");
         if (onBack != null) back.addActionListener(onBack);
         JPanel south = new JPanel();
@@ -34,3 +30,4 @@ public class Settings extends JPanel {
         add(south, BorderLayout.SOUTH);
     }
 }
+

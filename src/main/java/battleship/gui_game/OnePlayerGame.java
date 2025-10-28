@@ -3,11 +3,15 @@ package battleship.gui_game;
 import battleship.domain.Board;
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
 
 public class OnePlayerGame extends JPanel {
 
     private final JButton[][] shipsGrid = new JButton[10][10];
     private final JButton[][] shotsGrid = new JButton[10][10];
+    private final JTextArea logArea = new JTextArea(12, 22);
+    private final JLabel status = new JLabel("Ready", JLabel.CENTER);
 
     private OnePlayerActions actions;
     private Board myBoard;
@@ -51,7 +55,22 @@ public class OnePlayerGame extends JPanel {
         boards.add(shipsBoard);
         boards.add(shotsBoard);
         add(boards, BorderLayout.CENTER);
+        
+        JPanel right = new JPanel(new BorderLayout(8, 8));
 
+        // Status line
+        status.setFont(status.getFont().deriveFont(Font.BOLD));
+        right.add(status, BorderLayout.NORTH);
+
+        // Log area
+        logArea.setEditable(false);
+        logArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        JScrollPane scroll = new JScrollPane(logArea);
+        scroll.setBorder(new TitledBorder("Battle log"));
+        right.add(scroll, BorderLayout.CENTER);
+
+        add(right, BorderLayout.EAST);
+    
         JButton quitSave    = new JButton("Quit & Save");
         JButton quitDiscard = new JButton("Quit & Discard");
         quitSave.addActionListener(e -> { if (actions != null) actions.quitSave(); });
@@ -81,4 +100,13 @@ public class OnePlayerGame extends JPanel {
     public void setShotsEnabled(boolean enabled) {
         for (var row : shotsGrid) for (var b : row) b.setEnabled(enabled);
     }
+    
+    public void log(String msg) {
+        logArea.append(msg + "\n");
+        logArea.setCaretPosition(logArea.getDocument().getLength()); // auto-scroll
+    }
+
+    public void clearLog() { logArea.setText(""); }
+
+    public void setStatusText(String s) { status.setText(s); }
 }

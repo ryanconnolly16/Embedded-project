@@ -39,10 +39,12 @@ public class OnePlayerController implements OnePlayerActions {
         this.view.setModel(playerBoard);
         this.view.refresh();
         this.view.setShotsEnabled(true);
+        this.view.setStatusText("Your turn");
     }
 
     @Override
     public void fireShot(int r, int c) {
+
         if (!playerTurn) return;
         try {
             if (!Shooting.playershooting(r, c, playerBoard, aiFleet, aiBoard)) return;
@@ -54,11 +56,13 @@ public class OnePlayerController implements OnePlayerActions {
         if (allShipsSunk(aiBoard)) {
             JOptionPane.showMessageDialog(view, "You win!");
             view.setShotsEnabled(false);
+            view.setStatusText("Game over — you win!");
             return;
         }
 
         playerTurn = false;
         view.setShotsEnabled(false);
+        view.setStatusText("AI thinking…");
 
         new Timer(AI_DELAY_MS, e -> {
             aiTurn();
@@ -78,20 +82,23 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     private void aiTurn() {
+
         Ai.AiShot(aiBoard, playerFleet, playerBoard);
+
         view.refresh();
 
         if (allShipsSunk(playerBoard)) {
             JOptionPane.showMessageDialog(view, "AI wins!");
             view.setShotsEnabled(false);
+            view.setStatusText("Game over — AI wins.");
             return;
         }
 
         playerTurn = true;
         view.setShotsEnabled(true);
+        view.setStatusText("Your turn");
     }
 
-    
 
     private boolean allShipsSunk(Board b) {
         int n = b.size();
@@ -99,5 +106,13 @@ public class OnePlayerController implements OnePlayerActions {
             for (int c = 0; c < n; c++)
                 if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return false;
         return true;
+    }
+    
+    private static String coord(int r, int c) {
+        return "" + (char)('A' + r) + (c + 1);
+    }
+
+    private boolean isShipAt(Board defender, int r, int c) {
+        return defender.cellAt(r, c, GridType.SHIPS) == Cell.SHIP;
     }
 }
