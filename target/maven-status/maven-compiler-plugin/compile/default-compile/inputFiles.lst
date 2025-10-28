@@ -34,6 +34,7 @@ C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\ShipPlacer.j
 C:\Users\samrc\Embedded-project\src\main\java\battleship\players\TwoPlayers.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_setup\SetupServices.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\enums\Cell.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_game\OnePlayerActions.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\ui\InputManager.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\BattleshipGame.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\domain\Board.java
@@ -54,5 +55,6 @@ C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_settings\WindowedSi
 C:\Users\samrc\Embedded-project\src\main\java\battleship\ui\DefaultGlyphs.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\playinggame\Shooting.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\fleetplacements\Fleet.java
+C:\Users\samrc\Embedded-project\src\main\java\battleship\gui_game\OnePlayerController.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\enums\Result.java
 C:\Users\samrc\Embedded-project\src\main\java\battleship\interfaces\PlayerShooter.java

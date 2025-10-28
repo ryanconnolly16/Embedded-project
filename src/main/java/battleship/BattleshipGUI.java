@@ -10,6 +10,9 @@ import battleship.gui_setup.SetupActions;
 import battleship.gui_setup.SetupController;
 import battleship.navigation.CardNavigator;
 import battleship.navigation.Navigator;
+import battleship.gui_game.OnePlayerGame;
+import battleship.gui_game.OnePlayerController;
+import battleship.gui_game.OnePlayerActions;
 
 import battleship.gui_settings.Settings;
 
@@ -46,18 +49,17 @@ public class BattleshipGUI extends JFrame {
 
         // screens
         Menu menu = new Menu(toSetup, toSettings, quit);
-        OnePlayerGame one = new OnePlayerGame(toMenu);
-
         Navigator navigator = new CardNavigator(cardLayout, cardPanel);
-        Setup setupPanel = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU));
-
-        Settings settingsPanel = new Settings(toMenu, null, null);
+        
+        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU));
+        OnePlayerGame one = new OnePlayerGame(new OnePlayerController(navigator, CARD_MENU));
+        Settings settings = new Settings(toMenu, null, null);
 
         // add cards
         cardPanel.add(menu,          CARD_MENU);
-        cardPanel.add(setupPanel,    CARD_SETUP);
+        cardPanel.add(setup,    CARD_SETUP);
         cardPanel.add(one,           CARD_ONEGAME);
-        cardPanel.add(settingsPanel, CARD_SETTINGS);
+        cardPanel.add(settings, CARD_SETTINGS);
 
         add(cardPanel, BorderLayout.CENTER);
         setVisible(true);
