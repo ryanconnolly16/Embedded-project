@@ -51,8 +51,9 @@ public class BattleshipGUI extends JFrame {
         Menu menu = new Menu(toSetup, toSettings, quit);
         Navigator navigator = new CardNavigator(cardLayout, cardPanel);
         
-        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU));
+
         OnePlayerGame one = new OnePlayerGame(new OnePlayerController(navigator, CARD_MENU));
+        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one));
         Settings settings = new Settings(toMenu, null, null);
 
         // add cards

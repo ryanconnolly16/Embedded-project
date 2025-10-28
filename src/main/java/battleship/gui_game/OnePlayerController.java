@@ -22,4 +22,10 @@ public class OnePlayerController implements OnePlayerActions {
         // TODO: discard game state here
         nav.show(menuCard);
     }
+    
+        @Override
+    public void fireShot(int row, int col) {
+        
+        nav.show(menuCard);
+    }
 }

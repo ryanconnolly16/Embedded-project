@@ -9,7 +9,7 @@ import battleship.ui.DefaultGlyphs;
 public class SetupServices {
     public static void setuppresetGUI(Fleet fleet, Board board){
         fleet.preset(fleet, board); 
-
-        System.out.println("\n" + BoardRenderer.renderBoth(board, new DefaultGlyphs()));
+        
+        System.out.println(BoardRenderer.renderBoth(board, new DefaultGlyphs()));
     }
 }
