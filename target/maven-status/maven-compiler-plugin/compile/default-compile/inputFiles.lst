@@ -50,9 +50,11 @@
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/io/FileOutput.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/playinggame/Battle.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/io/LoadGame.java
+/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/gui_game/OnePlayerActions.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/UserPlacer.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/interfaces/UserInput.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/domain/Board.java
+/Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/gui_game/OnePlayerController.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/playinggame/Startup.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/navigation/CardNavigator.java
 /Users/ryanconnolly/Desktop/Battleship/src/main/java/battleship/gui_screens/ActionListenerCardSwitch.java

@@ -1,5 +1,7 @@
+battleship/gui_game/OnePlayerActions.class
 battleship/gui_setup/SetupController.class
 battleship/navigation/CardNavigator.class
+battleship/gui_game/OnePlayerController.class
 battleship/navigation/Navigator.class
 battleship/gui_setup/Setup.class
 battleship/gui_setup/SetupServices.class
