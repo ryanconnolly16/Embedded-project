@@ -40,7 +40,7 @@ public class Battle {
                 
                 //checks if cell hits or misses a ship
                 if(hit == null){
-                    hitmiss = ("Miss.");
+                    hitmiss = ("Miss");
                     p1board.markMiss(row, col);
                     p2board.shipMiss(row, col);
                 }
@@ -66,7 +66,7 @@ public class Battle {
         Fleet.Ship hit = playerfleet.processHit(xpos, ypos);
         //checks if cell hits or misses a ship
         if(hit == null){
-            hitmiss = ("Miss.");
+            hitmiss = ("Miss");
             aiboard.markMiss(xpos, ypos);
             playerboard.shipMiss(xpos, ypos);
         }

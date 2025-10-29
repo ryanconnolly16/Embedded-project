@@ -1,17 +1,22 @@
 package battleship.gui_game;
 
+import battleship.database.Db;
 import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.GridType;
 import battleship.fleetplacements.Fleet;
+import battleship.io.SaveManager;
 import battleship.players.Ai;
 import static battleship.players.Ai.logresult;
 import battleship.playinggame.Battle;
 import battleship.playinggame.Shooting;
+import battleship.ui.InputManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -97,10 +102,47 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     @Override
-    public void quitSave()    { System.exit(0); }
+    public void quitSave(){ 
+        try (Connection c = Db.connect()) {
+            Db.ensureSchema(c);
+            String home = System.getProperty("derby.system.home");
+            String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
+            
+            
+            InputManager.autosave = SaveManager.writeTurnAutosave(playerBoard, aiBoard);
+            String sql = "DELETE FROM GAMESTATE WHERE slot = ?";
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setLong(1, 1);
+                ps.executeUpdate();
+            }
+
+            
+            Db.overwriteOrInsert(c, "current", InputManager.autosave);
+            System.exit(0); 
+        }
+        catch (java.sql.SQLException | java.io.IOException e) {
+            JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception e) { // the generic checked one
+            JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
     @Override
     public void quitDiscard() { System.exit(0); }
 
+    
+    
+    
+    
     private void aiTurn() {
         // Let your AI choose + apply its shot
         Ai.AiShot(aiBoard, playerFleet, playerBoard);
