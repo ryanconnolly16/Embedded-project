@@ -5,6 +5,8 @@ import battleship.enums.Cell;
 import battleship.enums.GridType;
 import battleship.fleetplacements.Fleet;
 import battleship.players.Ai;
+import static battleship.players.Ai.logresult;
+import battleship.playinggame.Battle;
 import battleship.playinggame.Shooting;
 
 import javax.swing.*;
@@ -30,6 +32,9 @@ public class OnePlayerController implements OnePlayerActions {
     private final Set<Point> aiTried = new HashSet<>();
     private boolean playerTurn = true;
 
+    
+    public static String logresults;
+    
     public OnePlayerController(OnePlayerGame view,
                                Board playerBoard,  Fleet playerFleet,
                                Board aiBoard,      Fleet aiFleet) {
@@ -92,6 +97,11 @@ public class OnePlayerController implements OnePlayerActions {
         // Let your AI choose + apply its shot
         Ai.AiShot(aiBoard, playerFleet, playerBoard);
 
+        
+        logresults = Ai.logresult + Battle.hitmiss;
+        
+        view.log(logresults);
+        
         view.refresh();
 
         if (allShipsSunk(playerBoard)) {

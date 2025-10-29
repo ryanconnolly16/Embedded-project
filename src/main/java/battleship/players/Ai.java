@@ -10,6 +10,7 @@ import java.util.Random;
 
 //ai class for when its one player
 public class Ai implements AiShooter {
+    public static String logresult;
     
     public Ai(Board playerboard, Board aiboard, Fleet playerfleet) {
     }
@@ -65,9 +66,9 @@ public class Ai implements AiShooter {
         }
         else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
             ypos++;
-            char letterxpos = (char)('a' + xpos);
+            char letterxpos = (char)('A' + xpos);
             String usershot = "" + letterxpos + ypos;
-            System.out.println("\nThe ai shoots at " + usershot);
+            logresult = ("\nThe ai fired at " + usershot + " - ");
             Battle.usershot(usershot, aiboard, playerfleet, playerboard);
             
         }

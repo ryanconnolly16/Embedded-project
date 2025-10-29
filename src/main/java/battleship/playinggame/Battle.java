@@ -6,6 +6,8 @@ import battleship.domain.Board;
 public class Battle {
     //function to check what the user inputted for the shot and then shoot
     //shooting player, receieving fleet, receiving board
+    
+    public static String hitmiss;
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){
             int col;
@@ -35,14 +37,14 @@ public class Battle {
                 
                 //checks if cell hits or misses a ship
                 if(hit == null){
-                    System.out.println("Miss.");
+                    hitmiss = ("Miss.");
                     p1board.markMiss(row, col);
                     p2board.shipMiss(row, col);
                 }
                 else{
                     p1board.markHit(row, col);
                     //will display which ship is sunk if the ship runs out of health
-                    System.out.println("Hit " + 
+                    hitmiss = ("Hit " + 
                         (hit.isSunk() ? "SUNK!" + hit.name: ""));
                     p2board.shipHit(row, col);
                     if(p2fleet.allSunk()){
