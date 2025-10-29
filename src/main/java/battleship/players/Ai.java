@@ -56,7 +56,7 @@ public class Ai implements AiShooter {
         Cell trial_shot = playerboard.cellAt(ypos, xpos, GridType.SHIPS);
         
         
-        String xposis = String.valueOf((char) ('A' + xpos));
+        String xposis = String.valueOf((char) ('a' + xpos));
         String yposis = String.valueOf(ypos);
         String pos = (xposis + yposis);
         
@@ -69,7 +69,9 @@ public class Ai implements AiShooter {
             char letterxpos = (char)('A' + xpos);
             String usershot = "" + letterxpos + ypos;
             logresult = ("\nThe ai fired at " + usershot + " - ");
-            Battle.usershot(usershot, aiboard, playerfleet, playerboard);
+            
+            
+            Battle.usershot(pos, aiboard, playerfleet, playerboard);
             
         }
         

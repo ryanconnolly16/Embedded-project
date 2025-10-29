@@ -8,6 +8,9 @@ public class Battle {
     //shooting player, receieving fleet, receiving board
     
     public static String hitmiss;
+    
+    
+    
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
         if(!p2fleet.allSunk()){
             int col;
@@ -47,6 +50,9 @@ public class Battle {
                     hitmiss = ("Hit " + 
                         (hit.isSunk() ? "SUNK!" + hit.name: ""));
                     p2board.shipHit(row, col);
+                    
+                    
+                    
                     if(p2fleet.allSunk()){
                         System.exit(0);
                     }
@@ -60,7 +66,7 @@ public class Battle {
         Fleet.Ship hit = playerfleet.processHit(xpos, ypos);
         //checks if cell hits or misses a ship
         if(hit == null){
-            System.out.println("Miss.");
+            hitmiss = ("Miss.");
             aiboard.markMiss(xpos, ypos);
             playerboard.shipMiss(xpos, ypos);
         }
@@ -69,7 +75,7 @@ public class Battle {
             
             
             //will display which ship is sunk if the ship runs out of health
-            System.out.println("Hit " + 
+            hitmiss = ("Hit " + 
                 (hit.isSunk() ? "SUNK!" + hit.name: ""));
             
             playerboard.shipHit(xpos, ypos);

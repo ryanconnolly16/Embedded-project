@@ -84,6 +84,9 @@ public class OnePlayerController implements OnePlayerActions {
 
         new Timer(AI_DELAY_MS, e -> {
             aiTurn();
+            logresults = Ai.logresult + Battle.hitmiss + "\n";
+        
+            view.log(logresults);
             ((Timer) e.getSource()).stop();
         }).start();
     }
@@ -97,11 +100,6 @@ public class OnePlayerController implements OnePlayerActions {
         // Let your AI choose + apply its shot
         Ai.AiShot(aiBoard, playerFleet, playerBoard);
 
-        
-        logresults = Ai.logresult + Battle.hitmiss;
-        
-        view.log(logresults);
-        
         view.refresh();
 
         if (allShipsSunk(playerBoard)) {
