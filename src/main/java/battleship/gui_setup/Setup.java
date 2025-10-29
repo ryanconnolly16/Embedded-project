@@ -70,6 +70,8 @@ public class Setup extends JPanel {
         loadBtn.addActionListener(e -> {
             if(!savedDone){
                 presetDone = true;
+                loadBtn.setEnabled(false);
+                newBtn.setEnabled(false);
                 savedDone = true;
                 sourceChosen = true;
                 status.setText("Save selected. You can Start when preset is applied.");
@@ -82,6 +84,8 @@ public class Setup extends JPanel {
         addSmall(center, newBtn);
         newBtn.addActionListener(e -> {
             sourceChosen = true;
+            loadBtn.setEnabled(false);
+            newBtn.setEnabled(false);
             status.setText("New game selected. You can Start when preset is applied.");
             actions.newGame();
             updateStartEnabled();

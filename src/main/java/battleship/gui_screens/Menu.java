@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Menu extends JPanel {
     private final Image backgroundImage;
@@ -16,6 +19,12 @@ public class Menu extends JPanel {
 
         setOpaque(false);
         setLayout(new GridBagLayout());
+
+        // ---------- Title (big blocky label) ----------
+        JLabel title = new JLabel("BATTLESHIP", SwingConstants.CENTER);
+        title.setForeground(Color.WHITE);
+        title.setFont(pickBlockyFont(title.getFont(), 64f)); // big + chunky
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
         JPanel column = new JPanel(new GridLayout(0, 1, 10, 10));
         column.setOpaque(false);
@@ -36,6 +45,7 @@ public class Menu extends JPanel {
         JPanel padded = new JPanel(new BorderLayout());
         padded.setOpaque(false);
         padded.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        padded.add(title, BorderLayout.NORTH);   // <- title above buttons
         padded.add(column, BorderLayout.CENTER);
 
         GridBagConstraints gc = new GridBagConstraints();
@@ -78,5 +88,26 @@ public class Menu extends JPanel {
     private static Image loadImage(String resourcePath) {
         URL url = Menu.class.getResource(resourcePath);
         return (url == null) ? null : new ImageIcon(url).getImage();
+    }
+
+    /** Pick a chunky/blocky font if available; otherwise fallback to a bold version of the base font. */
+    private static Font pickBlockyFont(Font base, float size) {
+        String[] preferred = {
+            "Impact", "Arial Black", "Rockwell Extra Bold", "Haettenschweiler",
+            "Franklin Gothic Heavy", "Futura Condensed ExtraBold", "Verdana"
+        };
+        Set<String> installed = new HashSet<>(Arrays.asList(
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()
+        ));
+        for (String name : preferred) {
+            if (installed.contains(name)) {
+                return new Font(name, Font.BOLD, Math.round(size));
+            }
+        }
+        // Fallback to a bold sans/monospace to keep it chunky
+        String fallback = installed.contains("Dialog") ? "Dialog" :
+                          installed.contains("SansSerif") ? "SansSerif" :
+                          installed.contains("Monospaced") ? "Monospaced" : base.getFamily();
+        return new Font(fallback, Font.BOLD, Math.round(size));
     }
 }
