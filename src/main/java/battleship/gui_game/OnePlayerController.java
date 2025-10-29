@@ -1,6 +1,5 @@
 package battleship.gui_game;
 
-import battleship.fleetplacements.Fleet;
 import battleship.database.Db;
 import battleship.domain.Board;
 import battleship.enums.Cell;
@@ -16,13 +15,10 @@ import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Point;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,13 +32,10 @@ public class OnePlayerController implements OnePlayerActions {
     private final Board aiBoard;
     private final Fleet aiFleet;
 
-    private final Random rng = new Random();
-    private final Set<Point> aiTried = new HashSet<>();
     private boolean playerTurn = true;
 
-    
     public static String logresults;
-    
+
     public OnePlayerController(OnePlayerGame view,
                                Board playerBoard,  Fleet playerFleet,
                                Board aiBoard,      Fleet aiFleet) {
@@ -68,20 +61,19 @@ public class OnePlayerController implements OnePlayerActions {
     public void fireShot(int r, int c) {
         if (!playerTurn) return;
 
-        boolean willHit = isShipAt(aiBoard, r, c); 
+        boolean willHit = isShipAt(aiBoard, r, c);
         try {
             // returns false if already tried this cell
             if (!Shooting.playershooting(r, c, playerBoard, aiFleet, aiBoard)) return;
-            
         } catch (IOException ex) {
             Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        
+
+        // Log using your existing strings
         logresults = Shooting.logresult + Battle.hitmiss;
-        view.log(logresults);
-        
-        
+        view.appendLog(logresults);
+
         view.refresh();
         System.out.println("\n" + BoardRenderer.renderBoth(aiBoard, new DefaultGlyphs()));
         if (aiFleet.allSunk()) {
@@ -99,54 +91,40 @@ public class OnePlayerController implements OnePlayerActions {
         new Timer(AI_DELAY_MS, e -> {
             aiTurn();
             logresults = Ai.logresult + Battle.hitmiss;
-        
-            view.log(logresults);
+            view.appendLog(logresults);
             ((Timer) e.getSource()).stop();
         }).start();
     }
 
     @Override
-    public void quitSave(){ 
+    public void quitSave() {
         try (Connection c = Db.connect()) {
             Db.ensureSchema(c);
             String home = System.getProperty("derby.system.home");
             String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-            
-            
+
             InputManager.autosave = SaveManager.writeTurnAutosave(playerBoard, aiBoard);
+
             String sql = "DELETE FROM GAMESTATE WHERE slot = ?";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setLong(1, 1);
                 ps.executeUpdate();
             }
 
-            
             Db.overwriteOrInsert(c, "current", InputManager.autosave);
-            System.exit(0); 
-        }
-        catch (java.sql.SQLException | java.io.IOException e) {
+            System.exit(0);
+        } catch (java.sql.SQLException | java.io.IOException e) {
             JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
                 "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (Exception e) { // the generic checked one
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
                 "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
-    
-    
-    
-    
-    
+
     @Override
     public void quitDiscard() { System.exit(0); }
 
-    
-    
-    
-    
     private void aiTurn() {
         // Let your AI choose + apply its shot
         Ai.AiShot(aiBoard, playerFleet, playerBoard);
@@ -165,7 +143,7 @@ public class OnePlayerController implements OnePlayerActions {
         view.setStatusText("Your turn");
     }
 
-    //helpers
+    // helpers
     private boolean hasAnyShips(Board b) {
         int n = b.size();
         for (int r = 0; r < n; r++)
@@ -174,6 +152,7 @@ public class OnePlayerController implements OnePlayerActions {
         return false;
     }
 
+    @SuppressWarnings("unused")
     private boolean allShipsSunk(Board b) {
         int n = b.size();
         int ships = 0, hits = 0;
@@ -187,8 +166,7 @@ public class OnePlayerController implements OnePlayerActions {
         return ships > 0 && hits >= ships;
     }
 
-
-    private static String coord(int r, int c) { return "" + (char) ('A' + r) + (c + 1); }
+    private static String coord(int r, int c) { return "" + (char)('A' + r) + (c + 1); }
 
     private boolean isShipAt(Board defender, int r, int c) {
         return defender.cellAt(r, c, GridType.SHIPS) == Cell.SHIP;
