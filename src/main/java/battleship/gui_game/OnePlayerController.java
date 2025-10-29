@@ -1,5 +1,6 @@
 package battleship.gui_game;
 
+import battleship.fleetplacements.Fleet;
 import battleship.database.Db;
 import battleship.domain.Board;
 import battleship.enums.Cell;
@@ -81,7 +82,7 @@ public class OnePlayerController implements OnePlayerActions {
         
         view.refresh();
 
-        if (allShipsSunk(aiBoard)) {
+        if (aiFleet.allSunk()) {
             JOptionPane.showMessageDialog(view, "You win!");
             view.setShotsEnabled(false);
             view.setStatusText("Game over - you win!");
@@ -149,7 +150,7 @@ public class OnePlayerController implements OnePlayerActions {
 
         view.refresh();
 
-        if (allShipsSunk(playerBoard)) {
+        if (playerFleet.allSunk()) {
             JOptionPane.showMessageDialog(view, "AI wins!");
             view.setShotsEnabled(false);
             view.setStatusText("Game over - AI wins.");

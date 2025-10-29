@@ -57,6 +57,9 @@ public class SetupController implements SetupActions {
     public void loadSave() {
         // TODO: show file chooser / pick last save / etc.
         // Leave gating to the Setup view (it enables Start once user clicked).
+        
+        
+        
     }
 
     @Override
