@@ -4,9 +4,7 @@ import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.GridType;
 import battleship.fleetplacements.Fleet;
-import battleship.gui_setup.SetupController;
 import battleship.players.Ai;
-import battleship.playinggame.Battle;
 import battleship.playinggame.Shooting;
 
 import javax.swing.*;
@@ -21,42 +19,57 @@ import java.util.logging.Logger;
 public class OnePlayerController implements OnePlayerActions {
     private static final int AI_DELAY_MS = 650;
 
-    private final OnePlayerGame view; 
+    private final OnePlayerGame view;
 
-    public Board playerBoard = SetupController.pboard;
-    public Fleet playerFleet = SetupController.pfleet;
-    public Board aiBoard = SetupController.aiboard;
-    public Fleet aiFleet = SetupController.aifleet;
-    
-    
+    private final Board playerBoard;
+    private final Fleet playerFleet;
+    private final Board aiBoard;
+    private final Fleet aiFleet;
+
     private final Random rng = new Random();
     private final Set<Point> aiTried = new HashSet<>();
     private boolean playerTurn = true;
 
-    public OnePlayerController(OnePlayerGame view, Board playerBoard, Board aiBoard) {
+    public OnePlayerController(OnePlayerGame view,
+                               Board playerBoard,  Fleet playerFleet,
+                               Board aiBoard,      Fleet aiFleet) {
         this.view = view;
-        this.view.setActions(this);
-        this.view.setModel(playerBoard);
-        this.view.refresh();
-        this.view.setShotsEnabled(true);
-        this.view.setStatusText("Your turn");
+        this.playerBoard = playerBoard;
+        this.playerFleet = playerFleet;
+        this.aiBoard     = aiBoard;
+        this.aiFleet     = aiFleet;
+
+        view.setActions(this);
+        view.setModel(playerBoard);
+        view.refresh();
+        view.setShotsEnabled(true);
+        view.setStatusText("Your turn");
+
+        // Disable shots if AI has no ships yet (defensive; should be placed in Setup)
+        boolean aiReady = hasAnyShips(aiBoard);
+        this.view.setShotsEnabled(aiReady);
+        this.view.setStatusText(aiReady ? "Your turn" : "Apply preset first…");
     }
 
     @Override
     public void fireShot(int r, int c) {
-
         if (!playerTurn) return;
+
+        boolean willHit = isShipAt(aiBoard, r, c); 
         try {
+            // returns false if already tried this cell
             if (!Shooting.playershooting(r, c, playerBoard, aiFleet, aiBoard)) return;
         } catch (IOException ex) {
             Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
         }
+        view.log("You fired at " + coord(r, c) + " - " + (willHit ? "HIT" : "Miss"));
         view.refresh();
 
         if (allShipsSunk(aiBoard)) {
             JOptionPane.showMessageDialog(view, "You win!");
             view.setShotsEnabled(false);
-            view.setStatusText("Game over — you win!");
+            view.setStatusText("Game over - you win!");
             return;
         }
 
@@ -71,18 +84,12 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     @Override
-    public void quitSave() {
-        // TODO: persist state
-        System.exit(0);
-    }
-
+    public void quitSave()    { System.exit(0); }
     @Override
-    public void quitDiscard() {
-        System.exit(0);
-    }
+    public void quitDiscard() { System.exit(0); }
 
     private void aiTurn() {
-
+        // Let your AI choose + apply its shot
         Ai.AiShot(aiBoard, playerFleet, playerBoard);
 
         view.refresh();
@@ -90,7 +97,7 @@ public class OnePlayerController implements OnePlayerActions {
         if (allShipsSunk(playerBoard)) {
             JOptionPane.showMessageDialog(view, "AI wins!");
             view.setShotsEnabled(false);
-            view.setStatusText("Game over — AI wins.");
+            view.setStatusText("Game over - AI wins.");
             return;
         }
 
@@ -99,18 +106,30 @@ public class OnePlayerController implements OnePlayerActions {
         view.setStatusText("Your turn");
     }
 
-
-    private boolean allShipsSunk(Board b) {
+    //helpers
+    private boolean hasAnyShips(Board b) {
         int n = b.size();
         for (int r = 0; r < n; r++)
             for (int c = 0; c < n; c++)
-                if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return false;
-        return true;
+                if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return true;
+        return false;
     }
-    
-    private static String coord(int r, int c) {
-        return "" + (char)('A' + r) + (c + 1);
+
+    private boolean allShipsSunk(Board b) {
+        int n = b.size();
+        int ships = 0, hits = 0;
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                Cell cell = b.cellAt(r, c, GridType.SHIPS);
+                if (cell == Cell.SHIP) ships++;
+                else if (cell == Cell.HIT) hits++;
+            }
+        }
+        return ships > 0 && hits >= ships;
     }
+
+
+    private static String coord(int r, int c) { return "" + (char) ('A' + r) + (c + 1); }
 
     private boolean isShipAt(Board defender, int r, int c) {
         return defender.cellAt(r, c, GridType.SHIPS) == Cell.SHIP;

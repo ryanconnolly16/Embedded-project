@@ -10,7 +10,7 @@ public class OnePlayerGame extends JPanel {
 
     private final JButton[][] shipsGrid = new JButton[10][10];
     private final JButton[][] shotsGrid = new JButton[10][10];
-    private final JTextArea logArea = new JTextArea(12, 22);
+    private final JTextArea logArea = new JTextArea(12, 24);
     private final JLabel status = new JLabel("Ready", JLabel.CENTER);
 
     private OnePlayerActions actions;
@@ -23,46 +23,40 @@ public class OnePlayerGame extends JPanel {
 
         JPanel boards = new JPanel(new GridLayout(1, 2, 10, 10));
 
-        // Left: my ships
-        JPanel shipsBoard = new JPanel(new BorderLayout());
-        shipsBoard.add(new JLabel("Your ships", JLabel.CENTER), BorderLayout.NORTH);
-        JPanel shipsGridPanel = new JPanel(new GridLayout(10, 10, 2, 2));
+        LabeledBoardPanel shipsBoardPanel = new LabeledBoardPanel(10, 10, 2, "Your ships");
+        JButton[][] shipsButtons = shipsBoardPanel.getButtons();
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
-                JButton b = new JButton();
-                shipsGrid[r][c] = b;
-                shipsGridPanel.add(b);
+                shipsGrid[r][c] = shipsButtons[r][c];
+                // ships buttons are display-only
+                shipsGrid[r][c].setEnabled(false);
             }
         }
-        shipsBoard.add(shipsGridPanel, BorderLayout.CENTER);
+        boards.add(shipsBoardPanel);
 
-        // Right: my shots
-        JPanel shotsBoard = new JPanel(new BorderLayout());
-        shotsBoard.add(new JLabel("Your shots", JLabel.CENTER), BorderLayout.NORTH);
-        JPanel shotsGridPanel = new JPanel(new GridLayout(10, 10, 2, 2));
+
+        LabeledBoardPanel shotsBoardPanel = new LabeledBoardPanel(10, 10, 2, "Your shots");
+        JButton[][] shotsButtons = shotsBoardPanel.getButtons();
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
                 final int rr = r, cc = c;
-                JButton b = new JButton();
-                shotsGrid[rr][cc] = b;
-                // action is bound via setActions()
-                b.addActionListener(e -> { if (actions != null) actions.fireShot(rr, cc); });
-                shotsGridPanel.add(b);
+                shotsGrid[r][c] = shotsButtons[r][c];
+                shotsGrid[r][c].addActionListener(e -> {
+                    if (actions != null) {
+                        actions.fireShot(rr, cc);
+                    }
+                });
             }
         }
-        shotsBoard.add(shotsGridPanel, BorderLayout.CENTER);
-
-        boards.add(shipsBoard);
-        boards.add(shotsBoard);
+        boards.add(shotsBoardPanel);
+        
         add(boards, BorderLayout.CENTER);
         
         JPanel right = new JPanel(new BorderLayout(8, 8));
 
-        // Status line
         status.setFont(status.getFont().deriveFont(Font.BOLD));
         right.add(status, BorderLayout.NORTH);
 
-        // Log area
         logArea.setEditable(false);
         logArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         JScrollPane scroll = new JScrollPane(logArea);

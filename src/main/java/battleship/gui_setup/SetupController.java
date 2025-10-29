@@ -1,4 +1,3 @@
-// battleship/gui_setup/SetupController.java
 package battleship.gui_setup;
 
 import battleship.domain.Board;
@@ -8,54 +7,66 @@ import battleship.gui_game.OnePlayerGame;
 
 public class SetupController implements SetupActions {
     private final Navigator nav;
-    private final String onePlayerCard;
-    private final String menuCard;
-    private final OnePlayerGame oneView;  // <-- pass the view in
+    private final String onePlayerCard, menuCard;
+    private final OnePlayerGame oneView;
+    
+    private final Board pboard;
+    private final Board aiboard;
+    private final Fleet pfleet;
+    private final Fleet aifleet;
 
-    // Keep these so applyPreset() is usable later by start()
-    public static Board pboard  = new Board(10);
-    public static Board aiboard = new Board(10);
-    public static Fleet pfleet  = new Fleet();
-    public static Fleet aifleet = new Fleet();
 
-    private boolean presetApplied = false;
+    private boolean presetRunning = false; // re-entry guard
+    private boolean presetApplied = false; // placed at least once
+    private boolean started       = false; // start() one-shot
 
-    public SetupController(Navigator nav, String onePlayerCard, String menuCard, OnePlayerGame oneView) {
+    public SetupController(Navigator nav,
+                           String onePlayerCard,
+                           String menuCard,
+                           OnePlayerGame oneView,
+                           Board pboard,  Fleet pfleet,
+                           Board aiboard, Fleet aifleet) {        
         this.nav = nav;
-        this.oneView = oneView;
         this.onePlayerCard = onePlayerCard;
         this.menuCard = menuCard;
+        this.oneView = oneView;
+
+        this.pboard  = pboard;   // shared
+        this.pfleet  = pfleet;   // shared
+        this.aiboard = aiboard;  // shared
+        this.aifleet = aifleet;  // shared
     }
 
     @Override
     public void applyPreset() {
-        // If you really have a static button reference, keep it; otherwise expose a method on your Setup panel.
-        // Setup.preset.setEnabled(false);
+        if (presetRunning) return;   // ignore double-clicks
+        presetRunning = true;        // flip BEFORE doing work
 
-        SetupServices.setupPresetGUI(pfleet, pboard);
-        SetupServices.setupPresetGUI(aifleet, aiboard);
-        presetApplied = true;
-        Setup.preset.setEnabled(false);
-        // Optional preview in setup screen:
-        // oneView.setModel(pboard);
-        // oneView.refresh();
+        try {
+            // If needed: clear boards first to avoid “double place”
+            // pboard.clear(); aiboard.clear();
+
+            SetupServices.setupPresetGUI(pfleet,  pboard);
+            SetupServices.setupPresetGUI(aifleet, aiboard);
+
+            presetApplied = true;
+            oneView.refresh();       // show placed ships
+        } finally {
+            // Keep it one-shot; if you want to allow re-preset, set back to false.
+            // presetRunning = false;
+        }
     }
 
     @Override
     public void start() {
-        // Safety: ensure boards are populated
+        if (started) return;         // one-shot
+        started = true;
         if (!presetApplied) applyPreset();
-
-
-        // (Controller already sets model + refresh on the view, but harmless to call again)
+        oneView.setShotsEnabled(true);
         oneView.refresh();
-
-        // Navigate to the 1P game screen
         nav.show(onePlayerCard);
     }
 
     @Override
-    public void back() {
-        nav.show(menuCard);
-    }
+    public void back() { nav.show(menuCard); }
 }

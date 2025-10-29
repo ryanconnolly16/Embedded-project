@@ -1,6 +1,7 @@
 package battleship;
 
 import battleship.domain.Board;
+import battleship.fleetplacements.Fleet;
 import battleship.gui_screens.ActionListenerCardSwitch;
 import battleship.gui_screens.Menu;
 import battleship.gui_screens.QuitListener;
@@ -51,12 +52,14 @@ public class BattleshipGUI extends JFrame {
         
         Board playerBoard = new Board(10);
         Board aiBoard     = new Board(10);
+        Fleet playerFleet = new Fleet();
+        Fleet aiFleet     = new Fleet();
 
         OnePlayerGame one = new OnePlayerGame();
-        OnePlayerController controller = new OnePlayerController(one, playerBoard, aiBoard);
-        
-        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one));
-        
+        OnePlayerController controller = new OnePlayerController(one, playerBoard, playerFleet, aiBoard, aiFleet);
+
+        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one, playerBoard, playerFleet, aiBoard, aiFleet));
+
         ActionListener goFullscreen = battleship.gui_settings.ScreenSizeUtils.fullscreen(this);
         ActionListener goWindowed   = battleship.gui_settings.ScreenSizeUtils.windowed(this, defaultSize);
         battleship.gui_settings.ScreenSizeUtils.bindEscapeToExit(this, goWindowed);
