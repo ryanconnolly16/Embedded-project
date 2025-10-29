@@ -24,6 +24,13 @@ public class BattleshipGUI extends JFrame {
     public static final String CARD_ONEGAME  = "oneplayergame";
     public static final String CARD_SETTINGS = "settings";
 
+    
+    public static Board playerBoard = new Board(10);
+    public static Board aiBoard     = new Board(10);
+    public static Fleet playerFleet = new Fleet();
+    public static Fleet aiFleet     = new Fleet();
+    
+    
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
 
@@ -50,15 +57,12 @@ public class BattleshipGUI extends JFrame {
         Menu menu = new Menu(toSetup, toSettings, quit);
         Navigator navigator = new CardNavigator(cardLayout, cardPanel);
         
-        Board playerBoard = new Board(10);
-        Board aiBoard     = new Board(10);
-        Fleet playerFleet = new Fleet();
-        Fleet aiFleet     = new Fleet();
+        
 
         OnePlayerGame one = new OnePlayerGame();
-        OnePlayerController controller = new OnePlayerController(one, playerBoard, playerFleet, aiBoard, aiFleet);
+        OnePlayerController controller = new OnePlayerController(one);
 
-        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one, playerBoard, playerFleet, aiBoard, aiFleet));
+        Setup setup = new Setup(new SetupController(navigator, CARD_ONEGAME, CARD_MENU, one));
 
         ActionListener goFullscreen = battleship.gui_settings.ScreenSizeUtils.fullscreen(this);
         ActionListener goWindowed   = battleship.gui_settings.ScreenSizeUtils.windowed(this, defaultSize);
@@ -67,9 +71,9 @@ public class BattleshipGUI extends JFrame {
 
         // add cards
         cardPanel.add(menu,          CARD_MENU);
-        cardPanel.add(setup,    CARD_SETUP);
+        cardPanel.add(setup,         CARD_SETUP);
         cardPanel.add(one,           CARD_ONEGAME);
-        cardPanel.add(settings, CARD_SETTINGS);
+        cardPanel.add(settings,      CARD_SETTINGS);
 
         add(cardPanel, BorderLayout.CENTER);
         setVisible(true);

@@ -1,6 +1,7 @@
 package battleship.io;
 
 import battleship.domain.*;
+import battleship.gui_setup.SetupController;
 import battleship.interfaces.*;
 import battleship.players.*;
 import battleship.ui.*;
@@ -92,7 +93,7 @@ public class LoadGame implements LoadGameImplement {
                                 if (rs.next()) {
                                     try (Reader r = rs.getCharacterStream(1);
                                         Writer w = Files.newBufferedWriter(outFile, StandardCharsets.UTF_8)) {
-                                      r.transferTo(w); // Java 10+
+                                      r.transferTo(w); 
                                     }    
                                 }
                             }
@@ -154,6 +155,12 @@ public class LoadGame implements LoadGameImplement {
         }
     }
 
+    
+    
+    
+    
+    
+    
     @Override
     public void loadsavedgame(int playerAmount) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
