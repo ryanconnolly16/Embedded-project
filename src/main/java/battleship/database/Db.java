@@ -54,7 +54,11 @@ public final class Db {
                 """);
             } catch (SQLException e) { if (!"X0Y32".equals(e.getSQLState())) throw e; }   
             try {
-                st.executeUpdate("CREATE TABLE GameState(slot VARCHAR(32) PRIMARY KEY, content CLOB)");
+                st.executeUpdate("""
+                                 CREATE TABLE GameState
+                                 (slot VARCHAR(32) PRIMARY KEY, 
+                                 content CLOB)
+                                 """);
             } catch (SQLException e) { if (!"X0Y32".equals(e.getSQLState())) throw e; }
         }
     }
