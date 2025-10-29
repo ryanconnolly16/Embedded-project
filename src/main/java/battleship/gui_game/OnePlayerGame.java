@@ -2,6 +2,7 @@
 package battleship.gui_game;
 
 import battleship.domain.Board;
+import battleship.gui_screens.FlatButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,16 +102,39 @@ public class OnePlayerGame extends JPanel {
         add(centerRow, BorderLayout.CENTER);
 
         // ---------- Bottom bar ----------
-        JPanel south = new JPanel();
+        JPanel south = new JPanel(new BorderLayout());
         south.setOpaque(true);
         south.setBackground(PANEL_BG);
-        JButton quitSave    = new JButton("Quit & Save");
-        JButton quitDiscard = new JButton("Quit & Discard");
-        quitSave.addActionListener(e -> { if (actions != null) actions.quitSave(); });
-        quitDiscard.addActionListener(e -> { if (actions != null) actions.quitDiscard(); });
-        south.add(quitSave);
-        south.add(quitDiscard);
+        south.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        buttons.setOpaque(false);
+
+    // Flat-style buttons, like the menu
+        FlatButton quitSave = new FlatButton("Quit & Save");
+        quitSave.setBaseColor(new Color(40, 140, 70)); // green
+        quitSave.setMnemonic('S');
+        quitSave.addActionListener(e -> {
+            if (actions != null) {
+                actions.quitSave();
+            }
+        });
+
+        FlatButton quitDiscard = new FlatButton("Quit & Discard");
+        quitDiscard.setBaseColor(new Color(170, 40, 40)); // red
+        quitDiscard.setMnemonic('D');
+        quitDiscard.addActionListener(e -> {
+            if (actions != null) {
+                actions.quitDiscard();
+            }
+        });
+
+        buttons.add(quitSave);
+        buttons.add(quitDiscard);
+
+        south.add(buttons, BorderLayout.EAST);
         add(south, BorderLayout.SOUTH);
+
 
         // Optional: crisp cell styling/borders/symbol sizing
         BoardView.styleGrids(shipsGrid, shotsGrid);
