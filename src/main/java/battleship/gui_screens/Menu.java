@@ -60,7 +60,7 @@ public class Menu extends JPanel {
                 ActionListener toSettings,
                 ActionListener quit) {
         // Load background image from resources (e.g., src/main/resources/images/menu_bg.jpg)
-        backgroundImage = loadImage("/images/menu_bg.jpg");
+        backgroundImage = loadImage("/Battleship_background.png");
 
         // Transparent content over bg
         setOpaque(false);
@@ -99,27 +99,50 @@ public class Menu extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (backgroundImage != null) {
-            // scale to fill while preserving aspect ratio
-            int pw = getWidth(), ph = getHeight();
-            int iw = backgroundImage.getWidth(null);
-            int ih = backgroundImage.getHeight(null);
-            if (iw > 0 && ih > 0) {
-                double s = Math.max(pw / (double) iw, ph / (double) ih);
-                int w = (int) Math.round(iw * s);
-                int h = (int) Math.round(ih * s);
-                int x = (pw - w) / 2;
-                int y = (ph - h) / 2;
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                g2.drawImage(backgroundImage, x, y, w, h, null);
-                g2.dispose();
-            }
-        } else {
-            // fallback solid bg
+        if (backgroundImage == null) {
             g.setColor(new Color(15, 25, 40));
             g.fillRect(0, 0, getWidth(), getHeight());
+            return;
         }
+
+        int pw = getWidth(), ph = getHeight();
+        int iw = backgroundImage.getWidth(null);
+        int ih = backgroundImage.getHeight(null);
+        if (iw <= 0 || ih <= 0) {
+            return;
+        }
+
+        double sx = pw / (double) iw;
+        double sy = ph / (double) ih;
+
+        // --- COVER scaling ---
+        // If we are enlarging, use an INTEGER scale (2x, 3x, ...) to keep pixels perfectly square.
+        // If we are shrinking, allow fractional (still nearest-neighbor) so it fits.
+        double scale;
+        if (pw >= iw && ph >= ih) {
+            int intScale = Math.max(
+                    (int) Math.ceil(sx),
+                    (int) Math.ceil(sy)
+            );                    // integer cover when upscaling
+            scale = Math.max(1, intScale);
+        } else {
+            scale = Math.max(sx, sy);  // fractional cover when downscaling
+        }
+
+        int w = (int) Math.round(iw * scale);
+        int h = (int) Math.round(ih * scale);
+        int x = (pw - w) / 2;          // center (can be negative; cropped by panel)
+        int y = (ph - h) / 2;
+
+        Graphics2D g2 = (Graphics2D) g.create();
+        // keep pixel art crisp
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+
+        g2.drawImage(backgroundImage, x, y, w, h, null);
+        g2.dispose();
     }
 
     private static Image loadImage(String resourcePath) {
