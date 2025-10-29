@@ -7,19 +7,22 @@ public class SquareGridPanel extends JPanel {
     private final int rows, cols, gap;
     private final JButton[][] buttons;
 
+    // --- expose these to align headers ---
+    private int lastCell = 32;
+    private int lastStartX = 0, lastStartY = 0;
+
     public SquareGridPanel(int rows, int cols, int gap) {
         this.rows = rows;
         this.cols = cols;
         this.gap = gap;
         this.buttons = new JButton[rows][cols];
 
-        setLayout(null);       // we’ll place buttons manually to keep them square
+        setLayout(null);
         setOpaque(false);
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 JButton b = new JButton();
-                // optional: reduce default insets so text won’t skew sizing
                 b.setMargin(new Insets(0, 0, 0, 0));
                 buttons[r][c] = b;
                 add(b);
@@ -28,6 +31,12 @@ public class SquareGridPanel extends JPanel {
     }
 
     public JButton[][] getButtons() { return buttons; }
+    public int getCellSize() { return lastCell; }
+    public int getStartX() { return lastStartX; }
+    public int getStartY() { return lastStartY; }
+    public int getGap()    { return gap; }
+    public int getRows()   { return rows; }
+    public int getCols()   { return cols; }
 
     @Override
     public Dimension getPreferredSize() {
@@ -45,12 +54,17 @@ public class SquareGridPanel extends JPanel {
 
         int cellW = (availW - (cols - 1) * gap) / cols;
         int cellH = (availH - (rows - 1) * gap) / rows;
-        int cell = Math.min(cellW, cellH);  // enforce square
+        int cell  = Math.min(cellW, cellH);
 
         int gridW = cols * cell + (cols - 1) * gap;
         int gridH = rows * cell + (rows - 1) * gap;
         int startX = in.left + (availW - gridW) / 2;
-        int startY = in.top + (availH - gridH) / 2;
+        int startY = in.top  + (availH - gridH) / 2;
+
+        // remember metrics for headers
+        lastCell   = cell;
+        lastStartX = startX;
+        lastStartY = startY;
 
         for (int r = 0; r < rows; r++) {
             int y = startY + r * (cell + gap);

@@ -19,7 +19,10 @@ public class OnePlayerGame extends JPanel {
     public OnePlayerGame() {
         setLayout(new BorderLayout());
 
-        add(new JLabel("One Player", JLabel.CENTER), BorderLayout.NORTH);
+        JLabel title = new JLabel("You vs AI", JLabel.CENTER);
+        title.setFont(title.getFont().deriveFont(Font.BOLD, 20f)); // 20-pt, bold
+        title.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0)); // optional padding
+        add(title, BorderLayout.NORTH);
 
         JPanel boards = new JPanel(new GridLayout(1, 2, 10, 10));
 
