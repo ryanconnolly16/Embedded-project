@@ -18,6 +18,7 @@ public class Setup extends JPanel {
 
     // local gating state (view-side)
     private boolean presetDone = false;
+    private boolean savedDone = false;
     private boolean sourceChosen = false;
 
     public Setup(SetupActions actions) {
@@ -67,10 +68,14 @@ public class Setup extends JPanel {
         // load save
         addSmall(center, loadBtn);
         loadBtn.addActionListener(e -> {
-            sourceChosen = true;
-            status.setText("Save selected. You can Start when preset is applied.");
-            actions.loadSave();
-            updateStartEnabled();
+            if(!savedDone){
+                presetDone = true;
+                savedDone = true;
+                sourceChosen = true;
+                status.setText("Save selected. You can Start when preset is applied.");
+                actions.loadSave();
+                updateStartEnabled();
+            }
         });
 
         // new game
