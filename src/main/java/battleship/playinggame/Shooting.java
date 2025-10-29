@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Shooting implements PlayerShooter {
+    public static String logresult = null;
+    
     
     public Shooting() {
     }
@@ -91,6 +93,11 @@ public class Shooting implements PlayerShooter {
             
         }
         else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
+            
+            char letterxpos = (char)('A' + xpos);
+            String usershots = "" + letterxpos + y;
+            logresult = ("\nYou fired at " + usershots + " - ");
+
             Battle.usershot(usershot, shooterboard, receiverfleet, receiverboard);
             return true;
             

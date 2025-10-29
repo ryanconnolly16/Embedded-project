@@ -48,7 +48,7 @@ public class Battle {
                     p1board.markHit(row, col);
                     //will display which ship is sunk if the ship runs out of health
                     hitmiss = ("Hit " + 
-                        (hit.isSunk() ? "SUNK!" + hit.name: ""));
+                        (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
                     p2board.shipHit(row, col);
                     
                     
@@ -76,7 +76,7 @@ public class Battle {
             
             //will display which ship is sunk if the ship runs out of health
             hitmiss = ("Hit " + 
-                (hit.isSunk() ? "SUNK!" + hit.name: ""));
+                (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
             
             playerboard.shipHit(xpos, ypos);
             if(playerfleet.allSunk()){

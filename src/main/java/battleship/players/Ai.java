@@ -68,7 +68,7 @@ public class Ai implements AiShooter {
             ypos++;
             char letterxpos = (char)('A' + xpos);
             String usershot = "" + letterxpos + ypos;
-            logresult = ("\nThe ai fired at " + usershot + " - ");
+            logresult = ("\nAi fired at " + usershot + " - ");
             
             
             Battle.usershot(pos, aiboard, playerfleet, playerboard);

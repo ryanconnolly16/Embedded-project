@@ -64,11 +64,16 @@ public class OnePlayerController implements OnePlayerActions {
         try {
             // returns false if already tried this cell
             if (!Shooting.playershooting(r, c, playerBoard, aiFleet, aiBoard)) return;
+            
         } catch (IOException ex) {
             Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        view.log("You fired at " + coord(r, c) + " - " + (willHit ? "HIT" : "Miss"));
+        
+        logresults = Shooting.logresult + Battle.hitmiss;
+        view.log(logresults);
+        
+        
         view.refresh();
 
         if (allShipsSunk(aiBoard)) {
@@ -84,7 +89,7 @@ public class OnePlayerController implements OnePlayerActions {
 
         new Timer(AI_DELAY_MS, e -> {
             aiTurn();
-            logresults = Ai.logresult + Battle.hitmiss + "\n";
+            logresults = Ai.logresult + Battle.hitmiss;
         
             view.log(logresults);
             ((Timer) e.getSource()).stop();
