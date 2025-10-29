@@ -4,4 +4,6 @@ public interface SetupActions {
     void start();
     void back();
     void applyPreset();
+    void loadSave();
+    void newGame();
 }
