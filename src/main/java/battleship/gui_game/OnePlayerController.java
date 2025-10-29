@@ -11,6 +11,8 @@ import battleship.players.Ai;
 import static battleship.players.Ai.logresult;
 import battleship.playinggame.Battle;
 import battleship.playinggame.Shooting;
+import battleship.ui.BoardRenderer;
+import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
 
 import javax.swing.*;
@@ -81,11 +83,12 @@ public class OnePlayerController implements OnePlayerActions {
         
         
         view.refresh();
-
+        System.out.println("\n" + BoardRenderer.renderBoth(aiBoard, new DefaultGlyphs()));
         if (aiFleet.allSunk()) {
             JOptionPane.showMessageDialog(view, "You win!");
             view.setShotsEnabled(false);
             view.setStatusText("Game over - you win!");
+            System.exit(0);
             return;
         }
 

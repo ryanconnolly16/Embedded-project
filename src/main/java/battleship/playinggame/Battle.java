@@ -53,9 +53,7 @@ public class Battle {
                     
                     
                     
-                    if(p2fleet.allSunk()){
-                        System.exit(0);
-                    }
+                    
                 }
             }
         }
@@ -79,9 +77,7 @@ public class Battle {
                 (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
             
             playerboard.shipHit(xpos, ypos);
-            if(playerfleet.allSunk()){
-                System.exit(0);
-            }
+            
         }
     }
 }
