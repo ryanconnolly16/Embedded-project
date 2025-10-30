@@ -91,7 +91,7 @@ public class OnePlayerController implements OnePlayerActions {
         playerTurn = false;
         view.setShotsEnabled(false);
         view.setStatusText("AI thinking…");
-        System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
+        
         Timer t = new Timer(AI_DELAY_MS, e -> { 
             aiTurn(); 
             // Only append hitmiss if AI actually fired (not an error)
@@ -154,8 +154,6 @@ public class OnePlayerController implements OnePlayerActions {
             Db.ensureSchema(d);
             String home = ""+battleship.database.DbPaths.derbyHome();
             String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-            System.out.println("derby.system.home = " + home);
-            System.out.println("DB directory      = " + dbDir);
             
             recordShot(d, Db.Player.PLAYER2, Ai.usershot, Battle.hitmiss);
             if (!d.getAutoCommit()) d.commit();
@@ -203,11 +201,9 @@ public class OnePlayerController implements OnePlayerActions {
             }
             
             try (Connection h = Db.connect()) {
-                System.out.println("trying");
                 try (java.sql.Statement st = h.createStatement()) {
                     st.executeUpdate("TRUNCATE TABLE GAMESTATE"); 
                 }
-                System.out.println("initial deleted");
                 
                 
                 Board pBoard = new Board(10);
@@ -218,7 +214,6 @@ public class OnePlayerController implements OnePlayerActions {
                 SetupServices.setupPresetGUI(pFleet,  pBoard);
                 SetupServices.setupPresetGUI(aFleet, aBoard);
                 
-                System.out.println("new made");
                 Db.ensureSchema(h);
                 String home = System.getProperty("derby.system.home");
                 String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();

@@ -78,7 +78,7 @@ public class Fleet {
         if (loaded != null) {
             ships.addAll(loaded);
         }else {
-            System.out.println("File loading failed - ships list is empty");
+            //System.out.println("File loading failed - ships list is empty");
         }
     }
     
@@ -237,13 +237,6 @@ public class Fleet {
             }
         }
         
-        System.out.println(board.cellAt(1, 4, GridType.SHIPS));
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                System.out.println("row"+(r)+" " + "col"+(c) + " = " + visited[r][c]);
-                System.out.println("hi");
-            }
-        }
         return true;
         
     }

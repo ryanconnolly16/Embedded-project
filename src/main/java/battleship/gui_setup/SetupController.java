@@ -65,8 +65,6 @@ public class SetupController implements SetupActions {
             SetupServices.setupPresetGUI(BattleshipGUI.playerFleet,  BattleshipGUI.playerBoard);
             SetupServices.setupPresetGUI(BattleshipGUI.aiFleet, BattleshipGUI.aiBoard);
             
-            System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.playerBoard, new DefaultGlyphs()));
-            System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
             presetApplied = true;
             oneView.refresh(); // show placed ships
             
@@ -123,7 +121,6 @@ public class SetupController implements SetupActions {
                 }
             }
             // Rebuild fleets to match those boards:
-            System.out.println("player");
             BattleshipGUI.playerFleet.repopulateFromBoard("player");
             
             
@@ -136,7 +133,7 @@ public class SetupController implements SetupActions {
                     aivisited[r][col] = (shotCell == Cell.HIT || shotCell == Cell.MISS);
                 }
             }
-            System.out.println("ai");
+            
             BattleshipGUI.aiFleet.repopulateFromBoard("ai");
 
             
