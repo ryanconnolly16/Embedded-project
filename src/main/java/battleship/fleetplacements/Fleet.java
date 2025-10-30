@@ -159,16 +159,23 @@ public class Fleet {
     // Rebuild fleet placements by scanning the board’s SHIPS grid.
     // Assumes Board.cellAt(r,c,GridType.SHIPS) returns Cell.SHIP for ship cells.
     // Uses RIGHT for horizontal and DOWN for vertical orientation.
-    public boolean repopulateFromBoard(Board board) {
+    
+    
+    
+    public boolean repopulateFromBoard(Board board, boolean[][] visited) {
         clearPlacementsAndHits();
 
         final int n = 10;
-        boolean[][] visited = new boolean[n][n];
+        
 
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < n; c++) {
                
                 if(visited[r][c])continue;
+                
+                if(board.cellAt(r, c, GridType.SHIPS) == Cell.MISS){
+                    visited[r][c] = true;
+                }
                 if (board.cellAt(r, c, GridType.SHIPS) == Cell.MISS || 
                         board.cellAt(r, c, GridType.SHIPS) == Cell.WATER) continue;
                 
@@ -188,17 +195,17 @@ public class Fleet {
                     
                 }
                 
-                System.out.println(lenRight + " right light from " +r+c);
                 
+//                    visited[r][c + lenRight - 1] = true;
+//                    visited[r+lenDown-1][c] = true;
                 // Measure vertical length
                 int lenDown = 0;
                 while (r + lenDown < n && board.cellAt(r + lenDown, c, GridType.SHIPS) == Cell.SHIP ||
                         r + lenDown < n && board.cellAt(r + lenDown, c, GridType.SHIPS) == Cell.HIT){
                     
                     lenDown++;
+                    
                 }
-                
-                System.out.println(lenDown + " down length from "+r+c);
 
                 final boolean isHorizontal = lenRight >= lenDown;
                 final int length = isHorizontal ? lenRight : lenDown;
@@ -216,13 +223,23 @@ public class Fleet {
                     // No matching ship left; inconsistent board vs fleet definition
                     return false;
                 }
+                
+                
 
                 // Place without touching the board again
                 s.place(r, c, isHorizontal ? Direction.RIGHT : Direction.DOWN);
                 
-                visited[r][c] = true;
+                
             }
         }
+        System.out.println(board.cellAt(1, 4, GridType.SHIPS));
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                System.out.println("row"+(r)+" " + "col"+(c) + " = " + visited[r][c]);
+                System.out.println("hi");
+            }
+        }
+        
         return true;
     }
 

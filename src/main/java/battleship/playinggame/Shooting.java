@@ -85,7 +85,6 @@ public class Shooting implements PlayerShooter {
         String x = String.valueOf((char)('a' + (xpos)));
         String y = Integer.toString(ypos+1);
         String usershot = x + y;
-        System.out.println(usershot);
         
         Cell trial_shot = receiverboard.cellAt(ypos, xpos, GridType.SHIPS);
         if (trial_shot == Cell.HIT || trial_shot == Cell.MISS) {
@@ -95,7 +94,7 @@ public class Shooting implements PlayerShooter {
         else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
             
             char letterxpos = (char)('A' + xpos);
-            String usershots = "" + letterxpos + y;
+            String usershots = "" + letterxpos + (y);
             logresult = ("\nYou fired at " + usershots + " - ");
 
             Battle.usershot(usershot, shooterboard, receiverfleet, receiverboard);

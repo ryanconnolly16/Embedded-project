@@ -41,6 +41,10 @@ public class SetupController implements SetupActions {
     private boolean savedApplied  = false;
     private boolean started       = false; // start() one-shot
 
+    public static boolean[][] playervisited = new boolean[10][10];
+    public static boolean[][] aivisited = new boolean[10][10];
+    
+    
     public SetupController(Navigator nav,
                            String onePlayerCard,
                            String menuCard,
@@ -104,12 +108,29 @@ public class SetupController implements SetupActions {
             BattleshipGUI.aiBoard = boards[1];
             
             
+            for (int r = 0; r < 10; r++) {
+                for (int col = 0; col < 10; col++) {
+                    playervisited[r][col] = false;
+                }
+            }
             // Rebuild fleets to match those boards:
             System.out.println("player");
-            BattleshipGUI.playerFleet.repopulateFromBoard(BattleshipGUI.playerBoard);
+            BattleshipGUI.playerFleet.repopulateFromBoard(BattleshipGUI.playerBoard, playervisited);
+            
+            
+            
+            for (int r = 0; r < 10; r++) {
+                for (int col = 0; col < 10; col++) {
+                    aivisited[r][col] = false;
+                }
+            }
             System.out.println("ai");
-            BattleshipGUI.aiFleet.repopulateFromBoard(BattleshipGUI.aiBoard);
+            BattleshipGUI.aiFleet.repopulateFromBoard(BattleshipGUI.aiBoard, aivisited);
 
+            
+            
+            
+            
             // Recount hits so allSunk/health is consistent with saved shots:
             BattleshipGUI.playerFleet.syncHitsFromBoard(BattleshipGUI.playerBoard);
             BattleshipGUI.aiFleet.syncHitsFromBoard(BattleshipGUI.aiBoard);

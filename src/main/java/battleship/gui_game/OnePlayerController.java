@@ -113,7 +113,8 @@ public class OnePlayerController implements OnePlayerActions {
             JOptionPane.showMessageDialog(view, "You win!");
             view.setShotsEnabled(false);
             view.setStatusText("Game over - you win.");
-            
+            Db.deleteDerbyLocks();
+            System.exit(0);
             return;
         }
 
@@ -157,6 +158,7 @@ public class OnePlayerController implements OnePlayerActions {
             }
 
             Db.overwriteOrInsert(c, "current", InputManager.autosave);
+            Db.deleteDerbyLocks();
             System.exit(0);
         } catch (java.sql.SQLException | java.io.IOException e) {
             JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
@@ -168,7 +170,7 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     @Override
-    public void quitDiscard() { System.exit(0); }
+    public void quitDiscard() { Db.deleteDerbyLocks();System.exit(0); }
 
     private void aiTurn() {
         // Let your AI choose + apply its shot
@@ -190,6 +192,8 @@ public class OnePlayerController implements OnePlayerActions {
             JOptionPane.showMessageDialog(view, "AI wins!");
             view.setShotsEnabled(false);
             view.setStatusText("Game over - AI wins.");
+            Db.deleteDerbyLocks();
+            System.exit(0);
             return;
         }
 

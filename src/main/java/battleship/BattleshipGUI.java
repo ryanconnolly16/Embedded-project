@@ -1,5 +1,6 @@
 package battleship;
 
+import battleship.database.Db;
 import battleship.domain.Board;
 import battleship.fleetplacements.Fleet;
 import battleship.gui_screens.ActionListenerCardSwitch;
@@ -35,6 +36,7 @@ public class BattleshipGUI extends JFrame {
     private final JPanel cardPanel = new JPanel(cardLayout);
 
     public BattleshipGUI() {
+        
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screen = kit.getScreenSize();
         int width  = screen.width / 2, height = screen.height / 2;
@@ -80,6 +82,8 @@ public class BattleshipGUI extends JFrame {
     }
 
     public static void main(String[] args) {
+        Db.deleteDerbyLocks();
         SwingUtilities.invokeLater(BattleshipGUI::new);
+        
     }
 }

@@ -2,6 +2,8 @@ package battleship.playinggame;
 
 import battleship.fleetplacements.*;
 import battleship.domain.Board;
+import battleship.enums.Cell;
+import battleship.enums.GridType;
 
 public class Battle {
     //function to check what the user inputted for the shot and then shoot
@@ -63,7 +65,8 @@ public class Battle {
     public static void aishot(int xpos,int ypos, Board aiboard, Fleet playerfleet, Board playerboard){
         Fleet.Ship hit = playerfleet.processHit(xpos, ypos);
         //checks if cell hits or misses a ship
-        if(hit == null){
+        if(playerboard.cellAt(xpos, ypos, GridType.SHIPS) == Cell.WATER
+                ){
             hitmiss = ("Miss");
             aiboard.markMiss(xpos, ypos);
             playerboard.shipMiss(xpos, ypos);
@@ -73,8 +76,8 @@ public class Battle {
             
             
             //will display which ship is sunk if the ship runs out of health
-            hitmiss = ("Hit " + 
-                (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
+            hitmiss = ("Hit ");// + 
+//                (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
             
             playerboard.shipHit(xpos, ypos);
             

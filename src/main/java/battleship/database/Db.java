@@ -100,6 +100,26 @@ public final class Db {
         }
       }
     
+    
+    // Delete Derby .lck files at startup (embedded mode)
+    public static void deleteDerbyLocks() {
+        String home = System.getProperty("derby.system.home");
+        //String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
+        
+        
+        try (java.nio.file.DirectoryStream<java.nio.file.Path> ds =
+                 java.nio.file.Files.newDirectoryStream(java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath(), "*.lck")) {
+            
+            
+            
+            
+            
+            for (java.nio.file.Path p : ds) java.nio.file.Files.deleteIfExists(p);
+        } catch (java.io.IOException ignored) {}
+    }
+
+    
+    
 //    
 //    public static long saveTempTextFile(Connection c, String name, File tmp) throws Exception {
 //        String sql = "INSERT INTO PASTSAVE(name, content) VALUES (?, ?)";
