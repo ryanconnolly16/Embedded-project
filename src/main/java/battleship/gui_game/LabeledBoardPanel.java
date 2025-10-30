@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class LabeledBoardPanel extends JPanel {
     private final SquareGridPanel grid;
+    private final JLabel header; // NEW: keep a handle so we can style it
 
     // Small offsets so labels fit; keep the grid near the top/left
     private static final int TOP_STRIP  = 24;   // space reserved above grid
@@ -16,9 +17,13 @@ public class LabeledBoardPanel extends JPanel {
         setOpaque(false);
 
         if (title != null && !title.isEmpty()) {
-            JLabel t = new JLabel(title, JLabel.CENTER);
-            t.setFont(t.getFont().deriveFont(Font.BOLD));
-            add(t, BorderLayout.NORTH);
+            header = new JLabel(title, JLabel.CENTER);
+            header.setFont(header.getFont().deriveFont(Font.BOLD, 18f));   // bigger
+            header.setForeground(Color.WHITE);                              // white
+            header.setBorder(BorderFactory.createEmptyBorder(2, 0, 8, 0));  // small gap below
+            add(header, BorderLayout.NORTH);
+        } else {
+            header = null;
         }
 
         // Center uses absolute layout so we can paint labels precisely
@@ -103,6 +108,15 @@ public class LabeledBoardPanel extends JPanel {
             }
         });
         layoutCenter(center, grid, topPainter, leftPainter);
+    }
+
+    // Optional: allow caller to adjust header size/color later
+    public void setHeaderEmphasis(float sizePt, java.awt.Color color) {
+        if (header == null) return;
+        header.setFont(header.getFont().deriveFont(java.awt.Font.BOLD, sizePt));
+        header.setForeground(color);
+        header.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 0, 8, 0));
+        header.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     }
 
     private static void layoutCenter(JPanel center, JComponent grid,

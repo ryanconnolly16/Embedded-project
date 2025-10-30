@@ -1,11 +1,14 @@
+// battleship/gui_game/BoardView.java
 package battleship.gui_game;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Insets;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.geom.RoundRectangle2D;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 import battleship.domain.Board;
 import battleship.enums.Cell;
@@ -14,22 +17,44 @@ import battleship.enums.GridType;
 public final class BoardView {
     private BoardView() {}
 
-    // Palette
+    // ----- Palette -----
     private static final Color WATER = new Color(220, 235, 255);
-    private static final Color SHIP  = new Color( 80, 110, 160);
+    private static final Color SHIP  = new Color(60, 60, 60);
     private static final Color HIT   = new Color(200,  40,  40);
     private static final Color MISS  = new Color(210, 210, 210);
-    private static final Color TEXT  = Color.BLACK;
+
+    // ----- Symbol fallbacks -----
+    private static final char CIRCLE   = '\u25CF'; // ●
+    private static final char BULLET   = '\u2022'; // •
+    private static final char MULTIPLY = '\u00D7'; // ×
+
+    private static String hitMarkFor(JButton b) {
+        Font f = b.getFont();
+        if (f != null) {
+            if (f.canDisplay(CIRCLE)) return "●";
+            if (f.canDisplay(BULLET)) return "•";
+        }
+        return "O";
+    }
+
+    private static String missMarkFor(JButton b) {
+        Font f = b.getFont();
+        if (f != null && f.canDisplay(MULTIPLY)) return "×";
+        return "X";
+    }
+
+    private static Color textOn(Color bg) {
+        double y = 0.2126 * bg.getRed() + 0.7152 * bg.getGreen() + 0.0722 * bg.getBlue();
+        return (y < 140.0) ? Color.WHITE : Color.BLACK;
+    }
 
     private static void colorButton(JButton b, Color bg, String text) {
         b.setText(text);
-        b.setForeground(TEXT);
-        b.setBackground(bg);
-        b.setOpaque(true);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
+        b.setForeground(textOn(bg));
+        b.setBackground(bg); // read by our custom UI
     }
 
+    // ----- Rendering -----
     /** Render player's own board (SHIPS grid). */
     public static void renderShips(JButton[][] shipsButtons, Board board) {
         int n = shipsButtons.length;
@@ -39,8 +64,8 @@ public final class BoardView {
                 Cell cell = board.cellAt(r, c, GridType.SHIPS);
                 switch (cell) {
                     case SHIP -> colorButton(b, SHIP,  "");
-                    case HIT  -> colorButton(b, HIT,   "●");
-                    case MISS -> colorButton(b, MISS,  "×");
+                    case HIT  -> colorButton(b, HIT,   hitMarkFor(b));
+                    case MISS -> colorButton(b, MISS,  missMarkFor(b));
                     default   -> colorButton(b, WATER, "");
                 }
             }
@@ -55,8 +80,8 @@ public final class BoardView {
                 JButton b = shotsButtons[r][c];
                 Cell cell = board.cellAt(r, c, GridType.SHOTS);
                 switch (cell) {
-                    case HIT  -> colorButton(b, HIT,  "●");
-                    case MISS -> colorButton(b, MISS, "×");
+                    case HIT  -> colorButton(b, HIT,  hitMarkFor(b));
+                    case MISS -> colorButton(b, MISS, missMarkFor(b));
                     default   -> colorButton(b, WATER, "");
                 }
             }
@@ -69,12 +94,13 @@ public final class BoardView {
         renderShots(shotsButtons, board);
     }
 
-    /** Optional chrome: apply crisp borders/fonts once after grid creation. */
+    /** Apply the nice tile style once after grid creation. */
     public static void styleGrids(JButton[][] shipsButtons, JButton[][] shotsButtons) {
-        if (shipsButtons != null)  applyGridStyle(shipsButtons);
-        if (shotsButtons != null)  applyGridStyle(shotsButtons);
+        if (shipsButtons != null) applyGridStyle(shipsButtons);
+        if (shotsButtons != null) applyGridStyle(shotsButtons);
     }
 
+    // ----- Fancy cell look -----
     private static void applyGridStyle(JButton[][] grid) {
         int rows = grid.length;
         if (rows == 0) return;
@@ -85,39 +111,86 @@ public final class BoardView {
                 JButton b = grid[r][c];
                 if (b == null) continue;
 
-                // Base look
-                b.setMargin(new Insets(0, 0, 0, 0));
+                b.setUI(CellButtonUI.INSTANCE);
+                b.setRolloverEnabled(true);
+                b.setContentAreaFilled(false);
+                b.setOpaque(false);
                 b.setFocusPainted(false);
-                b.setContentAreaFilled(true);
-                b.setOpaque(true);
+                b.setBorder(new EmptyBorder(2, 2, 2, 2)); // small gap between tiles
 
-                // Light grid lines with thicker outer border
-                int top    = (r == 0)      ? 2 : 1;
-                int left   = (c == 0)      ? 2 : 1;
-                int bottom = (r == rows-1) ? 2 : 0;
-                int right  = (c == cols-1) ? 2 : 0;
-
-                Color line  = new Color(205, 214, 226);
-                Color outer = new Color(170, 180, 195);
-
-                b.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createMatteBorder(top, 0, 0, 0, (r == 0) ? outer : line),
-                    BorderFactory.createCompoundBorder(
-                        BorderFactory.createMatteBorder(0, left, 0, 0, (c == 0) ? outer : line),
-                        BorderFactory.createCompoundBorder(
-                            BorderFactory.createMatteBorder(0, 0, bottom, 0, (r == rows - 1) ? outer : line),
-                            BorderFactory.createMatteBorder(0, 0, 0, right, (c == cols - 1) ? outer : line)
-                        )
-                    )
-                ));
-
-                // Symbol size (approx) — will be overridden when rendered
+                // Symbol font scales with size
+                b.addComponentListener(new ComponentAdapter() {
+                    @Override public void componentResized(ComponentEvent e) {
+                        int h = Math.max(1, b.getHeight());
+                        float sz = clamp(14f, h * 0.50f, 28f);
+                        b.setFont(b.getFont().deriveFont(Font.BOLD, sz));
+                    }
+                });
                 int h = Math.max(1, b.getPreferredSize().height);
-                float sz = Math.max(14f, Math.min(26f, h * 0.44f));
+                float sz = clamp(14f, h * 0.50f, 28f);
                 b.setFont(b.getFont().deriveFont(Font.BOLD, sz));
-
-                // Hover removed to avoid color trails
             }
+        }
+    }
+
+    private static float clamp(float lo, float v, float hi) {
+        return Math.max(lo, Math.min(hi, v));
+    }
+
+    /** Custom UI that paints rounded tiles with gradient + hover/press. */
+    private static final class CellButtonUI extends BasicButtonUI {
+        static final CellButtonUI INSTANCE = new CellButtonUI();
+        private CellButtonUI() {}
+
+        @Override public void paint(Graphics g, JComponent c) {
+            JButton b = (JButton) c;
+            Graphics2D g2 = (Graphics2D) g.create();
+            try {
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                int w = c.getWidth(), h = c.getHeight();
+                int arc = Math.round(Math.min(w, h) * 0.25f); // 25% roundness
+
+                Color base = b.getBackground();
+                ButtonModel m = b.getModel();
+                if (m.isPressed()) base = blend(base, Color.BLACK, 0.18f);
+                else if (m.isRollover()) base = blend(base, Color.WHITE, 0.10f);
+
+                Shape rr = new RoundRectangle2D.Float(1, 1, w - 2, h - 2, arc, arc);
+
+                // Soft gradient
+                Paint grad = new GradientPaint(0, 0, blend(base, Color.WHITE, 0.12f),
+                                               0, h, blend(base, Color.BLACK, 0.10f));
+                g2.setPaint(grad);
+                g2.fill(rr);
+
+                // Border + inner highlight
+                g2.setStroke(new BasicStroke(1f));
+                g2.setColor(new Color(255, 255, 255, 50));
+                Shape inner = new RoundRectangle2D.Float(2, 2, w - 4, h - 4, Math.max(arc - 2, 0), Math.max(arc - 2, 0));
+                g2.draw(inner);
+
+                g2.setColor(blend(base, Color.BLACK, 0.30f));
+                g2.draw(rr);
+
+                if (!b.isEnabled()) {
+                    g2.setColor(new Color(255, 255, 255, 120));
+                    g2.fill(rr);
+                }
+
+                // Let BasicButtonUI draw the text (● / ×)
+                super.paint(g2, c);
+            } finally {
+                g2.dispose();
+            }
+        }
+
+        private static Color blend(Color a, Color b, float t) {
+            t = Math.max(0f, Math.min(1f, t));
+            int r = Math.round(a.getRed()   * (1 - t) + b.getRed()   * t);
+            int g = Math.round(a.getGreen() * (1 - t) + b.getGreen() * t);
+            int bl= Math.round(a.getBlue()  * (1 - t) + b.getBlue()  * t);
+            return new Color(r, g, bl);
         }
     }
 }

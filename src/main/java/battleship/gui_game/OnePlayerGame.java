@@ -27,11 +27,14 @@ public class OnePlayerGame extends JPanel {
         JPanel north = new JPanel(new BorderLayout());
         north.setOpaque(true);
         north.setBackground(PANEL_BG);
-        JLabel title = new JLabel("You vs AI", JLabel.CENTER);
-        title.setFont(title.getFont().deriveFont(Font.BOLD, 22f));
+
+        JLabel title = new JLabel("BATTLESHIP", JLabel.CENTER);
+        title.setFont(pickBlockyFont(title.getFont(), 36f)); // smaller than menu (was ~64f)
         title.setForeground(new Color(245, 245, 245));
-        north.add(title, BorderLayout.NORTH);
+        title.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
+        north.add(title, BorderLayout.CENTER);
         add(north, BorderLayout.NORTH);
+
 
         // ---------- CENTER: boards + (centered) sidebar ----------
         JPanel centerRow = new JPanel(new GridBagLayout());
@@ -162,4 +165,22 @@ public class OnePlayerGame extends JPanel {
 
     public JButton[][] getShipsButtons() { return shipsGrid; }
     public JButton[][] getShotsButtons() { return shotsGrid; }
+    
+    // --- Blocky font picker (same idea as menu, just local) ---
+    private static Font pickBlockyFont(Font base, float size) {
+        String[] preferred = {
+            "Impact", "Arial Black", "Rockwell Extra Bold", "Haettenschweiler",
+            "Franklin Gothic Heavy", "Futura Condensed ExtraBold", "Verdana"
+        };
+        var installed = java.util.Set.of(
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()
+        );
+        for (String name : preferred) {
+            if (installed.contains(name)) return new Font(name, Font.BOLD, Math.round(size));
+        }
+        String family = installed.contains("Dialog") ? "Dialog" :
+                        installed.contains("SansSerif") ? "SansSerif" :
+                        installed.contains("Monospaced") ? "Monospaced" : base.getFamily();
+        return new Font(family, Font.BOLD, Math.round(size));
+    }
 }
