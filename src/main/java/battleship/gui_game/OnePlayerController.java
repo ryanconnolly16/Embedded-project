@@ -9,26 +9,18 @@ import battleship.enums.Cell;
 import battleship.enums.GridType;
 import battleship.io.SaveManager;
 import battleship.players.Ai;
-import static battleship.players.Ai.logresult;
 import battleship.playinggame.Battle;
 import battleship.playinggame.Shooting;
 import battleship.ui.BoardRenderer;
 import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
-import battleship.gui_setup.SetupController;
-import static battleship.database.Db.recordShot;
 import battleship.gui_setup.SetupServices;
-import static battleship.players.Ai.usershot;
 import java.sql.SQLException;
 
 import javax.swing.*;
-import java.awt.Point;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,10 +65,6 @@ public class OnePlayerController implements OnePlayerActions {
         
         try (Connection d = Db.connect()) {
             Db.ensureSchema(d);
-            count=10;
-            String home = System.getProperty("derby.system.home");
-            String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-            
             recordShot(d, Db.Player.PLAYER1, Shooting.usershots, Battle.hitmiss);
             if (!d.getAutoCommit()) d.commit();
         }
@@ -91,7 +79,7 @@ public class OnePlayerController implements OnePlayerActions {
         playerTurn = false;
         view.setShotsEnabled(false);
         view.setStatusText("AI thinking…");
-        
+        System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
         Timer t = new Timer(AI_DELAY_MS, e -> { 
             aiTurn(); 
             // Only append hitmiss if AI actually fired (not an error)
@@ -113,10 +101,6 @@ public class OnePlayerController implements OnePlayerActions {
         //saves current board to database
         try (Connection c = Db.connect()) {
             Db.ensureSchema(c);
-            String home = System.getProperty("derby.system.home");
-            String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-            
-            
             InputManager.autosave = SaveManager.writeTurnAutosave(BattleshipGUI.playerBoard, BattleshipGUI.aiBoard);
             String sql = "DELETE FROM GAMESTATE WHERE slot = ?";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -152,9 +136,6 @@ public class OnePlayerController implements OnePlayerActions {
         try (Connection d = Db.connect()) {
             
             Db.ensureSchema(d);
-            String home = ""+battleship.database.DbPaths.derbyHome();
-            String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-            
             recordShot(d, Db.Player.PLAYER2, Ai.usershot, Battle.hitmiss);
             if (!d.getAutoCommit()) d.commit();
         }
@@ -178,20 +159,13 @@ public class OnePlayerController implements OnePlayerActions {
         return false;
     }
     
-    private boolean hasAnyHits(Board b) {
-        int n = b.size();
-        for (int r = 0; r < n; r++)
-            for (int c = 0; c < n; c++)
-                if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return true;
-        return false;
-    }
     
     //ends the game with winners screen
     public void gamefinished(Board board,String player){
         boolean finished = hasAnyShips(board);
         
-        if (finished == false) {
-            if(player == "user"){
+        if (!finished) {
+            if("user".equals(player)){
                 JOptionPane.showMessageDialog(view, "You win!");
                 view.setStatusText("Game over - you win.");
             }
@@ -215,10 +189,6 @@ public class OnePlayerController implements OnePlayerActions {
                 SetupServices.setupPresetGUI(aFleet, aBoard);
                 
                 Db.ensureSchema(h);
-                String home = System.getProperty("derby.system.home");
-                String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-
-
                 InputManager.autosave = SaveManager.writeTurnAutosave(pBoard, aBoard);
                 
                 Db.overwriteOrInsert(h, "current", InputManager.autosave);

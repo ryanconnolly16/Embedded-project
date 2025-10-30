@@ -170,7 +170,7 @@ public class Fleet {
         boolean[][] visited;
 
         Board board;
-        if(player == "player"){visited = SetupController.playervisited; board = BattleshipGUI.playerBoard;}
+        if("player".equals(player)){visited = SetupController.playervisited; board = BattleshipGUI.playerBoard;}
         else{visited = SetupController.aivisited;board = BattleshipGUI.aiBoard;}
         final int n = 10;
         
