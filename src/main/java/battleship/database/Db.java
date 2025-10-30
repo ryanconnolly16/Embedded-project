@@ -113,9 +113,11 @@ public final class Db {
       }
     
     
+    
+    
     // Delete Derby .lck files that can mess with running
     public static void deleteDerbyLocks() {
-        String home = System.getProperty("derby.system.home");
+        String home = "" +battleship.database.DbPaths.derbyHome();
         try (java.nio.file.DirectoryStream<java.nio.file.Path> ds =
                  java.nio.file.Files.newDirectoryStream(java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath(), "*.lck")) {
             
