@@ -1,6 +1,5 @@
 package battleship.playinggame;
 
-import battleship.BattleshipGame;
 import battleship.database.Db;
 import static battleship.database.Db.recordShot;
 import battleship.fleetplacements.*;
