@@ -77,17 +77,9 @@ public class OnePlayerController implements OnePlayerActions {
     public void fireShot(int r, int c) {
         if (!playerTurn) return;
 
-        //boolean willHit = isShipAt(aiBoard, r, c); 
         try {
-            // returns false if already tried this cell
-            
-            
             Shooting.playershooting(r, c, BattleshipGUI.playerBoard, BattleshipGUI.aiFleet, BattleshipGUI.aiBoard);
             if (Shooting.value == false) return;
-            
-            
-            
-            
             
         } catch (IOException ex) {
             Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,6 +150,7 @@ public class OnePlayerController implements OnePlayerActions {
             }
 
             Db.overwriteOrInsert(c, "current", InputManager.autosave);
+            
             Db.deleteDerbyLocks();
             System.exit(0);
         } catch (java.sql.SQLException | java.io.IOException e) {
