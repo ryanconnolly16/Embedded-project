@@ -1,118 +1,92 @@
+// battleship/gui_setup/Setup.java
 package battleship.gui_setup;
 
-import battleship.gui_screens.FlatButton;   // <-- NOTE: correct import
+import battleship.gui_screens.FlatButton;
 import javax.swing.*;
 import java.awt.*;
 
-/** Simple setup screen for one-player mode with compact flat buttons. */
+/** One-player setup: only New Game, Load Game, Back. */
 public class Setup extends JPanel {
     private static final Color BUTTON_BASE = new Color(30, 80, 140);
-    private static final Color PANEL_BG    = new Color(42, 100, 165); // slightly lighter
+    private static final Color PANEL_BG    = new Color(42, 100, 165);
 
-    private final FlatButton preset   = new FlatButton("Use Preset");
-    private final FlatButton loadBtn  = new FlatButton("Load Save");
-    private final FlatButton newBtn   = new FlatButton("New Game");
-    private final FlatButton start    = new FlatButton("Start Game");
-    private final FlatButton back     = new FlatButton("Back");
-    private final JLabel     status   = new JLabel("Choose a setup option.", JLabel.CENTER);
-
-    // local gating state (view-side)
-    private boolean presetDone = false;
-    private boolean savedDone = false;
-    private boolean sourceChosen = false;
+    private final FlatButton newBtn  = new FlatButton("New Game");
+    private final FlatButton loadBtn = new FlatButton("Load Game");
+    private final FlatButton back    = new FlatButton("Back");
+    private final JLabel     status  = new JLabel("Choose: New Game or Load Game.", JLabel.CENTER);
 
     public Setup(SetupActions actions) {
-        // panel background (slightly lighter than buttons)
         setOpaque(true);
         setBackground(PANEL_BG);
-
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        // Title + status
+        // ---------- Title + status ----------
         JPanel north = new JPanel(new GridLayout(0, 1));
         north.setOpaque(true);
         north.setBackground(PANEL_BG);
+
         JLabel title = new JLabel("Setup (One Player)", JLabel.CENTER);
         title.setForeground(new Color(245,245,245));
-        status.setForeground(new Color(230,230,230));
         title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
+
+        status.setForeground(new Color(230,230,230));
+        status.setFont(status.getFont().deriveFont(Font.PLAIN, 14f));
+
         north.add(title);
         north.add(status);
         add(north, BorderLayout.NORTH);
 
-        // Center: vertical BoxLayout so buttons stay small
+        // ---------- Center: vertical buttons ----------
         JPanel center = new JPanel();
         center.setOpaque(true);
         center.setBackground(PANEL_BG);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
-        // match buttons’ base color (optional — default already 30,80,140)
-        for (FlatButton b : new FlatButton[]{preset, loadBtn, newBtn, start, back}) {
+        for (FlatButton b : new FlatButton[]{ newBtn, loadBtn }) {
             b.setBaseColor(BUTTON_BASE);
+            addSmall(center, b);
         }
-
-        // preset
-        addSmall(center, preset);
-        preset.addActionListener(e -> {
-            if (!presetDone) {
-                presetDone = true;
-                preset.setEnabled(false);
-                preset.setText("Preset applied");
-                status.setText("Preset placed. Now choose Load or New.");
-                actions.applyPreset();
-                updateStartEnabled();
-            }
-        });
-
-        // load save
-        addSmall(center, loadBtn);
-        loadBtn.addActionListener(e -> {
-            if(!savedDone){
-                presetDone = true;
-                loadBtn.setEnabled(false);
-                newBtn.setEnabled(false);
-                savedDone = true;
-                sourceChosen = true;
-                status.setText("Save selected. You can Start when preset is applied.");
-                actions.loadSave();
-                updateStartEnabled();
-            }
-        });
-
-        // new game
-        addSmall(center, newBtn);
-        newBtn.addActionListener(e -> {
-            sourceChosen = true;
-            loadBtn.setEnabled(false);
-            newBtn.setEnabled(false);
-            status.setText("New game selected. You can Start when preset is applied.");
-            actions.newGame();
-            updateStartEnabled();
-        });
-
-        // start (gated)
-        addSmall(center, start);
-        start.setEnabled(false);  // gate until both conditions met
-        start.addActionListener(e -> {
-            status.setText("Starting game…");
-            actions.start();
-        });
-
         add(center, BorderLayout.CENTER);
 
-        // South: back
+        // New Game: create new board, apply preset, start immediately
+        newBtn.addActionListener(e -> {
+            disableChoiceButtons();
+            status.setText("Creating new game, applying preset, starting…");
+            if (actions != null) {
+                actions.newGame();
+                actions.applyPreset();
+                actions.start();
+            }
+        });
+
+        // Load Game: load save, then start immediately
+        loadBtn.addActionListener(e -> {
+            disableChoiceButtons();
+            status.setText("Loading save and starting…");
+            if (actions != null) {
+                actions.loadSave();
+                actions.start();
+            }
+        });
+
+        // ---------- South: Back ----------
         JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         south.setOpaque(true);
         south.setBackground(PANEL_BG);
+
+        back.setBaseColor(BUTTON_BASE);
         fixSmall(back);
-        back.addActionListener(e -> actions.back());
+        back.addActionListener(e -> { if (actions != null) actions.back(); });
+
         south.add(back);
         add(south, BorderLayout.SOUTH);
     }
 
-    private void updateStartEnabled() {
-        start.setEnabled(presetDone && sourceChosen);
+    private void disableChoiceButtons() {
+        newBtn.setEnabled(false);
+        loadBtn.setEnabled(false);
+        back.setEnabled(false);
     }
 
     private static void addSmall(JPanel parent, JComponent c) {
@@ -121,13 +95,16 @@ public class Setup extends JPanel {
         parent.add(c);
         parent.add(Box.createVerticalStrut(10));
     }
+
     private static void fixSmall(JComponent c) {
-        Dimension d = (c.getPreferredSize() != null) ? c.getPreferredSize() : new Dimension(160, 36);
-        c.setMinimumSize(d); c.setPreferredSize(d); c.setMaximumSize(d);
+        Dimension d = (c.getPreferredSize() != null)
+                ? c.getPreferredSize()
+                : new Dimension(160, 36);
+        c.setMinimumSize(d);
+        c.setPreferredSize(d);
+        c.setMaximumSize(d);
     }
 
-    // Optional helpers if controller wants to influence UI text/buttons later
+    // Optional helper the controller can use
     public void setStatus(String text) { status.setText(text); }
-    public void enablePresetButton() { preset.setEnabled(true); preset.setText("Use Preset"); presetDone = false; updateStartEnabled(); }
-    public void disablePresetButton() { preset.setEnabled(false); preset.setText("Preset applied"); presetDone = true; updateStartEnabled(); }
 }
