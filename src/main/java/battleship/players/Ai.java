@@ -57,17 +57,14 @@ public class Ai implements AiShooter {
 //    }
 //    
     
-    /** List tracking shot locations that have been attempted by the AI */
+    // List tracking shot locations that have been attempted by the AI
     public static List<String> checking = new ArrayList<>();
     
-    /**
-     * Main AI shooting method. Selects a random valid cell to shoot at on the player's board.
-     * Uses the AI's shots grid to determine which cells have already been shot at.
-     * 
-     * @param aiboard The AI's board (tracks where AI has shot)
-     * @param playerfleet The player's fleet (used to process hits)
-     * @param playerboard The player's board (shows ship locations)
-     */
+    // Main AI shooting method. Selects a random valid cell to shoot at on the player's board.
+    // Uses the AI's shots grid to determine which cells have already been shot at.
+    // Parameters: aiboard - The AI's board (tracks where AI has shot)
+    //             playerfleet - The player's fleet (used to process hits)
+    //             playerboard - The player's board (shows ship locations)
     public static void AiShot(Board aiboard, Fleet playerfleet, Board playerboard) {
         java.util.concurrent.ThreadLocalRandom rand = java.util.concurrent.ThreadLocalRandom.current();
         

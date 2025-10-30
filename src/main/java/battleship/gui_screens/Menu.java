@@ -90,7 +90,7 @@ public class Menu extends JPanel {
         return (url == null) ? null : new ImageIcon(url).getImage();
     }
 
-    /** Pick a chunky/blocky font if available; otherwise fallback to a bold version of the base font. */
+    // Pick a chunky/blocky font if available; otherwise fallback to a bold version of the base font.
     private static Font pickBlockyFont(Font base, float size) {
         String[] preferred = {
             "Impact", "Arial Black", "Rockwell Extra Bold", "Haettenschweiler",

@@ -55,7 +55,7 @@ public final class BoardView {
     }
 
     // ----- Rendering -----
-    /** Render player's own board (SHIPS grid). */
+    // Render player's own board (SHIPS grid).
     public static void renderShips(JButton[][] shipsButtons, Board board) {
         int n = shipsButtons.length;
         for (int r = 0; r < n; r++) {
@@ -72,7 +72,7 @@ public final class BoardView {
         }
     }
 
-    /** Render fog-of-war view (SHOTS grid). */
+    // Render fog-of-war view (SHOTS grid).
     public static void renderShots(JButton[][] shotsButtons, Board board) {
         int n = shotsButtons.length;
         for (int r = 0; r < n; r++) {
@@ -88,13 +88,13 @@ public final class BoardView {
         }
     }
 
-    /** Convenience to update both at once. */
+    // Convenience to update both at once.
     public static void refreshAll(JButton[][] shipsButtons, JButton[][] shotsButtons, Board board) {
         renderShips(shipsButtons, board);
         renderShots(shotsButtons, board);
     }
 
-    /** Apply the nice tile style once after grid creation. */
+    // Apply the nice tile style once after grid creation.
     public static void styleGrids(JButton[][] shipsButtons, JButton[][] shotsButtons) {
         if (shipsButtons != null) applyGridStyle(shipsButtons);
         if (shotsButtons != null) applyGridStyle(shotsButtons);
@@ -137,7 +137,7 @@ public final class BoardView {
         return Math.max(lo, Math.min(hi, v));
     }
 
-    /** Custom UI that paints rounded tiles with gradient + hover/press. */
+    // Custom UI that paints rounded tiles with gradient + hover/press.
     private static final class CellButtonUI extends BasicButtonUI {
         static final CellButtonUI INSTANCE = new CellButtonUI();
         private CellButtonUI() {}

@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-/** Reusable flat, rounded button with hover/press states (no LAF gradients). */
+// Reusable flat, rounded button with hover/press states (no LAF gradients).
 public class FlatButton extends JButton {
 
     private Color base = new Color(30, 80, 140);
@@ -15,13 +15,13 @@ public class FlatButton extends JButton {
         commonInit();
     }
 
-    /** Use this to set the base color (the button will lighten/darken on hover/press). */
+    // Use this to set the base color (the button will lighten/darken on hover/press).
     public void setBaseColor(Color c) {
         if (c != null) this.base = c;
         repaint();
     }
 
-    /** Change the corner radius. */
+    // Change the corner radius.
     public void setCornerRadius(int arc) {
         this.arc = Math.max(0, arc);
         repaint();

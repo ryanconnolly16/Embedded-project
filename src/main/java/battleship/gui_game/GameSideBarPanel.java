@@ -6,7 +6,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
 
-/** Sidebar with status + auto-sized log that never collapses. */
+// Sidebar with status + auto-sized log that never collapses.
 public class GameSideBarPanel extends JPanel {
     private static final Color DARK_BG   = new Color(0x15, 0x3E, 0x78);  // #153E78
     private static final Color LIGHT_FG  = new Color(235, 240, 248);
@@ -63,7 +63,7 @@ public class GameSideBarPanel extends JPanel {
         add(scroll, BorderLayout.CENTER);
     }
 
-    /** Recompute preferred width so the longest line fits without wrapping. */
+    // Recompute preferred width so the longest line fits without wrapping.
     private void updateWidth() {
         String longest = longestLine(logArea.getText());
         FontMetrics fm = logArea.getFontMetrics(logArea.getFont());

@@ -74,10 +74,10 @@ public class Fleet {
             return false;
         }
         
-        /** Records a hit on this ship (increments hit counter if not already at max). */
+        // Records a hit on this ship (increments hit counter if not already at max).
         void hit() { if (hits < size) hits++; }
         
-        /** Adds a hit to this ship if it's not already sunk. */
+        // Adds a hit to this ship if it's not already sunk.
         public void addHit() {
             if (!isSunk()) {
                 hits++;
@@ -197,8 +197,6 @@ public class Fleet {
     
     
     
-    // ---- Add to Fleet.java ----
-
     // Reset all placements and hits (keeps names/sizes)
     public void clearPlacementsAndHits() {
         for (Ship s : ships) {

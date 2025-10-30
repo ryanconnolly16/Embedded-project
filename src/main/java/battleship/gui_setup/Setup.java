@@ -5,7 +5,7 @@ import battleship.gui_screens.FlatButton;
 import javax.swing.*;
 import java.awt.*;
 
-/** One-player setup: only New Game, Load Game, Back. */
+// One-player setup: only New Game, Load Game, Back.
 public class Setup extends JPanel {
     private static final Color BUTTON_BASE = new Color(30, 80, 140);
     private static final Color PANEL_BG    = new Color(42, 100, 165);
