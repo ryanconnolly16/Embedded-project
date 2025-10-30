@@ -242,14 +242,17 @@ public class Fleet {
     }
 
     // After placements are set, sync hits from the SHOTS grid.
-    // Counts a hit whenever both SHIPS has a ship and SHOTS marks a hit.
+    // Counts a hit whenever SHIPS has a ship (or hit ship) and SHOTS marks a hit.
     public void syncHitsFromBoard(Board board) {
         final int n = board.size();
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < n; c++) {
-                if (board.cellAt(r, c, GridType.SHIPS) == Cell.SHIP
-                 && board.cellAt(r, c, GridType.SHOTS) == Cell.HIT) {
-                    // This will increment the matching ship’s hit counter
+                Cell shipCell = board.cellAt(r, c, GridType.SHIPS);
+                Cell shotCell = board.cellAt(r, c, GridType.SHOTS);
+                // Check if there's a ship (or hit ship) and it's been shot at
+                if ((shipCell == Cell.SHIP || shipCell == Cell.HIT)
+                 && shotCell == Cell.HIT) {
+                    // This will increment the matching ship's hit counter
                     processHit(r, c);
                 }
             }
