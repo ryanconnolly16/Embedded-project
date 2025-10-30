@@ -5,34 +5,47 @@ import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.GridType;
 
+// Battle class handles the core game logic for shooting mechanics.
+// Processes shots for both players and AI, determines hits/misses,
+// and updates board states accordingly.
 public class Battle {
-    //function to check what the user inputted for the shot and then shoot
-    //shooting player, receieving fleet, receiving board
-    
+    // Result string indicating whether the last shot was a "Hit" or "Miss".
+    // May include additional information like "SUNK! ShipName" if a ship was sunk.
     public static String hitmiss;
     
     
     
+    // Processes a player's shot against the opponent's board.
+    // Parses the shot location string, determines hit/miss based on board state,
+    // updates both boards, and processes fleet damage.
+    // Parameters: usershot - String representation of shot location (e.g., "a1", "b5", "j10")
+    //             p1board - Board of the shooting player (tracks their shots)
+    //             p2fleet - Fleet of the receiving player (tracks ship damage)
+    //             p2board - Board of the receiving player (shows ship locations)
     public static void usershot(String usershot, Board p1board, Fleet p2fleet, Board p2board){
+        // Only process shot if opponent's fleet hasn't been completely sunk
         if(!p2fleet.allSunk()){
             int col;
             int row;
-            //if usershot num num
+            
+            // Parse shot coordinates from string format
+            // Handle numeric-numeric format (e.g., "11" for row 1, col 1)
             if (!Character.isLetter(usershot.charAt(0))) {
-                col = usershot.charAt(0) - '1'+1;
-                row = usershot.charAt(1) - '1'+1;
+                col = usershot.charAt(0) - '1' + 1;
+                row = usershot.charAt(1) - '1' + 1;
             }
-            //if usershot letter num
+            // Handle letter-numeric format (e.g., "a1", "b5")
             else{
                 col = usershot.charAt(0) - 'a';
                 row = usershot.charAt(1) - '1';
             }
             
-            //incase of 10 in row
+            // Handle row 10 (two-digit number, e.g., "a10", "j10")
             if(usershot.length() > 2){
-               row = 9;
+               row = 9; // Row 10 is index 9 (0-based)
             }
             
+            // Validate coordinates are within bounds
             if(col > 9 || row > 10){
                 System.out.println("Input is out of bounds, try again.\n\n");
             }
@@ -67,26 +80,30 @@ public class Battle {
         }
     }
     
-    //function for the ai to shot 
-    public static void aishot(int xpos,int ypos, Board aiboard, Fleet playerfleet, Board playerboard){
+    // Processes the AI's shot against the player's board.
+    // Determines hit/miss, updates boards, and processes fleet damage.
+    // Parameters: xpos - Row coordinate (0-based) where AI is shooting
+    //             ypos - Column coordinate (0-based) where AI is shooting
+    //             aiboard - AI's board (tracks where AI has shot)
+    //             playerfleet - Player's fleet (tracks ship damage)
+    //             playerboard - Player's board (shows ship locations)
+    public static void aishot(int xpos, int ypos, Board aiboard, Fleet playerfleet, Board playerboard){
+        // Process the hit on the fleet (increments ship damage counter)
         Fleet.Ship hit = playerfleet.processHit(xpos, ypos);
-        //checks if cell hits or misses a ship
-        if(playerboard.cellAt(xpos, ypos, GridType.SHIPS) == Cell.WATER
-                ){
+        
+        // Determine hit or miss based on board state
+        if(playerboard.cellAt(xpos, ypos, GridType.SHIPS) == Cell.WATER){
+            // Miss - no ship at this location
             hitmiss = ("Miss");
             aiboard.markMiss(xpos, ypos);
             playerboard.shipMiss(xpos, ypos);
         }
         else{
+            // Hit - ship present at this location
             aiboard.markHit(xpos, ypos);
-            
-            
-            //will display which ship is sunk if the ship runs out of health
-            hitmiss = ("Hit ");// + 
-//                (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
-            
+            hitmiss = ("Hit ");
+            // Note: Ship sunk message could be added here if needed
             playerboard.shipHit(xpos, ypos);
-            
         }
     }
 }

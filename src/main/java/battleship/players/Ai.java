@@ -9,10 +9,19 @@ import battleship.interfaces.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//ai class for when its one player
+// AI player implementation for one-player battleship games.
+// Handles AI shooting logic including shot selection and tracking.
 public class Ai implements AiShooter {
+    // Log message describing the AI's shot action
     public static String logresult;
+    
+    // String representation of the AI's shot location (e.g., "A1", "B5")
     public static String usershot;
+    
+    // Constructor for AI player.
+    // Parameters: playerboard - Board representing the player's board
+    //             aiboard - Board representing the AI's board (tracks AI's shots)
+    //             playerfleet - Fleet representing the player's ships
     public Ai(Board playerboard, Board aiboard, Fleet playerfleet) {
     }
     
@@ -48,7 +57,17 @@ public class Ai implements AiShooter {
 //    }
 //    
     
+    /** List tracking shot locations that have been attempted by the AI */
     public static List<String> checking = new ArrayList<>();
+    
+    /**
+     * Main AI shooting method. Selects a random valid cell to shoot at on the player's board.
+     * Uses the AI's shots grid to determine which cells have already been shot at.
+     * 
+     * @param aiboard The AI's board (tracks where AI has shot)
+     * @param playerfleet The player's fleet (used to process hits)
+     * @param playerboard The player's board (shows ship locations)
+     */
     public static void AiShot(Board aiboard, Fleet playerfleet, Board playerboard) {
         java.util.concurrent.ThreadLocalRandom rand = java.util.concurrent.ThreadLocalRandom.current();
         
@@ -72,6 +91,7 @@ public class Ai implements AiShooter {
             int xpos = rand.nextInt(10);
             int ypos = rand.nextInt(10);
 
+            // Convert coordinates to human-readable format (e.g., "A1", "B5")
             char letterxpos = (char)('A' + xpos);
             usershot = "" + letterxpos + (ypos+1);
 
@@ -100,6 +120,9 @@ public class Ai implements AiShooter {
         logresult = "\nAi error - no valid shot found";
     }
 
+    // Unused interface method - use AiShot() instead.
+    // Parameters: aiboard - AI's board, pfleet - Player's fleet, pboard - Player's board
+    // Returns: Unsupported operation (throws exception)
     @Override
     public String aiShoot(Board aiboard, Fleet pfleet, Board pboard) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

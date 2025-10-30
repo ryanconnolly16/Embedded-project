@@ -8,11 +8,19 @@ import battleship.ui.*;
 import java.io.IOException;
 import java.util.Scanner;
 
+// Shooting class handles player shooting logic for GUI-based gameplay.
+// Validates shot attempts and processes valid shots through the Battle class.
 public class Shooting implements PlayerShooter {
+    // Log message describing the player's shot action
     public static String logresult = null;
+    
+    // Flag indicating whether the last shot attempt was valid (true) or invalid (false)
     public static boolean value = false;
+    
+    // String representation of the player's shot location in display format (e.g., "A1", "B5")
     public static String usershots;
     
+    // Constructor for Shooting class.
     public Shooting() {
     }
 //    //function to take in where the user wants to shooter, will convert from string to int, check that shot hasnt already been done, then shoot
@@ -82,28 +90,45 @@ public class Shooting implements PlayerShooter {
     
     
     
+    // Processes a player's shot attempt at the specified coordinates.
+    // Validates that the cell hasn't been shot before, and if valid, processes the shot.
+    // Parameters: ypos - Row coordinate (0-based) where player wants to shoot
+    //             xpos - Column coordinate (0-based) where player wants to shoot
+    //             shooterboard - Board of the shooting player (will be updated with shot result)
+    //             receiverfleet - Fleet of the receiving player (will process damage if hit)
+    //             receiverboard - Board of the receiving player (shows ship locations)
+    // Throws: IOException - If there's an I/O error during shot processing
     public static void playershooting(int ypos, int xpos, Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
+        // Convert coordinates to lowercase string format for Battle class (e.g., "a1", "b5")
         String x = String.valueOf((char)('a' + (xpos)));
         String y = Integer.toString(ypos+1);
         String usershot = x + y;
         
+        // Check if this cell has already been shot at
         Cell trial_shot = receiverboard.cellAt(ypos, xpos, GridType.SHIPS);
         if (trial_shot == Cell.HIT || trial_shot == Cell.MISS) {
-            value =  false;
-            
+            // Cell already shot - invalid attempt
+            value = false;
         }
         else if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
-            
+            // Valid shot - cell hasn't been shot yet
+            // Create display format string (uppercase letter, e.g., "A1", "B5")
             char letterxpos = (char)('A' + xpos);
             usershots = "" + letterxpos + (y);
             logresult = ("\nYou fired at " + usershots + " - ");
 
+            // Process the shot through Battle class
             Battle.usershot(usershot, shooterboard, receiverfleet, receiverboard);
             value = true;
-            
         }
     }
 
+    // Unused interface method - use playershooting() instead.
+    // Parameters: shooterboard - Shooting player's board
+    //             receiverfleet - Receiving player's fleet
+    //             receiverboard - Receiving player's board
+    // Returns: Unsupported operation (throws exception)
+    // Throws: IOException - If operation fails
     @Override
     public String playershoot(Board shooterboard, Fleet receiverfleet, Board receiverboard) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

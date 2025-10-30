@@ -9,7 +9,7 @@ public class PresetPlacer implements ShipPlacer {
     
     public PresetPlacer() {}
     
-    //function to randomly pllace ships
+    //function to randomly place ships
     @Override
     public void placeShips(Fleet fleet, Board board) {
         Random rand = new Random();

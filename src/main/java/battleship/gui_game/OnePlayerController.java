@@ -24,13 +24,26 @@ import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// Controller for one-player battleship game mode.
+// Handles turn-based gameplay between human player and AI, including shot processing,
+// game state management, database operations, and UI updates.
 public class OnePlayerController implements OnePlayerActions {
+    // Delay in milliseconds before AI takes its turn (for visual feedback)
     private static final int AI_DELAY_MS = 50;
+    
+    // Reference to the game view for UI updates
     private final OnePlayerGame view;
+    
+    // Tracks whether it's currently the player's turn (true) or AI's turn (false)
     private boolean playerTurn = true;
+    
+    // Accumulated log results for display in the game log
     public static String logresults;
+    
     public int count = 0;
     
+    // Constructor for OnePlayerController.
+    // Parameter: view - The OnePlayerGame view instance to control
     public OnePlayerController(OnePlayerGame view) {
         this.view = view;
         view.setActions(this);
@@ -45,10 +58,15 @@ public class OnePlayerController implements OnePlayerActions {
         this.view.setStatusText(aiReady ? "Your turn" : "Apply preset first…");
     }
     
+    // Handles the player's shot attempt at the specified coordinates.
+    // Processes the shot, updates boards, records to database, checks for game end,
+    // and triggers AI turn after a short delay.
+    // Parameters: r - Row coordinate (0-based) where player wants to shoot
+    //             c - Column coordinate (0-based) where player wants to shoot
     @Override
     public void fireShot(int r, int c) {
+        // Ignore shot attempts when it's not the player's turn
         if (!playerTurn) return;
-        //function to fire shot for user
         try {
             Shooting.playershooting(r, c, BattleshipGUI.playerBoard, BattleshipGUI.aiFleet, BattleshipGUI.aiBoard);
             if (Shooting.value == false) return;
@@ -73,7 +91,7 @@ public class OnePlayerController implements OnePlayerActions {
         }
         
         view.refresh();
-        //checks board to see if any ships left and ends game
+        // Check if game is over (no ships remaining on AI's board)
         gamefinished(BattleshipGUI.aiBoard, "user");
 
         playerTurn = false;
@@ -96,9 +114,10 @@ public class OnePlayerController implements OnePlayerActions {
         view.repaint();
     }
 
+    // Saves the current game state to the database and exits the application.
+    // Clears the current game slot, writes the autosave, and deletes Derby lock files.
     @Override
     public void quitSave() {
-        //saves current board to database
         try (Connection c = Db.connect()) {
             Db.ensureSchema(c);
             InputManager.autosave = SaveManager.writeTurnAutosave(BattleshipGUI.playerBoard, BattleshipGUI.aiBoard);
@@ -109,7 +128,7 @@ public class OnePlayerController implements OnePlayerActions {
             }
 
             Db.overwriteOrInsert(c, "current", InputManager.autosave);
-            //deletes lock files so can look at them in services tab
+            // Delete lock files so they can be examined in services tab
             Db.deleteDerbyLocks();
             System.exit(0);
         } catch (java.sql.SQLException | java.io.IOException e) {
@@ -121,20 +140,26 @@ public class OnePlayerController implements OnePlayerActions {
         }
     }
 
+    // Quits the game without saving. Deletes Derby lock files and exits.
     @Override
-    public void quitDiscard() { Db.deleteDerbyLocks();System.exit(0); }
+    public void quitDiscard() { 
+        Db.deleteDerbyLocks();
+        System.exit(0); 
+    }
 
+    // Handles the AI's turn. Makes the AI shoot, updates the UI, checks for game end,
+    // records the shot to the database, and returns control to the player.
     private void aiTurn() {
-        // ai shooting function
         Ai.AiShot(BattleshipGUI.aiBoard, BattleshipGUI.playerFleet, BattleshipGUI.playerBoard);
 
         
         //checks for any ships on board and ends game
         view.refresh();
+        // Check if game is over (no ships remaining on player's board)
         gamefinished(BattleshipGUI.playerBoard, "ai");
 
+        // Record AI's shot to the database
         try (Connection d = Db.connect()) {
-            
             Db.ensureSchema(d);
             recordShot(d, Db.Player.PLAYER2, Ai.usershot, Battle.hitmiss);
             if (!d.getAutoCommit()) d.commit();
@@ -143,14 +168,15 @@ public class OnePlayerController implements OnePlayerActions {
             Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
+        // Return control to the player
         playerTurn = true;
         view.setShotsEnabled(true);
         view.setStatusText("Your turn");
     }
 
-    // checks for any ships left on board
+    // Checks if there are any ships remaining on the specified board.
+    // Parameter: b - The board to check
+    // Returns: true if at least one SHIP cell exists, false otherwise
     private boolean hasAnyShips(Board b) {
         int n = b.size();
         for (int r = 0; r < n; r++)
@@ -160,11 +186,16 @@ public class OnePlayerController implements OnePlayerActions {
     }
     
     
-    //ends the game with winners screen
-    public void gamefinished(Board board,String player){
+    // Checks if the game is finished (no ships remaining) and handles game end logic.
+    // Displays winner message, resets game state in database, and exits the application.
+    // Parameters: board - The board to check for remaining ships
+    //             player - String identifying the winner ("user" for player, "ai" for AI)
+    public void gamefinished(Board board, String player){
+        // Check if any ships remain (game is finished when no ships found)
         boolean finished = hasAnyShips(board);
         
         if (!finished) {
+            // Game is over - display winner and reset game state
             if("user".equals(player)){
                 JOptionPane.showMessageDialog(view, "You win!");
                 view.setStatusText("Game over - you win.");
@@ -174,23 +205,26 @@ public class OnePlayerController implements OnePlayerActions {
                 view.setStatusText("Game over - Ai wins.");
             }
             
+            // Reset game state in database for next game
             try (Connection h = Db.connect()) {
+                // Clear existing game state
                 try (java.sql.Statement st = h.createStatement()) {
                     st.executeUpdate("TRUNCATE TABLE GAMESTATE"); 
                 }
                 
-                
+                // Create fresh boards and fleets for next game
                 Board pBoard = new Board(10);
-                Board aBoard     = new Board(10);
+                Board aBoard = new Board(10);
                 Fleet pFleet = new Fleet();
-                Fleet aFleet     = new Fleet();
+                Fleet aFleet = new Fleet();
                 
-                SetupServices.setupPresetGUI(pFleet,  pBoard);
+                // Place ships on fresh boards using preset placement
+                SetupServices.setupPresetGUI(pFleet, pBoard);
                 SetupServices.setupPresetGUI(aFleet, aBoard);
                 
+                // Save the new game state to database
                 Db.ensureSchema(h);
                 InputManager.autosave = SaveManager.writeTurnAutosave(pBoard, aBoard);
-                
                 Db.overwriteOrInsert(h, "current", InputManager.autosave);
                 
                 
