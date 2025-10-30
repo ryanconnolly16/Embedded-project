@@ -3,6 +3,8 @@ package battleship.gui_setup;
 import battleship.BattleshipGUI;
 import battleship.database.Db;
 import battleship.domain.Board;
+import battleship.enums.Cell;
+import battleship.enums.GridType;
 import battleship.fleetplacements.Fleet;
 import battleship.navigation.Navigator;
 import battleship.gui_game.OnePlayerGame;
@@ -126,9 +128,12 @@ public class SetupController implements SetupActions {
             
             
             
+            // Sync aivisited array with the board's SHOTS grid to match actual shot history
             for (int r = 0; r < 10; r++) {
                 for (int col = 0; col < 10; col++) {
-                    aivisited[r][col] = false;
+                    // Mark as visited if the AI has already shot at this location (HIT or MISS on SHOTS grid)
+                    Cell shotCell = BattleshipGUI.aiBoard.cellAt(r, col, GridType.SHOTS);
+                    aivisited[r][col] = (shotCell == Cell.HIT || shotCell == Cell.MISS);
                 }
             }
             System.out.println("ai");
@@ -156,7 +161,12 @@ public class SetupController implements SetupActions {
         }
         
         savedApplied = true;
-        oneView.refresh(); // show placed ships
+        // Ensure model is set and refresh to show all hits/misses from loaded game
+        oneView.setModel(BattleshipGUI.playerBoard);
+        oneView.refresh(); // show placed ships and shots
+        // Force repaint to ensure GUI updates
+        oneView.revalidate();
+        oneView.repaint();
         
     }
 
@@ -170,9 +180,17 @@ public class SetupController implements SetupActions {
     public void start() {
         if (started) return;
         started = true;
+        // Ensure model is up to date, especially after loading a saved game
+        oneView.setModel(BattleshipGUI.playerBoard);
         oneView.setShotsEnabled(true);
-        oneView.refresh();
         nav.show(onePlayerCard);
+        // Refresh after showing the card to ensure view is visible and all hits/misses are displayed
+        oneView.refresh();
+        // Force repaint to ensure all loaded hits/misses are displayed
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            oneView.revalidate();
+            oneView.repaint();
+        });
     }
 
     @Override

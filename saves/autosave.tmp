@@ -1,47 +1,47 @@
 10
 PLAYER1
 SHIPS
-OS    O  O
- S        
- S        
-  S   O   
-OSS  O S O
- XS    S  
- SS    SS 
- XS   O S 
- XS OO  SS
-  S  O OSS
+OOOO OOOO 
+  OOOO    
+OO    OO  
+SSXXXO OO 
+XSXSXSXSO 
+  OO   XOO
+O  OSXXSOO
+SO OO OSS 
+SO OOOOOXO
+O  O   OSO
 SHOTS
-      XX O
- O  X     
-    X     
-  X X O   
- X        
-   O    O 
- X     O  
-          
-    O     
-          
+ O    XO O
+  OOOOO O 
+  OOO   O 
+ OXXXO OOO
+  OOO  O  
+ OXOOO   O
+ OXOX O X 
+ OXOOO  X 
+  O     O 
+XXXXXXXO  
 PLAYER2
 SHIPS
-      XX O
- O  X     
-    X     
-  X X O   
- XS       
- SSO    O 
- XS    O  
- SSSSS    
-   SOSSSSS
-          
+ OSSSSXO O
+  OOOOO O 
+  OOO   O 
+ OXXXO OOO
+  OOO  OS 
+ OXOOO  SO
+ OXOXSO X 
+ OXOOO  X 
+  O     O 
+XXXXXXXO  
 SHOTS
-O     O  O
-          
-          
-      O   
-O    O   O
- X        
-          
- X    O   
- X  OO    
-     O O  
+OOOO OOOO 
+  OOOO    
+OO    OO  
+  XXXO OO 
+X X X X O 
+  OO   XOO
+O  O XX OO
+ O OO O   
+ O OOOOOXO
+O  O   O O

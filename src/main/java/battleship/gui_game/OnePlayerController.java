@@ -92,7 +92,15 @@ public class OnePlayerController implements OnePlayerActions {
         view.setShotsEnabled(false);
         view.setStatusText("AI thinking…");
         System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
-        Timer t = new Timer(AI_DELAY_MS, e -> { aiTurn(); view.appendLog(Ai.logresult + Battle.hitmiss); });
+        Timer t = new Timer(AI_DELAY_MS, e -> { 
+            aiTurn(); 
+            // Only append hitmiss if AI actually fired (not an error)
+            String logMsg = Ai.logresult;
+            if (Ai.logresult != null && !Ai.logresult.contains("error")) {
+                logMsg += Battle.hitmiss;
+            }
+            view.appendLog(logMsg);
+        });
         t.setRepeats(false);
         t.start();
         view.refresh();

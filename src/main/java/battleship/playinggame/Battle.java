@@ -38,20 +38,30 @@ public class Battle {
             }
 
             else{
+                // Check the board's SHIPS grid to determine if there's a ship (source of truth)
+                Cell shipCell = p2board.cellAt(row, col, GridType.SHIPS);
                 Fleet.Ship hit = p2fleet.processHit(row, col);
                 
-                //checks if cell hits or misses a ship
-                if(hit == null){
+                // Use board state to determine hit/miss, processHit just tracks fleet health
+                if(shipCell == Cell.SHIP || shipCell == Cell.HIT){
+                    // There's a ship at this location (or was, if already hit)
+                    p1board.markHit(row, col);
+                    // Only mark ship as hit if it wasn't already hit
+                    if(shipCell == Cell.SHIP) {
+                        p2board.shipHit(row, col);
+                    }
+                    // Get ship name for sunk message if available
+                    String shipName = "";
+                    if (hit != null && hit.isSunk()) {
+                        shipName = "\nSUNK! " + hit.name;
+                    }
+                    hitmiss = ("Hit " + shipName);
+                }
+                else{
+                    // No ship at this location
                     hitmiss = ("Miss");
                     p1board.markMiss(row, col);
                     p2board.shipMiss(row, col);
-                }
-                else{
-                    p1board.markHit(row, col);
-                    //will display which ship is sunk if the ship runs out of health
-                    hitmiss = ("Hit " + 
-                        (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
-                    p2board.shipHit(row, col);
                 }
             }
         }

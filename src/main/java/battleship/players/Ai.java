@@ -6,10 +6,8 @@ import battleship.domain.*;
 import battleship.enums.*;
 import battleship.gui_setup.SetupController;
 import battleship.interfaces.*;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 //ai class for when its one player
 public class Ai implements AiShooter {
@@ -52,47 +50,54 @@ public class Ai implements AiShooter {
     
     public static List<String> checking = new ArrayList<>();
     public static void AiShot(Board aiboard, Fleet playerfleet, Board playerboard) {
-        Random rand = new Random();
-        int xpos = rand.nextInt(10);
-        int ypos = rand.nextInt(10);
-        
-        Point result = null;
-        //checking what state the chosen cell is
-        Cell trial_shot = playerboard.cellAt(ypos, xpos, GridType.SHIPS);
+        java.util.concurrent.ThreadLocalRandom rand = java.util.concurrent.ThreadLocalRandom.current();
         
         
-        String xposis = String.valueOf((char) ('a' + xpos));
-        String yposis = String.valueOf(ypos);
-        System.out.println(ypos);
-        String pos = (xposis + yposis);
+        // Check how many cells have been shot at by counting HIT/MISS on the board
+        int triedCount = 0;
+        for (int y = 0; y < 10; y++)
+            for (int x = 0; x < 10; x++) {
+                Cell shotCell = aiboard.cellAt(y, x, GridType.SHOTS);
+                if (shotCell == Cell.HIT || shotCell == Cell.MISS) triedCount++;
+            }
+        if (triedCount >= 100) return;
         
         
-        char letterxpos = (char)('A' + xpos);
-        usershot = "" + letterxpos + (ypos+1);
+        // Add maximum iteration limit to prevent infinite loops
+        int maxAttempts = 1000;
+        int attempts = 0;
         
-        
-        
-        //checking if they already shot in that space
-        if (SetupController.aivisited[xpos][ypos]== true || checking.contains(usershot) ||
-                trial_shot == Cell.HIT || trial_shot == Cell.MISS) {
-            System.out.println("reset");
-            AiShot(aiboard, playerfleet, playerboard);
+        while(attempts < maxAttempts){
+            attempts++;
+            int xpos = rand.nextInt(10);
+            int ypos = rand.nextInt(10);
+
+            char letterxpos = (char)('A' + xpos);
+            usershot = "" + letterxpos + (ypos+1);
+
+            // Check if AI has already shot at this location by checking the AI's SHOTS grid
+            Cell aiShotCell = aiboard.cellAt(ypos, xpos, GridType.SHOTS);
+            
+            // Skip if already shot (HIT/MISS on AI's shots grid) - this is the source of truth
+            // The aivisited array should match, but we rely on the board state
+            if (aiShotCell == Cell.HIT || aiShotCell == Cell.MISS) {
+                // Keep aivisited in sync
+                SetupController.aivisited[ypos][xpos] = true;
+                continue;
+            }
+
+            // Found a valid cell to shoot at - mark it as visited and fire
+            SetupController.aivisited[ypos][xpos] = true;
+            checking.add(usershot);
+            logresult = ("\nAi fired at " + usershot + " - ");
+
+            Battle.aishot(ypos, xpos, aiboard, playerfleet, playerboard);
             return;
         }
         
-        
-        if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
-            
-            SetupController.aivisited[xpos][ypos] = true;
-            System.out.println("added");
-            checking.add(usershot);
-            logresult = ("\nAi fired at " + usershot + " - ");
-            
-            
-            Battle.aishot(ypos, xpos, aiboard, playerfleet, playerboard);
-            
-        }
-        System.out.println(checking);
+        // If we couldn't find a valid cell after maxAttempts, log error and return
+        System.err.println("AI failed to find valid shot after " + maxAttempts + " attempts");
+        logresult = "\nAi error - no valid shot found";
     }
 
     @Override
