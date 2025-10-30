@@ -52,10 +52,6 @@ public class Battle {
                     hitmiss = ("Hit " + 
                         (hit.isSunk() ? "\nSUNK! " + hit.name: ""));
                     p2board.shipHit(row, col);
-                    
-                    
-                    
-                    
                 }
             }
         }

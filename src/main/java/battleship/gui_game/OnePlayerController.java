@@ -17,6 +17,7 @@ import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
 import battleship.gui_setup.SetupController;
 import static battleship.database.Db.recordShot;
+import battleship.gui_setup.SetupServices;
 import static battleship.players.Ai.usershot;
 import java.sql.SQLException;
 
@@ -32,10 +33,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class OnePlayerController implements OnePlayerActions {
-    private static final int AI_DELAY_MS = 650;
+    private static final int AI_DELAY_MS = 50;
     private final OnePlayerGame view;
     private boolean playerTurn = true;
     public static String logresults;
+    public int count = 0;
     
     public OnePlayerController(OnePlayerGame view) {
         this.view = view;
@@ -46,7 +48,7 @@ public class OnePlayerController implements OnePlayerActions {
         view.setStatusText("Your turn");
 
         // Disable shots if AI has no ships yet 
-        boolean aiReady = hasAnyShips(BattleshipGUI.aiBoard);
+        boolean aiReady = !hasAnyShips(BattleshipGUI.aiBoard);
         this.view.setShotsEnabled(aiReady);
         this.view.setStatusText(aiReady ? "Your turn" : "Apply preset first…");
     }
@@ -71,10 +73,9 @@ public class OnePlayerController implements OnePlayerActions {
         
         try (Connection d = Db.connect()) {
             Db.ensureSchema(d);
+            count=10;
             String home = System.getProperty("derby.system.home");
             String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-            System.out.println("derby.system.home = " + home);
-            System.out.println("DB directory      = " + dbDir);
             
             recordShot(d, Db.Player.PLAYER1, Shooting.usershots, Battle.hitmiss);
             if (!d.getAutoCommit()) d.commit();
@@ -83,9 +84,6 @@ public class OnePlayerController implements OnePlayerActions {
             Logger.getLogger(OnePlayerController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-        
         view.refresh();
         //checks board to see if any ships left and ends game
         gamefinished(BattleshipGUI.aiBoard, "user");
@@ -93,18 +91,10 @@ public class OnePlayerController implements OnePlayerActions {
         playerTurn = false;
         view.setShotsEnabled(false);
         view.setStatusText("AI thinking…");
-
-        new Timer(AI_DELAY_MS, e -> {
-            // sends to seperate function and adds timer delay
-            aiTurn();
-            
-            
-            logresults = Ai.logresult + Battle.hitmiss;
-            view.appendLog(logresults);
-            ((Timer) e.getSource()).stop();
-        }).start();
-        
-        
+        System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
+        Timer t = new Timer(AI_DELAY_MS, e -> { aiTurn(); view.appendLog(Ai.logresult + Battle.hitmiss); });
+        t.setRepeats(false);
+        t.start();
         view.refresh();
         view.revalidate();
         view.repaint();
@@ -154,7 +144,7 @@ public class OnePlayerController implements OnePlayerActions {
         try (Connection d = Db.connect()) {
             
             Db.ensureSchema(d);
-            String home = System.getProperty("derby.system.home");
+            String home = ""+battleship.database.DbPaths.derbyHome();
             String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
             System.out.println("derby.system.home = " + home);
             System.out.println("DB directory      = " + dbDir);
@@ -181,6 +171,15 @@ public class OnePlayerController implements OnePlayerActions {
                 if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return true;
         return false;
     }
+    
+    private boolean hasAnyHits(Board b) {
+        int n = b.size();
+        for (int r = 0; r < n; r++)
+            for (int c = 0; c < n; c++)
+                if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return true;
+        return false;
+    }
+    
     //ends the game with winners screen
     public void gamefinished(Board board,String player){
         boolean finished = hasAnyShips(board);
@@ -194,6 +193,45 @@ public class OnePlayerController implements OnePlayerActions {
                 JOptionPane.showMessageDialog(view, "Ai wins!");
                 view.setStatusText("Game over - Ai wins.");
             }
+            
+            try (Connection h = Db.connect()) {
+                System.out.println("trying");
+                try (java.sql.Statement st = h.createStatement()) {
+                    st.executeUpdate("TRUNCATE TABLE GAMESTATE"); 
+                }
+                System.out.println("initial deleted");
+                
+                
+                Board pBoard = new Board(10);
+                Board aBoard     = new Board(10);
+                Fleet pFleet = new Fleet();
+                Fleet aFleet     = new Fleet();
+                
+                SetupServices.setupPresetGUI(pFleet,  pBoard);
+                SetupServices.setupPresetGUI(aFleet, aBoard);
+                
+                System.out.println("new made");
+                Db.ensureSchema(h);
+                String home = System.getProperty("derby.system.home");
+                String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
+
+
+                InputManager.autosave = SaveManager.writeTurnAutosave(pBoard, aBoard);
+                
+                Db.overwriteOrInsert(h, "current", InputManager.autosave);
+                
+                
+            }catch (java.sql.SQLException | java.io.IOException e) {
+                JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+            
+            
             view.setShotsEnabled(false);
             
             Db.deleteDerbyLocks();

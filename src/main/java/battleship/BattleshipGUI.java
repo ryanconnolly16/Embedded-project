@@ -84,10 +84,7 @@ public class BattleshipGUI extends JFrame {
     }
 
     public static void main(String[] args) throws SQLException {
-        try (Connection c = Db.connect()) {   // use your own provider
-            Db.clearOnStartup(c);
-            // continue normal startup...
-        }
+        
         Db.deleteDerbyLocks();
         SwingUtilities.invokeLater(BattleshipGUI::new);
         

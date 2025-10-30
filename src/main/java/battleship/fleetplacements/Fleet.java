@@ -1,11 +1,14 @@
 
 package battleship.fleetplacements;
+import battleship.BattleshipGUI;
 import battleship.io.*;
 import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.Direction;
 import battleship.enums.GridType;
 import battleship.enums.Result;
+import battleship.gui_setup.SetupController;
+import static battleship.gui_setup.SetupController.playervisited;
 import battleship.interfaces.*;
 import java.util.*;
 
@@ -162,9 +165,13 @@ public class Fleet {
     
     
     
-    public boolean repopulateFromBoard(Board board, boolean[][] visited) {
+    public boolean repopulateFromBoard(String player) {
         clearPlacementsAndHits();
+        boolean[][] visited;
 
+        Board board;
+        if(player == "player"){visited = SetupController.playervisited; board = BattleshipGUI.playerBoard;}
+        else{visited = SetupController.aivisited;board = BattleshipGUI.aiBoard;}
         final int n = 10;
         
 
@@ -195,9 +202,6 @@ public class Fleet {
                     
                 }
                 
-                
-//                    visited[r][c + lenRight - 1] = true;
-//                    visited[r+lenDown-1][c] = true;
                 // Measure vertical length
                 int lenDown = 0;
                 while (r + lenDown < n && board.cellAt(r + lenDown, c, GridType.SHIPS) == Cell.SHIP ||
@@ -232,6 +236,7 @@ public class Fleet {
                 
             }
         }
+        
         System.out.println(board.cellAt(1, 4, GridType.SHIPS));
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < n; c++) {
@@ -239,8 +244,8 @@ public class Fleet {
                 System.out.println("hi");
             }
         }
-        
         return true;
+        
     }
 
     // After placements are set, sync hits from the SHOTS grid.

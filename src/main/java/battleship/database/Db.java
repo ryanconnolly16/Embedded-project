@@ -80,7 +80,7 @@ public final class Db {
     // Call this once on startup
     public static void clearOnStartup(java.sql.Connection c) throws java.sql.SQLException {
         try (java.sql.Statement st = c.createStatement()) {
-            st.executeUpdate("TRUNCATE TABLE Player1");   // <-- your table name
+            st.executeUpdate("TRUNCATE TABLE Player1"); 
             st.executeUpdate("TRUNCATE TABLE Player2");
         }
     }

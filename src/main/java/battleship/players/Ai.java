@@ -77,11 +77,11 @@ public class Ai implements AiShooter {
                 trial_shot == Cell.HIT || trial_shot == Cell.MISS) {
             System.out.println("reset");
             AiShot(aiboard, playerfleet, playerboard);
+            return;
         }
         
         
         if (trial_shot == Cell.WATER || trial_shot == Cell.SHIP) {
-//            ypos++;
             
             SetupController.aivisited[xpos][ypos] = true;
             System.out.println("added");
