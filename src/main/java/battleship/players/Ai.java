@@ -14,7 +14,7 @@ import java.util.Random;
 //ai class for when its one player
 public class Ai implements AiShooter {
     public static String logresult;
-    
+    public static String usershot;
     public Ai(Board playerboard, Board aiboard, Fleet playerfleet) {
     }
     
@@ -68,7 +68,7 @@ public class Ai implements AiShooter {
         
         
         char letterxpos = (char)('A' + xpos);
-        String usershot = "" + letterxpos + (ypos+1);
+        usershot = "" + letterxpos + (ypos+1);
         
         
         

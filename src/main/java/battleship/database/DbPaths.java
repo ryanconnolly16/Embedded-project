@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public final class DbPaths {
     private DbPaths() {}
-
+    //gets path to database
     public static Path derbyHome() {
         String os = System.getProperty("os.name","").toLowerCase(Locale.ROOT);
         Path base;

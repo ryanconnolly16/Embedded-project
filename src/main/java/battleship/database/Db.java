@@ -14,12 +14,13 @@ import java.nio.file.Path;
 public final class Db {
     private Db() {}
 
-    // Database name on disk (folder name under derby.system.home)
+    // searchs for battleship database in files
     private static final String DB_NAME = "BattleshipDb";
     private static final String URL = "jdbc:derby:" + DB_NAME + ";create=true";
 
+    //returns filepath
     static {
-        Path home = battleship.database.DbPaths.derbyHome(); // returns an absolute, OS-appropriate folder
+        Path home = battleship.database.DbPaths.derbyHome(); 
         System.setProperty("derby.system.home", home.toString());
         String url = "jdbc:derby:BattleshipDb;create=true";
 
@@ -29,6 +30,7 @@ public final class Db {
         return DriverManager.getConnection(URL);
     }
 
+    //makes sure the data bases have been made
     public static void ensureSchema(Connection c) throws SQLException {
         try (Statement st = c.createStatement()) {
             // Be explicit about schema
@@ -64,7 +66,8 @@ public final class Db {
     }
     
     public enum Player { PLAYER1, PLAYER2 }
-    
+
+    //function to record each player shot
     public static void recordShot(Connection c, Player who, String grid, String result) throws SQLException {
         final String table = (who == Player.PLAYER1) ? "PLAYER1" : "PLAYER2";
         try (var ps = c.prepareStatement("INSERT INTO " + table + " (GridSpace, HitMiss) VALUES (?, ?)")) {
@@ -74,6 +77,15 @@ public final class Db {
         }
     }
 
+    // Call this once on startup
+    public static void clearOnStartup(java.sql.Connection c) throws java.sql.SQLException {
+        try (java.sql.Statement st = c.createStatement()) {
+            st.executeUpdate("TRUNCATE TABLE Player1");   // <-- your table name
+            st.executeUpdate("TRUNCATE TABLE Player2");
+        }
+    }
+
+    
 
     
     public static void shutdownQuietly() {
@@ -81,7 +93,7 @@ public final class Db {
         catch (SQLException e) { if (!"XJ015".equals(e.getSQLState())) e.printStackTrace(); }
     }
     
-    
+    //overwrites what is the in save file in the database
     public static void overwriteOrInsert(Connection c, String slot, File f) throws Exception {
         int n;
         try (PreparedStatement up = c.prepareStatement("UPDATE GameState SET content=? WHERE slot=?");
@@ -101,39 +113,14 @@ public final class Db {
       }
     
     
-    // Delete Derby .lck files at startup (embedded mode)
+    // Delete Derby .lck files that can mess with running
     public static void deleteDerbyLocks() {
         String home = System.getProperty("derby.system.home");
-        //String dbDir = java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath().toString();
-        
-        
         try (java.nio.file.DirectoryStream<java.nio.file.Path> ds =
                  java.nio.file.Files.newDirectoryStream(java.nio.file.Path.of(home, "BattleshipDb").toAbsolutePath(), "*.lck")) {
-            
-            
-            
-            
             
             for (java.nio.file.Path p : ds) java.nio.file.Files.deleteIfExists(p);
         } catch (java.io.IOException ignored) {}
     }
-
-    
-    
-//    
-//    public static long saveTempTextFile(Connection c, String name, File tmp) throws Exception {
-//        String sql = "INSERT INTO PASTSAVE(name, content) VALUES (?, ?)";
-//        try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//             Reader r = new BufferedReader(new InputStreamReader(
-//                         new FileInputStream(tmp), StandardCharsets.UTF_8))) {
-//            ps.setString(1, name);
-//            // length can be omitted with recent Derby; if needed use tmp.length()
-//            ps.setCharacterStream(2, r); 
-//            ps.executeUpdate();
-//            try (ResultSet k = ps.getGeneratedKeys()) {
-//                return k.next() ? k.getLong(1) : -1L;
-//            }
-//        }
-//    }
 
 }
