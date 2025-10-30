@@ -48,11 +48,11 @@ public class InputManager implements UserInput {
                         String trimmedResponse = saveResponse.trim().toLowerCase();
 
                         if (trimmedResponse.equals("y")) {
-                            SaveManager.keep(autosave);
+//                            SaveManager.keep(autosave);
                             
                             break;
                         } else if (trimmedResponse.equals("n")) {
-                            SaveManager.discard(autosave);
+//                            SaveManager.discard(autosave);
                             
                             break;
                         } else {

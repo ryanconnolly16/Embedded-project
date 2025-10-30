@@ -72,7 +72,7 @@ public class Fleet {
         shipLoader = new ShipFileLoader();
         
         presetPlacer = new PresetPlacer();
-        userPlacer = new UserShipPlacer();
+        //userPlacer = new UserShipPlacer();
         
         List<Ship> loaded = shipLoader.loadShips("ships.txt");
         if (loaded != null) {
