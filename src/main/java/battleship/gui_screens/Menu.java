@@ -8,22 +8,23 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+// Defines the menu panel
 public class Menu extends JPanel {
     private final Image backgroundImage;
 
     public Menu(ActionListener toSetup,
                 ActionListener toSettings,
                 ActionListener quit) {
-        // Load from classpath, e.g. src/main/resources/Battleship_background.png
+        
         backgroundImage = loadImage("/Battleship_background.png");
 
         setOpaque(false);
         setLayout(new GridBagLayout());
 
-        // ---------- Title (big blocky label) ----------
+        // Title (big blocky label) 
         JLabel title = new JLabel("BATTLESHIP", SwingConstants.CENTER);
         title.setForeground(Color.WHITE);
-        title.setFont(pickBlockyFont(title.getFont(), 64f)); // big + chunky
+        title.setFont(pickBlockyFont(title.getFont(), 64f)); 
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
         JPanel column = new JPanel(new GridLayout(0, 1, 10, 10));
@@ -45,7 +46,7 @@ public class Menu extends JPanel {
         JPanel padded = new JPanel(new BorderLayout());
         padded.setOpaque(false);
         padded.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        padded.add(title, BorderLayout.NORTH);   // <- title above buttons
+        padded.add(title, BorderLayout.NORTH);  
         padded.add(column, BorderLayout.CENTER);
 
         GridBagConstraints gc = new GridBagConstraints();
@@ -68,10 +69,10 @@ public class Menu extends JPanel {
         double sx = pw / (double) iw, sy = ph / (double) ih;
         double scale;
         if (pw >= iw && ph >= ih) {
-            int intScale = Math.max((int)Math.ceil(sx), (int)Math.ceil(sy)); // integer cover on upscale
+            int intScale = Math.max((int)Math.ceil(sx), (int)Math.ceil(sy)); 
             scale = Math.max(1, intScale);
         } else {
-            scale = Math.max(sx, sy); // fractional cover on downscale
+            scale = Math.max(sx, sy);
         }
 
         int w = (int)Math.round(iw * scale);

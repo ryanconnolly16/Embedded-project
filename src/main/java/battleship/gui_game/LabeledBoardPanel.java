@@ -3,10 +3,13 @@ package battleship.gui_game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
+// Creates the labels on the top and side of the grid
 public class LabeledBoardPanel extends JPanel {
     private final SquareGridPanel grid;
-    private final JLabel header; // NEW: keep a handle so we can style it
+    private final JLabel header; 
 
     // Small offsets so labels fit; keep the grid near the top/left
     private static final int TOP_STRIP  = 24;   // space reserved above grid
@@ -18,22 +21,21 @@ public class LabeledBoardPanel extends JPanel {
 
         if (title != null && !title.isEmpty()) {
             header = new JLabel(title, JLabel.CENTER);
-            header.setFont(header.getFont().deriveFont(Font.BOLD, 18f));   // bigger
-            header.setForeground(Color.WHITE);                              // white
-            header.setBorder(BorderFactory.createEmptyBorder(2, 0, 8, 0));  // small gap below
+            header.setFont(header.getFont().deriveFont(Font.BOLD, 18f));   
+            header.setForeground(Color.WHITE);                            
+            header.setBorder(BorderFactory.createEmptyBorder(2, 0, 8, 0));  
             add(header, BorderLayout.NORTH);
         } else {
             header = null;
         }
 
-        // Center uses absolute layout so we can paint labels precisely
         JPanel center = new JPanel(null);
         center.setOpaque(false);
 
         grid = new SquareGridPanel(rows, cols, gap);
         center.add(grid);
 
-        // ---- TOP painter: A..J above the first row ----
+        // TOP painter: A..J above the first row
         JComponent topPainter = new JComponent() {
             @Override protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -49,7 +51,6 @@ public class LabeledBoardPanel extends JPanel {
                 int gx = grid.getX(), gy = grid.getY();
                 Rectangle first = btns[0][0].getBounds();
 
-                // Baseline just ABOVE the first row so letters don't overlap cells
                 int baseline = gy + first.y - Math.max(2, fm.getDescent());
 
                 for (int c = 0; c < btns[0].length; c++) {
@@ -65,7 +66,7 @@ public class LabeledBoardPanel extends JPanel {
         topPainter.setOpaque(false);
         center.add(topPainter);
 
-        // ---- LEFT painter: 1..10 centered next to each row ----
+        // LEFT painter: 1..10 centered next to each row
         JComponent leftPainter = new JComponent() {
             @Override protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -84,7 +85,7 @@ public class LabeledBoardPanel extends JPanel {
                     Rectangle b = btns[r][0].getBounds();
                     String txt = String.valueOf(r + 1);
                     int y = gy + b.y + (b.height + fm.getAscent() - fm.getDescent()) / 2;
-                    int x = gx - 6 - fm.stringWidth(txt);      // a few px left of the grid
+                    int x = gx - 6 - fm.stringWidth(txt);
                     if (x < 2) x = 2;
                     g2.drawString(txt, x, y);
                 }
@@ -102,21 +103,12 @@ public class LabeledBoardPanel extends JPanel {
         add(center, BorderLayout.CENTER);
 
         // Keep everything positioned on resize
-        center.addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override public void componentResized(java.awt.event.ComponentEvent e) {
+        center.addComponentListener(new ComponentAdapter() {
+            @Override public void componentResized(ComponentEvent e) {
                 layoutCenter(center, grid, topPainter, leftPainter);
             }
         });
         layoutCenter(center, grid, topPainter, leftPainter);
-    }
-
-    // Optional: allow caller to adjust header size/color later
-    public void setHeaderEmphasis(float sizePt, java.awt.Color color) {
-        if (header == null) return;
-        header.setFont(header.getFont().deriveFont(java.awt.Font.BOLD, sizePt));
-        header.setForeground(color);
-        header.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 0, 8, 0));
-        header.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     }
 
     private static void layoutCenter(JPanel center, JComponent grid,
@@ -130,7 +122,6 @@ public class LabeledBoardPanel extends JPanel {
 
         grid.setBounds(gx, gy, gw, gh);
 
-        // Painters cover the whole center so they can read button bounds and draw anywhere
         topPainter.setBounds(0, 0, w, h);
         leftPainter.setBounds(0, 0, w, h);
 

@@ -5,15 +5,11 @@ import battleship.database.Db;
 import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.GridType;
-import battleship.fleetplacements.Fleet;
 import battleship.navigation.Navigator;
 import battleship.gui_game.OnePlayerGame;
 import battleship.io.FileInput;
-//import battleship.io.FileInput;
 import battleship.io.SaveManager;
-//import battleship.players.OnePlayer;
-import battleship.ui.BoardRenderer;
-import battleship.ui.DefaultGlyphs;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -32,11 +28,10 @@ public class SetupController implements SetupActions {
     private final Navigator nav;
     private final String onePlayerCard, menuCard;
     private final OnePlayerGame oneView;
-    private boolean presetRunning = false; // re-entry guard
-    private boolean presetApplied = false; // placed at least once
-    private boolean savedRunning = false;
-    private boolean savedApplied  = false;
-    private boolean started       = false; // start() one-shot
+    
+    private boolean presetRunning   = false; 
+    private boolean savedRunning    = false;
+    private boolean started         = false;
 
     public static boolean[][] playervisited = new boolean[10][10];
     public static boolean[][] aivisited = new boolean[10][10];
@@ -57,15 +52,11 @@ public class SetupController implements SetupActions {
     public void applyPreset() {
         if (presetRunning) return;
         presetRunning = true;
-        try {
-            // If you clear grids, do it here to avoid double-place
-            // pboard.clear(); aiboard.clear();
-            
-            
+        try {            
+         
             SetupServices.setupPresetGUI(BattleshipGUI.playerFleet,  BattleshipGUI.playerBoard);
             SetupServices.setupPresetGUI(BattleshipGUI.aiFleet, BattleshipGUI.aiBoard);
             
-            presetApplied = true;
             oneView.refresh(); // show placed ships
             
             try (Connection d = Db.connect()) {
@@ -75,17 +66,12 @@ public class SetupController implements SetupActions {
                 Logger.getLogger(SetupController.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            
         } finally {
-            // keep one-shot; flip back to false if you want to allow re-preset
-            // presetRunning = false;
         }
     }
 
     @Override
     public void loadSave() {
-        // TODO: show file chooser / pick last save / etc.
-        // Leave gating to the Setup view (it enables Start once user clicked).
         if (savedRunning) return;
         savedRunning = true;
         
@@ -136,53 +122,40 @@ public class SetupController implements SetupActions {
             
             BattleshipGUI.aiFleet.repopulateFromBoard("ai");
 
-            
-            
-            
-            
             // Recount hits so allSunk/health is consistent with saved shots:
             BattleshipGUI.playerFleet.syncHitsFromBoard(BattleshipGUI.playerBoard);
             BattleshipGUI.aiFleet.syncHitsFromBoard(BattleshipGUI.aiBoard);
             
             
             oneView.setModel(BattleshipGUI.playerBoard);
-            //--------------//--------------//--------------//--------------//--------------//--------------
-//            System.out.println("player\n" + BoardRenderer.renderBoth(BattleshipGUI.playerBoard, new DefaultGlyphs()));
-//            System.out.println("ai\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
+           
             
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(SetupController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(SetupController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        savedApplied = true;
         // Ensure model is set and refresh to show all hits/misses from loaded game
         oneView.setModel(BattleshipGUI.playerBoard);
         oneView.refresh(); // show placed ships and shots
         // Force repaint to ensure GUI updates
         oneView.revalidate();
-        oneView.repaint();
-        
+        oneView.repaint();      
     }
 
-    @Override
-    public void newGame() {
-        // TODO: reset/initialize new save metadata if you keep any.
-        // Leave gating to the Setup view.
-    }
 
     @Override
     public void start() {
         if (started) return;
         started = true;
-        // Ensure model is up to date, especially after loading a saved game
+        
+        // Ensure model is up to date
         oneView.setModel(BattleshipGUI.playerBoard);
         oneView.setShotsEnabled(true);
         nav.show(onePlayerCard);
+        
         // Refresh after showing the card to ensure view is visible and all hits/misses are displayed
         oneView.refresh();
+        
         // Force repaint to ensure all loaded hits/misses are displayed
         javax.swing.SwingUtilities.invokeLater(() -> {
             oneView.revalidate();

@@ -15,12 +15,12 @@ import battleship.ui.BoardRenderer;
 import battleship.ui.DefaultGlyphs;
 import battleship.ui.InputManager;
 import battleship.gui_setup.SetupServices;
-import java.sql.SQLException;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,22 +28,12 @@ import java.util.logging.Logger;
 // Handles turn-based gameplay between human player and AI, including shot processing,
 // game state management, database operations, and UI updates.
 public class OnePlayerController implements OnePlayerActions {
-    // Delay in milliseconds before AI takes its turn (for visual feedback)
-    private static final int AI_DELAY_MS = 50;
-    
-    // Reference to the game view for UI updates
+    private static final int AI_DELAY_MS = 100;
     private final OnePlayerGame view;
-    
-    // Tracks whether it's currently the player's turn (true) or AI's turn (false)
     private boolean playerTurn = true;
-    
-    // Accumulated log results for display in the game log
     public static String logresults;
-    
     public int count = 0;
     
-    // Constructor for OnePlayerController.
-    // Parameter: view - The OnePlayerGame view instance to control
     public OnePlayerController(OnePlayerGame view) {
         this.view = view;
         view.setActions(this);
@@ -59,10 +49,6 @@ public class OnePlayerController implements OnePlayerActions {
     }
     
     // Handles the player's shot attempt at the specified coordinates.
-    // Processes the shot, updates boards, records to database, checks for game end,
-    // and triggers AI turn after a short delay.
-    // Parameters: r - Row coordinate (0-based) where player wants to shoot
-    //             c - Column coordinate (0-based) where player wants to shoot
     @Override
     public void fireShot(int r, int c) {
         // Ignore shot attempts when it's not the player's turn
@@ -100,6 +86,7 @@ public class OnePlayerController implements OnePlayerActions {
         System.out.println("\n" + BoardRenderer.renderBoth(BattleshipGUI.aiBoard, new DefaultGlyphs()));
         Timer t = new Timer(AI_DELAY_MS, e -> { 
             aiTurn(); 
+            
             // Only append hitmiss if AI actually fired (not an error)
             String logMsg = Ai.logresult;
             if (Ai.logresult != null && !Ai.logresult.contains("error")) {
@@ -128,7 +115,8 @@ public class OnePlayerController implements OnePlayerActions {
             }
 
             Db.overwriteOrInsert(c, "current", InputManager.autosave);
-            // Delete lock files so they can be examined in services tab
+            
+            // Delete lock files
             Db.deleteDerbyLocks();
             System.exit(0);
         } catch (java.sql.SQLException | java.io.IOException e) {
@@ -175,8 +163,6 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     // Checks if there are any ships remaining on the specified board.
-    // Parameter: b - The board to check
-    // Returns: true if at least one SHIP cell exists, false otherwise
     private boolean hasAnyShips(Board b) {
         int n = b.size();
         for (int r = 0; r < n; r++)
@@ -184,18 +170,13 @@ public class OnePlayerController implements OnePlayerActions {
                 if (b.cellAt(r, c, GridType.SHIPS) == Cell.SHIP) return true;
         return false;
     }
-    
-    
-    // Checks if the game is finished (no ships remaining) and handles game end logic.
-    // Displays winner message, resets game state in database, and exits the application.
-    // Parameters: board - The board to check for remaining ships
-    //             player - String identifying the winner ("user" for player, "ai" for AI)
+
+    // Checks if the game is finished and handles game end logic.
     public void gamefinished(Board board, String player){
-        // Check if any ships remain (game is finished when no ships found)
+        
         boolean finished = hasAnyShips(board);
         
         if (!finished) {
-            // Game is over - display winner and reset game state
             if("user".equals(player)){
                 JOptionPane.showMessageDialog(view, "You win!");
                 view.setStatusText("Game over - you win.");
@@ -205,7 +186,6 @@ public class OnePlayerController implements OnePlayerActions {
                 view.setStatusText("Game over - Ai wins.");
             }
             
-            // Reset game state in database for next game
             try (Connection h = Db.connect()) {
                 // Clear existing game state
                 try (java.sql.Statement st = h.createStatement()) {
@@ -235,15 +215,11 @@ public class OnePlayerController implements OnePlayerActions {
                 JOptionPane.showMessageDialog(view, "Save failed: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
-            
-            
-            
+
             view.setShotsEnabled(false);
             
             Db.deleteDerbyLocks();
             System.exit(0);
-            return;
         }
     }
 }

@@ -1,11 +1,9 @@
-// battleship/gui_setup/Setup.java
 package battleship.gui_setup;
 
 import battleship.gui_screens.FlatButton;
 import javax.swing.*;
 import java.awt.*;
 
-// One-player setup: only New Game, Load Game, Back.
 public class Setup extends JPanel {
     private static final Color BUTTON_BASE = new Color(30, 80, 140);
     private static final Color PANEL_BG    = new Color(42, 100, 165);
@@ -21,7 +19,7 @@ public class Setup extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        // ---------- Title + status ----------
+        // Title + status
         JPanel north = new JPanel(new GridLayout(0, 1));
         north.setOpaque(true);
         north.setBackground(PANEL_BG);
@@ -37,7 +35,7 @@ public class Setup extends JPanel {
         north.add(status);
         add(north, BorderLayout.NORTH);
 
-        // ---------- Center: vertical buttons ----------
+        // Center: vertical buttons
         JPanel center = new JPanel();
         center.setOpaque(true);
         center.setBackground(PANEL_BG);
@@ -49,18 +47,15 @@ public class Setup extends JPanel {
         }
         add(center, BorderLayout.CENTER);
 
-        // New Game: create new board, apply preset, start immediately
         newBtn.addActionListener(e -> {
             disableChoiceButtons();
             status.setText("Creating new game, applying preset, starting…");
             if (actions != null) {
-                actions.newGame();
                 actions.applyPreset();
                 actions.start();
             }
         });
 
-        // Load Game: load save, then start immediately
         loadBtn.addActionListener(e -> {
             disableChoiceButtons();
             status.setText("Loading save and starting…");
@@ -70,7 +65,7 @@ public class Setup extends JPanel {
             }
         });
 
-        // ---------- South: Back ----------
+        // South: Back
         JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         south.setOpaque(true);
         south.setBackground(PANEL_BG);
@@ -104,7 +99,4 @@ public class Setup extends JPanel {
         c.setPreferredSize(d);
         c.setMaximumSize(d);
     }
-
-    // Optional helper the controller can use
-    public void setStatus(String text) { status.setText(text); }
 }

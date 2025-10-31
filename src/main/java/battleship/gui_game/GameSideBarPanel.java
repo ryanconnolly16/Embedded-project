@@ -3,16 +3,15 @@ package battleship.gui_game;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
 
-// Sidebar with status + auto-sized log that never collapses.
+// Creates sidebar with status + auto-sized log
 public class GameSideBarPanel extends JPanel {
-    private static final Color DARK_BG   = new Color(0x15, 0x3E, 0x78);  // #153E78
+    private static final Color DARK_BG   = new Color(0x15, 0x3E, 0x78);
     private static final Color LIGHT_FG  = new Color(235, 240, 248);
-    private static final int   MIN_W     = 220;   // never smaller than this
-    private static final int   MAX_W     = 420;   // clamp growth
-    private static final int   PADDING_W = 28;    // border + insets + breathing room
+    private static final int   MIN_W     = 220;
+    private static final int   MAX_W     = 420;
+    private static final int   PADDING_W = 28;
 
     private final JLabel     status  = new JLabel("Your turn", JLabel.CENTER);
     private final JTextArea  logArea = new JTextArea(12, 20);
@@ -23,14 +22,14 @@ public class GameSideBarPanel extends JPanel {
         setOpaque(true);
         setBackground(DARK_BG);
 
-        // --- Status header ---
+        // Status header
         status.setForeground(LIGHT_FG);
         status.setFont(status.getFont().deriveFont(Font.BOLD, 14f));
         add(status, BorderLayout.NORTH);
 
-        // --- Log text area ---
+        // Log text area
         logArea.setEditable(false);
-        logArea.setLineWrap(false);             // IMPORTANT: no wrapping; we widen instead
+        logArea.setLineWrap(false);           
         logArea.setWrapStyleWord(false);
         logArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
         logArea.setOpaque(true);
@@ -45,7 +44,7 @@ public class GameSideBarPanel extends JPanel {
             @Override public void changedUpdate(DocumentEvent e) { updateWidth(); }
         });
 
-        // --- Scroll pane ---
+        // Scroll pane
         scroll = new JScrollPane(
                 logArea,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -58,7 +57,7 @@ public class GameSideBarPanel extends JPanel {
         titled.setTitleColor(LIGHT_FG);
         scroll.setBorder(titled);
 
-        // Start with a safe width so it’s visible even when empty
+        // Start with a width so its visible even when empty
         scroll.setPreferredSize(new Dimension(MIN_W, 240));
         add(scroll, BorderLayout.CENTER);
     }
@@ -70,11 +69,11 @@ public class GameSideBarPanel extends JPanel {
         int textW = (longest == null) ? 0 : fm.stringWidth(longest);
         int target = Math.max(MIN_W, Math.min(MAX_W, textW + PADDING_W));
 
-        // Apply to scroll (the EAST panel honors preferred width)
+        // Apply to scroll
         Dimension cur = scroll.getPreferredSize();
         if (cur.width != target) {
             scroll.setPreferredSize(new Dimension(target, cur.height));
-            revalidate(); // tell layout to recompute
+            revalidate();
         }
     }
 
@@ -86,14 +85,13 @@ public class GameSideBarPanel extends JPanel {
         return best;
     }
 
-    // ---- Public API ----
+    // Public API
     public void setStatus(String text) { status.setText(text); }
 
     public void appendLog(String line) {
         if (line == null || line.isEmpty()) return;
         if (!line.endsWith("\n")) line += "\n";
         logArea.append(line);
-        // width will auto-update via the DocumentListener
     }
 
     public void clearLog() { logArea.setText(""); }

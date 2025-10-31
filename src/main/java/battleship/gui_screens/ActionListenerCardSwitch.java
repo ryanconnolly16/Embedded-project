@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
+// Action listener for switching cards
 public class ActionListenerCardSwitch implements ActionListener {
     private final CardLayout layout;
     private final JPanel container;

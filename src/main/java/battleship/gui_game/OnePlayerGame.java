@@ -1,4 +1,3 @@
-// battleship/gui_game/OnePlayerGame.java
 package battleship.gui_game;
 
 import battleship.domain.Board;
@@ -7,11 +6,12 @@ import battleship.gui_screens.FlatButton;
 import javax.swing.*;
 import java.awt.*;
 
+// Defines the Game panel
 public class OnePlayerGame extends JPanel {
-    private static final Color PANEL_BG = new Color(42, 100, 165); // page background
+    private static final Color PANEL_BG = new Color(42, 100, 165);
 
-    private JButton[][] shipsGrid;
-    private JButton[][] shotsGrid;
+    private final JButton[][] shipsGrid;
+    private final JButton[][] shotsGrid;
 
     private OnePlayerActions actions;
     private Board myBoard;
@@ -23,25 +23,25 @@ public class OnePlayerGame extends JPanel {
         setBackground(PANEL_BG);
         setLayout(new BorderLayout());
 
-        // ---------- Title bar ----------
+        // Title bar
         JPanel north = new JPanel(new BorderLayout());
         north.setOpaque(true);
         north.setBackground(PANEL_BG);
 
         JLabel title = new JLabel("BATTLESHIP", JLabel.CENTER);
-        title.setFont(pickBlockyFont(title.getFont(), 36f)); // smaller than menu (was ~64f)
+        title.setFont(pickBlockyFont(title.getFont(), 36f));
         title.setForeground(new Color(245, 245, 245));
         title.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
         north.add(title, BorderLayout.CENTER);
         add(north, BorderLayout.NORTH);
 
 
-        // ---------- CENTER: boards + (centered) sidebar ----------
+        // CENTER: boards + sidebar
         JPanel centerRow = new JPanel(new GridBagLayout());
         centerRow.setOpaque(true);
         centerRow.setBackground(PANEL_BG);
 
-        // Boards container (left)
+        // Boards container
         JPanel boards = new JPanel(new GridLayout(1, 2, 16, 10));
         boards.setOpaque(true);
         boards.setBackground(PANEL_BG);
@@ -74,7 +74,7 @@ public class OnePlayerGame extends JPanel {
         gbc.insets = new Insets(0, 0, 0, 12);
         centerRow.add(boards, gbc);
 
-        // ---- Sidebar wrapper: vertically centers the sidebar next to the boards ----
+        //  Sidebar wrapper - vertically centers the sidebar next to the boards
         JPanel sideWrap = new JPanel(new GridBagLayout());
         sideWrap.setOpaque(true);
         sideWrap.setBackground(PANEL_BG);
@@ -82,29 +82,25 @@ public class OnePlayerGame extends JPanel {
         GridBagConstraints w = new GridBagConstraints();
         w.gridx = 0; w.fill = GridBagConstraints.HORIZONTAL; w.weightx = 1.0;
 
-        // top glue
         w.gridy = 0; w.weighty = 1.0;
         sideWrap.add(Box.createVerticalGlue(), w);
 
-        // the sidebar itself (keeps its preferred width/height)
         w.gridy = 1; w.weighty = 0.0; w.fill = GridBagConstraints.NONE; w.anchor = GridBagConstraints.CENTER;
         sideWrap.add(sidebar, w);
 
-        // bottom glue
         w.gridy = 2; w.weighty = 1.0; w.fill = GridBagConstraints.HORIZONTAL;
         sideWrap.add(Box.createVerticalGlue(), w);
 
-        // mount wrapper on the right column; it stretches, but the sidebar inside stays centered
         gbc.gridx = 1; gbc.gridy = 0;
         gbc.weightx = 0.0; gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;  // wrapper grows; sidebar remains centered within
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(0, 0, 0, 0);
         centerRow.add(sideWrap, gbc);
 
         add(centerRow, BorderLayout.CENTER);
 
-        // ---------- Bottom bar ----------
+        // Bottom bar 
         JPanel south = new JPanel(new BorderLayout());
         south.setOpaque(true);
         south.setBackground(PANEL_BG);
@@ -113,7 +109,7 @@ public class OnePlayerGame extends JPanel {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttons.setOpaque(false);
 
-    // Flat-style buttons, like the menu
+        // Flat-style buttons
         FlatButton quitSave = new FlatButton("Quit & Save");
         quitSave.setBaseColor(new Color(40, 140, 70)); // green
         quitSave.setMnemonic('S');
@@ -138,12 +134,10 @@ public class OnePlayerGame extends JPanel {
         south.add(buttons, BorderLayout.EAST);
         add(south, BorderLayout.SOUTH);
 
-
-        // Optional: crisp cell styling/borders/symbol sizing
         BoardView.styleGrids(shipsGrid, shotsGrid);
     }
 
-    // ---------- Controller API ----------
+    // Controller API
     public void setActions(OnePlayerActions actions) { this.actions = actions; }
 
     public void setModel(Board board) { this.myBoard = board; }
@@ -166,7 +160,7 @@ public class OnePlayerGame extends JPanel {
     public JButton[][] getShipsButtons() { return shipsGrid; }
     public JButton[][] getShotsButtons() { return shotsGrid; }
     
-    // --- Blocky font picker (same idea as menu, just local) ---
+    //  Blocky font picker fallback
     private static Font pickBlockyFont(Font base, float size) {
         String[] preferred = {
             "Impact", "Arial Black", "Rockwell Extra Bold", "Haettenschweiler",

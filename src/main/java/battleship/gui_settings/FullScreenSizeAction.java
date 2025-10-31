@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
+// Sets the frame to fullscreen
 public class FullScreenSizeAction implements ActionListener {
     private final JFrame frame;
 

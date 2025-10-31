@@ -15,7 +15,7 @@ public final class ScreenSizeUtils {
                     .getLocalGraphicsEnvironment()
                     .getDefaultScreenDevice();
 
-            if (frame.isDisplayable()) frame.dispose();  // needed before toggling decoration
+            if (frame.isDisplayable()) frame.dispose();
             frame.setUndecorated(true);
             frame.setResizable(false);
             gd.setFullScreenWindow(frame);
@@ -48,7 +48,7 @@ public final class ScreenSizeUtils {
         };
     }
 
-    // Bind ESC to trigger the provided windowed action
+    // Bind ESC to trigger the windowed action
     public static void bindEscapeToExit(JFrame frame, ActionListener windowedAction) {
         frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke("ESCAPE"), "exitFS");
@@ -58,7 +58,8 @@ public final class ScreenSizeUtils {
             }
         });
     }
-
+    
+    // centers the window on the user's screen
     private static void centerOnPrimary(JFrame frame) {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width  - frame.getWidth())  / 2;

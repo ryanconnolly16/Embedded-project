@@ -6,9 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+// Defines the settings frame
 public class Settings extends JPanel {
     private static final Color BUTTON_BASE = new Color(30, 80, 140);
-    private static final Color PANEL_BG    = new Color(42, 100, 165); // slightly lighter
+    private static final Color PANEL_BG    = new Color(42, 100, 165); 
 
     public Settings(ActionListener onBack,
                     ActionListener onWindowed,
@@ -23,7 +24,6 @@ public class Settings extends JPanel {
         title.setForeground(new Color(245,245,245));
         add(title, BorderLayout.NORTH);
 
-        // Center: vertical BoxLayout with small buttons
         JPanel center = new JPanel();
         center.setOpaque(true);
         center.setBackground(PANEL_BG);
@@ -42,7 +42,6 @@ public class Settings extends JPanel {
 
         add(center, BorderLayout.CENTER);
 
-        // South: back
         JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         south.setOpaque(true);
         south.setBackground(PANEL_BG);

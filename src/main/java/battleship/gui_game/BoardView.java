@@ -1,4 +1,3 @@
-// battleship/gui_game/BoardView.java
 package battleship.gui_game;
 
 import java.awt.*;
@@ -14,16 +13,17 @@ import battleship.domain.Board;
 import battleship.enums.Cell;
 import battleship.enums.GridType;
 
+// Board rendering class
 public final class BoardView {
     private BoardView() {}
 
-    // ----- Palette -----
+    // Palette
     private static final Color WATER = new Color(220, 235, 255);
     private static final Color SHIP  = new Color(60, 60, 60);
     private static final Color HIT   = new Color(200,  40,  40);
     private static final Color MISS  = new Color(210, 210, 210);
 
-    // ----- Symbol fallbacks -----
+    // Symbol fallbacks 
     private static final char CIRCLE   = '\u25CF'; // ●
     private static final char BULLET   = '\u2022'; // •
     private static final char MULTIPLY = '\u00D7'; // ×
@@ -51,11 +51,11 @@ public final class BoardView {
     private static void colorButton(JButton b, Color bg, String text) {
         b.setText(text);
         b.setForeground(textOn(bg));
-        b.setBackground(bg); // read by our custom UI
+        b.setBackground(bg);
     }
 
-    // ----- Rendering -----
-    // Render player's own board (SHIPS grid).
+    // Rendering
+    // Render player's own board (SHIPS grid)
     public static void renderShips(JButton[][] shipsButtons, Board board) {
         int n = shipsButtons.length;
         for (int r = 0; r < n; r++) {
@@ -72,7 +72,7 @@ public final class BoardView {
         }
     }
 
-    // Render fog-of-war view (SHOTS grid).
+    // Render fog-of-war view (SHOTS grid)
     public static void renderShots(JButton[][] shotsButtons, Board board) {
         int n = shotsButtons.length;
         for (int r = 0; r < n; r++) {
@@ -88,19 +88,19 @@ public final class BoardView {
         }
     }
 
-    // Convenience to update both at once.
+    // Convenience to update both at once
     public static void refreshAll(JButton[][] shipsButtons, JButton[][] shotsButtons, Board board) {
         renderShips(shipsButtons, board);
         renderShots(shotsButtons, board);
     }
 
-    // Apply the nice tile style once after grid creation.
+    // Apply the nice tile style once after grid creation
     public static void styleGrids(JButton[][] shipsButtons, JButton[][] shotsButtons) {
         if (shipsButtons != null) applyGridStyle(shipsButtons);
         if (shotsButtons != null) applyGridStyle(shotsButtons);
     }
 
-    // ----- Fancy cell look -----
+    // Fancy cell look
     private static void applyGridStyle(JButton[][] grid) {
         int rows = grid.length;
         if (rows == 0) return;
@@ -116,7 +116,7 @@ public final class BoardView {
                 b.setContentAreaFilled(false);
                 b.setOpaque(false);
                 b.setFocusPainted(false);
-                b.setBorder(new EmptyBorder(2, 2, 2, 2)); // small gap between tiles
+                b.setBorder(new EmptyBorder(2, 2, 2, 2));
 
                 // Symbol font scales with size
                 b.addComponentListener(new ComponentAdapter() {
@@ -149,7 +149,7 @@ public final class BoardView {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 int w = c.getWidth(), h = c.getHeight();
-                int arc = Math.round(Math.min(w, h) * 0.25f); // 25% roundness
+                int arc = Math.round(Math.min(w, h) * 0.25f);
 
                 Color base = b.getBackground();
                 ButtonModel m = b.getModel();
@@ -158,13 +158,11 @@ public final class BoardView {
 
                 Shape rr = new RoundRectangle2D.Float(1, 1, w - 2, h - 2, arc, arc);
 
-                // Soft gradient
                 Paint grad = new GradientPaint(0, 0, blend(base, Color.WHITE, 0.12f),
                                                0, h, blend(base, Color.BLACK, 0.10f));
                 g2.setPaint(grad);
                 g2.fill(rr);
 
-                // Border + inner highlight
                 g2.setStroke(new BasicStroke(1f));
                 g2.setColor(new Color(255, 255, 255, 50));
                 Shape inner = new RoundRectangle2D.Float(2, 2, w - 4, h - 4, Math.max(arc - 2, 0), Math.max(arc - 2, 0));
@@ -178,7 +176,6 @@ public final class BoardView {
                     g2.fill(rr);
                 }
 
-                // Let BasicButtonUI draw the text (● / ×)
                 super.paint(g2, c);
             } finally {
                 g2.dispose();

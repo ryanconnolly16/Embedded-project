@@ -5,5 +5,4 @@ public interface SetupActions {
     void back();
     void applyPreset();
     void loadSave();
-    void newGame();
 }

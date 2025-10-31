@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
+// Sets frame to windowed
 public class WindowedSizeAction implements ActionListener {
     private final JFrame frame;
 
@@ -23,7 +24,6 @@ public class WindowedSizeAction implements ActionListener {
         frame.setUndecorated(false);   
         frame.setResizable(true);      
 
-        // Slides-supported sizing:
         var kit = java.awt.Toolkit.getDefaultToolkit();
         var screen = kit.getScreenSize();
         int w = screen.width / 2, h = screen.height / 2;

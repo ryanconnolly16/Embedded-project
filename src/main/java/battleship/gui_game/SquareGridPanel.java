@@ -7,7 +7,6 @@ public class SquareGridPanel extends JPanel {
     private final int rows, cols, gap;
     private final JButton[][] buttons;
 
-    // --- expose these to align headers ---
     private int lastCell = 32;
     private int lastStartX = 0, lastStartY = 0;
 
