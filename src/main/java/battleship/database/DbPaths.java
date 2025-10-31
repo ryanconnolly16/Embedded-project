@@ -4,9 +4,9 @@ import java.nio.file.*;
 
 public final class DbPaths {
     private DbPaths() {}
-    // Gets path to database - stores in project folder's "db" directory
+    // Gets path to database
     public static Path derbyHome() {
-        // Use "db" folder in the project directory (relative to current working directory)
+        // Use "db" folder in the project directory 
         Path base = Paths.get("db");
         try { Files.createDirectories(base); } catch (Exception ignored) {}
         return base.toAbsolutePath();
