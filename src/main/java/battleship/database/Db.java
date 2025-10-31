@@ -33,7 +33,6 @@ public final class Db {
     //makes sure the data bases have been made
     public static void ensureSchema(Connection c) throws SQLException {
         try (Statement st = c.createStatement()) {
-            // Be explicit about schema
             st.executeUpdate("SET SCHEMA APP");
 
             try {
@@ -77,17 +76,13 @@ public final class Db {
         }
     }
 
-    // Call this once on startup
+    //clears players shots
     public static void clearOnStartup(java.sql.Connection c) throws java.sql.SQLException {
         try (java.sql.Statement st = c.createStatement()) {
             st.executeUpdate("TRUNCATE TABLE Player1"); 
             st.executeUpdate("TRUNCATE TABLE Player2");
         }
     }
-
-    
-
-    
     public static void shutdownQuietly() {
         try { DriverManager.getConnection("jdbc:derby:;shutdown=true"); }
         catch (SQLException e) { if (!"XJ015".equals(e.getSQLState())) e.printStackTrace(); }
@@ -112,10 +107,7 @@ public final class Db {
         }
       }
     
-    
-    
-    
-    // Delete Derby .lck files that can mess with running
+    // Delete Derby .lck files 
     public static void deleteDerbyLocks() {
         String home = "" +battleship.database.DbPaths.derbyHome();
         try (java.nio.file.DirectoryStream<java.nio.file.Path> ds =

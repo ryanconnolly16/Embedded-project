@@ -85,7 +85,6 @@ public class GameSideBarPanel extends JPanel {
         return best;
     }
 
-    // Public API
     public void setStatus(String text) { status.setText(text); }
 
     public void appendLog(String line) {

@@ -70,6 +70,7 @@ public class SetupController implements SetupActions {
         }
     }
 
+    //loads file from database to game
     @Override
     public void loadSave() {
         if (savedRunning) return;
@@ -136,8 +137,7 @@ public class SetupController implements SetupActions {
         
         // Ensure model is set and refresh to show all hits/misses from loaded game
         oneView.setModel(BattleshipGUI.playerBoard);
-        oneView.refresh(); // show placed ships and shots
-        // Force repaint to ensure GUI updates
+        oneView.refresh(); 
         oneView.revalidate();
         oneView.repaint();      
     }

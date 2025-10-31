@@ -2,7 +2,7 @@ package battleship.gui_game;
 
 import javax.swing.*;
 import java.awt.*;
-
+//centers grids of buttons with fixed gaps
 public class SquareGridPanel extends JPanel {
     private final int rows, cols, gap;
     private final JButton[][] buttons;

@@ -25,8 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 // Controller for one-player battleship game mode.
-// Handles turn-based gameplay between human player and AI, including shot processing,
-// game state management, database operations, and UI updates.
 public class OnePlayerController implements OnePlayerActions {
     private static final int AI_DELAY_MS = 100;
     private final OnePlayerGame view;
@@ -48,7 +46,7 @@ public class OnePlayerController implements OnePlayerActions {
         this.view.setStatusText(aiReady ? "Your turn" : "Apply preset first…");
     }
     
-    // Handles the player's shot attempt at the specified coordinates.
+    // Handles the player's shot attempt
     @Override
     public void fireShot(int r, int c) {
         // Ignore shot attempts when it's not the player's turn
@@ -102,7 +100,6 @@ public class OnePlayerController implements OnePlayerActions {
     }
 
     // Saves the current game state to the database and exits the application.
-    // Clears the current game slot, writes the autosave, and deletes Derby lock files.
     @Override
     public void quitSave() {
         try (Connection c = Db.connect()) {
@@ -128,22 +125,19 @@ public class OnePlayerController implements OnePlayerActions {
         }
     }
 
-    // Quits the game without saving. Deletes Derby lock files and exits.
+    // Quits the game without saving. 
     @Override
     public void quitDiscard() { 
         Db.deleteDerbyLocks();
         System.exit(0); 
     }
 
-    // Handles the AI's turn. Makes the AI shoot, updates the UI, checks for game end,
-    // records the shot to the database, and returns control to the player.
+    // Handles the AI's turn
     private void aiTurn() {
         Ai.AiShot(BattleshipGUI.aiBoard, BattleshipGUI.playerFleet, BattleshipGUI.playerBoard);
-
         
-        //checks for any ships on board and ends game
         view.refresh();
-        // Check if game is over (no ships remaining on player's board)
+        //checks for any ships on board and ends game
         gamefinished(BattleshipGUI.playerBoard, "ai");
 
         // Record AI's shot to the database
