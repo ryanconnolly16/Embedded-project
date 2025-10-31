@@ -1,47 +1,47 @@
 10
 PLAYER1
 SHIPS
-   S      
-   S   S  
-   S   S  
-  S    S  
-  S    S  
-  S    S  
-  S   SS  
-      SSS 
-      S S 
-     SSSSS
+     O    
+      OS  
+  SSSS S  
+       XSS
+  SSSSS O 
+    OS    
+     S    
+     SO   
+          
+SSSSSSS   
 SHOTS
+        O 
+     X    
+   O   O  
+          
+     O    
           
           
-          
-          
-          
-          
-          
-          
+ X        
           
           
 PLAYER2
 SHIPS
-          
-      S   
-      S  S
-    S S  S
-    S S  S
-    SSSS S
-    S    S
+        O 
+ SSSSXSS  
+   OS  O  
     S     
-SS  S     
-    S  SSS
+    SO    
+ S  S S   
+ S    S   
+ X   SSSSS
+      SSS 
+          
 SHOTS
+     O    
+      O   
           
+       X  
+        O 
+    O     
           
-          
-          
-          
-          
-          
-          
+      O   
           
           

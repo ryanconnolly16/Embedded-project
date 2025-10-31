@@ -1,13 +1,9 @@
 package battleship.database;
-
-import battleship.database.DbPaths;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.sql.*;
 import java.nio.file.Path;
 
